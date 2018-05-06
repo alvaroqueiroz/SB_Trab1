@@ -32,7 +32,7 @@ Todos os arquivos de saída devem estar em formato TEXTO. No casso do arquivo ob
 | 5.2* | First Pass |      | macro solved assembly file  | Symbol Table |      |
 | 5.3* | Seccond Pass |    | macro solved assembly file / Symbol Table | Intermediary Code |      |
 | 6    | Optmizer |     | Intermediary code | Optmized Intermediary Code |     |
-| 7    | Object Code Generator | argument / Optmized Intermediary Code | Object Code / Macro Solved Code / Pre-process code |    |
+| 7    | Object Code Generator |    | argument / Optmized Intermediary Code | Object Code / Macro Solved Code / Pre-process code |    |
 
 (*) step 5 - Intermediary Code Generator
 
