@@ -1,10 +1,10 @@
-#Software Básico - Trabalho 1
+# Software Básico - Trabalho 1
 
-##Objetivo
+## Objetivo
 
 Fixar o funcionamento de um processo de tradução. Especificamente as etapas de analise léxica, sintática e semântica e a etapa de geração de código objeto.
 
-##Especificação
+## Especificação
 
 Criar um *montador* para a linguagem assembly didática inventada, para o conjunto de 14 instruções pré-definidas, sendo necessário o suporte para:
 
@@ -20,14 +20,16 @@ Criar um *montador* para a linguagem assembly didática inventada, para o conjun
 
 Todos os arquivos de saída devem estar em formato TEXTO. No casso do arquivo objeto, o arquivo de saída deve ser somente os OPCODES e operandos sem quebra de linha, nem endereço indicado, mas sepradados por espaço.
 
-##Fluxo de programa
+## Fluxo de programa
+
+### Descritivo de módulos
 
 | Step | Feature | Headers | Input | Output | Intermediary Elements |
 | :--: | ------- | ------- | ----- | ------ | --------------------- |
 | 1    | Main    |         | argument / assembly file name | txt file |      |
 | 2    | Scanner |       | complete assembly file | assembly token list / lexic error msg |      |
 | 3    | Parser |    | token list | syntactic tree / syntactic error msg |       |
-| 4    | Semantic Analiser |     | raw assembly file / Semantic error msg | noted syntactic tree |
+| 4    | Semantic Analyser |     | raw assembly file / Semantic error msg | noted syntactic tree |
 | 5.1* | Macro Solver |     | raw assembly file | macro solved assembly file | macro prototype table / macro body table |
 | 5.2* | First Pass |      | macro solved assembly file  | Symbol Table |      |
 | 5.3* | Seccond Pass |    | macro solved assembly file / Symbol Table | Intermediary Code |      |
@@ -35,6 +37,24 @@ Todos os arquivos de saída devem estar em formato TEXTO. No casso do arquivo ob
 | 7    | Object Code Generator |    | argument / Optmized Intermediary Code | Object Code / Macro Solved Code / Pre-process code |    |
 
 (*) step 5 - Intermediary Code Generator
+
+### Fluxo entre módulos
+
+- Argumento "-p":
+
+	Input -> Main -> Scanner -> Parser -> Semantic Analyser -> Main -> Output
+
+- Argumento "-m":
+
+	Input -> Main -> Scanner -> Parser -> Semantic Analyser -> Macro Solver -> Main -> Output
+
+- Argumento "-o":
+
+	Input -> Main -> Scanner -> Parser -> Semantic Analyser -> Macro Solver -> Intermediary Code Generator -> Optmizer -> Object Code Generator -> Main -> Output
+
+
+
+
 
 
 
