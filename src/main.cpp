@@ -17,39 +17,47 @@ Alunos: Andre Abreu Rodrigues de Almeida    12/0007100
 #include <cstdio>
 #include <iostream>
 #include <fstream>
-//#include "argument_checks.h"
+#include "argument_checks.h"
 using namespace std;
 
 
 
 int main (int argc, char** argv){
 
-//    validateArguments(argc, argv);
+    validateArguments(argc, argv);
 
-    string s = argv[1];
+    char* outpname;
+    string s = argv[2];
     string delimiter = ".";
     string file_name = s.substr(0, s.find(delimiter));
-    cout << file_name << endl;
-    /*
+
     FILE *fp = NULL;
     int operation_mode = checkOutputOption(argv[1]);
     switch (operation_mode){
         case 0:
-            fp = fopen("pre_processed.txt", "w+");
-            pre_processor();
+            file_name = file_name + ".txt";
+            outpname = strdup(file_name.c_str());
+            fp = fopen(outpname, "w+");
+    //        pre_processor(fp);
+            fclose (fp);
             break;
         case 1:
-            fp = fopen("macro_solved.txt", "w+");
-            macro_sover();
+            file_name = file_name + ".txt";
+            outpname = strdup(file_name.c_str());
+            fp = fopen(outpname, "w+");
+    //        macro_solver(fp);
+            fclose (fp);
             break;
         case 2:
-            fp = fopen("output.o", "w+");
-            assembler();
+            file_name = file_name + ".out";
+            outpname = strdup(file_name.c_str());
+            fp = fopen(outpname, "w+");
+    //        assembler(fp);
+            fclose (fp);
             break;
         default:
             return 0;
     }
-    */
 
 return 0;
 }

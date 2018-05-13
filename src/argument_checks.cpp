@@ -15,7 +15,7 @@ void validateArguments(int argc, char* argv[]) {
 }
 
 void checkArgumentAmount(int argc) {
-    if (argc != 2) {
+    if (argc != 3) {
         fprintf(stderr, "[ERRO]: Quantidade invalida de argumentos.\n");
         showUsage();
         exit(EXIT_FAILURE);
