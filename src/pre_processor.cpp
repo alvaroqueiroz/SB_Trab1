@@ -1,4 +1,5 @@
 #include "pre_processor.h"
+#include "scanner.h"
 using namespace std;
 
 /*
@@ -7,7 +8,7 @@ using namespace std;
 * OUTPUT: - FILE *ofp -> File containing analysed code
 */
 int pre_processor(char * s){
-    //scanner(char * s);
+    scanner(s);
     //parser();
     //semantic_analyser();
 
@@ -16,10 +17,6 @@ int pre_processor(char * s){
 
 
 
-
-
-    /*Open .asm file (input)*/
-    FILE *ifp = fopen(s, "r");
 
     /*create output file*/
     FILE *ofp = NULL;
@@ -31,7 +28,6 @@ int pre_processor(char * s){
 
 
 
-    fclose (ifp);
     fclose (ofp);
 
 

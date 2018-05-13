@@ -14,6 +14,7 @@ Alunos: Andre Abreu Rodrigues de Almeida    12/0007100
 #include <iostream>
 #include <fstream>
 #include "argument_checks.h"
+#include "pre_processor.h"
 using namespace std;
 
 
@@ -29,7 +30,7 @@ int main (int argc, char** argv){
     int operation_mode = checkOutputOption(argv[1]);
     switch (operation_mode){
         case 0:
-    //        pre_processor(argv[2]);
+            pre_processor(argv[2]);
             break;
         case 1:
     //        macro_solver(argv[2]);
