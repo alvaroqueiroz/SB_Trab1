@@ -26,7 +26,7 @@ Todos os arquivos de saída devem estar em formato TEXTO. No casso do arquivo ob
 
 | Step | Feature | Headers | Input | Output | Intermediary Elements |
 | :--: | ------- | ------- | ----- | ------ | --------------------- |
-| 1    | Main    |         | argument / assembly file name | txt file |      |
+| 1    | Main    |         | argument / assembly file name | asm file |      |
 | 2    | Scanner |       | complete assembly file | assembly token list / lexic error msg |      |
 | 3    | Parser |    | token list | syntactic tree / syntactic error msg |       |
 | 4    | Semantic Analyser |     | raw assembly file / Semantic error msg | noted syntactic tree |
@@ -52,13 +52,23 @@ Todos os arquivos de saída devem estar em formato TEXTO. No casso do arquivo ob
 
 	Input -> Main -> Scanner -> Parser -> Semantic Analyser -> Macro Solver -> Intermediary Code Generator -> Optmizer -> Object Code Generator -> Main -> Output
 
+#Instruções
 
+To compile this program, please use the following terminal command:
 
+	_clang++ -Wall *.cpp -o assembler_
 
+And to use it, please use:
 
+	_./assembler -d filename.asm_
 
+Where "-d" is one of the directives "-p", "-m" or "-o" (not case sensitive).
 
+# Referências
 
+### Scanner
+- https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
 
-
-
+### Lists in C++
+- https://www.youtube.com/watch?v=lSIoWv92rrU
+- http://www.cplusplus.com/forum/beginner/3396/
