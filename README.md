@@ -52,6 +52,18 @@ Todos os arquivos de saída devem estar em formato TEXTO. No casso do arquivo ob
 
 	Input -> Main -> Scanner -> Parser -> Semantic Analyser -> Macro Solver -> Intermediary Code Generator -> Optmizer -> Object Code Generator -> Main -> Output
 
+#Instruções
+
+To compile this program, please use the following terminal command:
+
+	_clang++ -Wall *.cpp -o assembler_
+
+And to use it, please use:
+
+	_./assembler -d filename.asm_
+
+Where "-d" is one of the directives "-p", "-m" or "-o" (not case sensitive).
+
 # Referências
 
 ### Parsing
