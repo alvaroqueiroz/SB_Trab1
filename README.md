@@ -52,7 +52,23 @@ Todos os arquivos de saída devem estar em formato TEXTO. No casso do arquivo ob
 
 	Input -> Main -> Scanner -> Parser -> Semantic Analyser -> Macro Solver -> Intermediary Code Generator -> Optmizer -> Object Code Generator -> Main -> Output
 
+#Instruções
+
+To compile this program, please use the following terminal command:
+
+	clang++ -Wall *.cpp -o assembler
+
+And to use it, please use:
+
+	./assembler -d filename.asm
+
+Where "-d" is one of the directives "-p", "-m" or "-o" (not case sensitive).
+
 # Referências
 
-### Parsing
+### Scanner
 - https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
+
+### Lists in C++
+- https://www.youtube.com/watch?v=lSIoWv92rrU
+- http://www.cplusplus.com/forum/beginner/3396/
