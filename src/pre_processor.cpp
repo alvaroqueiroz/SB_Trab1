@@ -8,7 +8,8 @@ using namespace std;
 * OUTPUT: - FILE *ofp -> File containing analysed code
 */
 int pre_processor(char * s){
-    scanner(s);
+    list <Token> tokenlist;
+    scanner(s, tokenlist);
     //parser();
     //semantic_analyser();
 
@@ -29,7 +30,6 @@ int pre_processor(char * s){
 
 
     fclose (ofp);
-
-
+    
     return 0;
 }

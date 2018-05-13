@@ -66,5 +66,9 @@ Where "-d" is one of the directives "-p", "-m" or "-o" (not case sensitive).
 
 # Referências
 
-### Parsing
+### Scanner
 - https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
+
+### Lists in C++
+- https://www.youtube.com/watch?v=lSIoWv92rrU
+- http://www.cplusplus.com/forum/beginner/3396/
