@@ -26,7 +26,7 @@ Todos os arquivos de saída devem estar em formato TEXTO. No casso do arquivo ob
 
 | Step | Feature | Headers | Input | Output | Intermediary Elements |
 | :--: | ------- | ------- | ----- | ------ | --------------------- |
-| 1    | Main    |         | argument / assembly file name | txt file |      |
+| 1    | Main    |         | argument / assembly file name | asm file |      |
 | 2    | Scanner |       | complete assembly file | assembly token list / lexic error msg |      |
 | 3    | Parser |    | token list | syntactic tree / syntactic error msg |       |
 | 4    | Semantic Analyser |     | raw assembly file / Semantic error msg | noted syntactic tree |
@@ -52,13 +52,7 @@ Todos os arquivos de saída devem estar em formato TEXTO. No casso do arquivo ob
 
 	Input -> Main -> Scanner -> Parser -> Semantic Analyser -> Macro Solver -> Intermediary Code Generator -> Optmizer -> Object Code Generator -> Main -> Output
 
+# Referências
 
-
-
-
-
-
-
-
-
-
+### Parsing
+- https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
