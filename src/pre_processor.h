@@ -30,17 +30,6 @@ struct Token {
     int token_pos_il;
 };
 typedef struct Token Token;
-
-struct Error {
-    std::string msg_error;
-    int line_number;
-};
-typedef struct Error Error;
-/*------------------------------------*/
-
-
-/*----------GLOBAL-VARIABLES----------*/
-std::list<Error> lexic_error, sintact_error, semantic_error;
 /*------------------------------------*/
 
 int pre_processor(char * file_name);
