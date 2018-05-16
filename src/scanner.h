@@ -6,6 +6,7 @@
 #include <fstream>
 #include <string>
 #include <list>
+#include <stdlib.h>
 
 struct Token {
     std::string str;
