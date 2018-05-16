@@ -48,10 +48,10 @@ void rm_spaces (list <Token> & tokenlist){
     list<Token>::iterator newit;
     for (it = tokenlist.begin(); it != tokenlist.end(); it++){
         if (it->str == "" || it->str == " " || it->str == "\n"){
-            tokenlist.erase(it);
-            newit = it;
-            newit++;
-            while (newit->line_number==it->line_number){
+            newit = it = tokenlist.erase(it); //erases node and advances iterator
+            it--;   //places iterator back to place (bug fix for Linux)
+            //newit++;  //works on Mac, but not on Linux - DON'T UNCOMMENT UNLESS YOU KNOW WHAT YOU'RE DOING!!!
+            while (newit->line_number == it->line_number){
                 newit->token_pos_il--;
                 newit++;
             }

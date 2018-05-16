@@ -20,16 +20,12 @@ int pre_processor(char * s){
 
 
     /*create output file*/
-    FILE *ofp = NULL;
-    char* outpname;
-    file_name = file_name + ".txt";     //add ".txt" extension
-    outpname = strdup(file_name.c_str());
-    ofp = fopen(outpname, "w+");
+    file_name = file_name + ".pre";     //add ".txt" extension
+
+    //ofstream fp (file_name);  //opens output file
 
 
+    //fp.close();   //closes output file
 
-
-    fclose (ofp);
-    
     return 0;
 }
