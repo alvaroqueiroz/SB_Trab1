@@ -50,7 +50,6 @@ void rm_spaces (list <Token> & tokenlist){
         if (it->str == "" || it->str == " " || it->str == "\n"){
             newit = it = tokenlist.erase(it); //erases node and advances iterator
             it--;   //places iterator back to place (bug fix for Linux)
-            //newit++;  //works on Mac, but not on Linux - DON'T UNCOMMENT UNLESS YOU KNOW WHAT YOU'RE DOING!!!
             while (newit->line_number == it->line_number){
                 newit->token_pos_il--;
                 newit++;
