@@ -59,13 +59,20 @@ void rm_spaces (list <Token> & tokenlist){
 }
 
 void verify_tokens (list <Token> & tokenlist){
+/*categorizes the token into five types: Mnemonic, Label, Constant, Directive and Operand
+**analyses the formation of each token and generates error messages for mistackes
+*/
+
+
+
+
 
 }
 
 void print_tokenlist (list <Token> & tokenlist){
-        cout << "Tamanho da Lista: " << tokenlist.size() << endl << "-----------------\n"; //print list size
-        list<Token>::iterator it;
-        for (it = tokenlist.begin();it != tokenlist.end(); it++)
-            cout << "Token: " << it->str << "   Line: " << it->line_number << " Number: " << it->token_pos_il << endl;  //print list element
-        cout << "-----------------\n";
+    cout << "Tamanho da Lista: " << tokenlist.size() << endl << "-----------------\n"; //print list size
+    list<Token>::iterator it;
+    for (it = tokenlist.begin();it != tokenlist.end(); it++)
+        cout << "Token: " << it->str << "   Line: " << it->line_number << " Number: " << it->token_pos_il << endl;  //print list element
+    cout << "-----------------\n";
 }
