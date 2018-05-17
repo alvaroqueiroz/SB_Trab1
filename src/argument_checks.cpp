@@ -4,8 +4,8 @@
 
 /**  Instrução de uso correto do programa e escolha do tipo de output */
 static void showUsage() {
-    printf("Uso:    .\\montador <argumento> arquivo_assembly.asm\n");
-    printf("<argumento> = '-p' ou '-m' ou '-o' ou '-P' ou '-M' ou '-O'\n");
+    printf("Usage:    .\\assembler <argument> assembly_file.asm\n");
+    printf("<argument> = '-p' or '-m' or '-o' or '-P' or '-M' or '-O'\n");
 }
 
 void validateArguments(int argc, char* argv[]) {
@@ -15,8 +15,8 @@ void validateArguments(int argc, char* argv[]) {
 }
 
 void checkArgumentAmount(int argc) {
-    if (argc != 3) {
-        fprintf(stderr, "[ERRO]: Quantidade invalida de argumentos.\n");
+    if (argc != 4) {
+        fprintf(stderr, "[ERROR]: Invalid amount of arguments.\n");
         showUsage();
         exit(EXIT_FAILURE);
     }
@@ -28,7 +28,7 @@ void checkArgumentAmount(int argc) {
 */
 void checkFileExtension(char* file_name) {
     if (strstr(file_name, ".asm") == NULL) {
-        fprintf(stderr, "[ERRO]: O arquivo deve ter a extensao '.asm'\n");
+        fprintf(stderr, "[ERROr]: The file must have the extension '.asm'\n");
         showUsage();
         exit(EXIT_FAILURE);
     }
@@ -45,7 +45,7 @@ int checkOutputOption(char* op) {
     else if (strcmp(op, "-o") == 0 || strcmp(op, "-O") == 0)
         return 2;
     else {
-        fprintf(stderr, "[ERRO]: Argumento invalido\n");
+        fprintf(stderr, "[ERROR]: Invalid argument\n");
         exit(EXIT_FAILURE);
     }
 }
