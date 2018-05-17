@@ -20,18 +20,23 @@ int parser (list <Token> & tokenlist){
 			
 			case TT_OPERAND:
 				cout << "Sintax Error@Line." << it->line_number << ": unexpected operand. " << endl;
+				it++;
 			break;
 			
 			case TT_DEC_CONST:
 			case TT_HEX_CONST:
 				cout << "Sintax Error@Line." << it->line_number << ": unexpected value. " << endl;
+				it++;
 			break;
 
 			default:
-				cout << "Parser: unknowm type token.";
+				cout << "Parser: unknowm type token." << endl;
+				it++;
 			break;
 		}
 	}
+
+	return 0;
 }
 
 list<Token>::iterator parser_mnemonic(list <Token> & tokenlist, list<Token>::iterator it){
@@ -90,20 +95,56 @@ list<Token>::iterator parser_mnemonic(list <Token> & tokenlist, list<Token>::ite
 		case OP_STOP:
 			target_line = it->line_number;
 			it++;
-			if (it != tokenlist.end()){
-				
+			if (it != tokenlist.end()){					// Check end of token list to avoid errors.
+				if (target_line == it->line_number){	// Check excess of arguments.
+					cout << "Sintax Error@Line." << target_line << ": unexpected arguments. " << endl;
+					do {								// Get out of this line.
+						it++;
+						if (it == tokenlist.end()){		// Check end of token list to avoid errors.
+							break;
+						}
+					} while (target_line == it->line_number);
+				}
 			}
 		break;
 
 		default:
+			cout << "Parser: unknowm mnemonic token." << endl;
+			it++;
 		break;
 	}
-}
 
-list<Token>::iterator parser_label(list <Token> & tokenlist, list<Token>::iterator it){
-
+	return it;
 }
 
 list<Token>::iterator parser_directive(list <Token> & tokenlist, list<Token>::iterator it){
+	switch (it->addit_info){
+		case DR_SECTION:
+		break;
 
+		case DR_SPACE:
+		break;
+
+		case DR_CONST:
+		break;
+
+		case DR_EQU:
+		break;
+
+		case DR_IF:
+		break;
+
+		case DR_MACRO:
+		break;
+
+		case DR_ENDMACRO:
+		break;
+
+		default:
+			cout << "Parser: unknowm directive token." << endl;
+			it++;
+		break;		
+	}
+
+	return it;
 }

@@ -13,7 +13,6 @@ using namespace std;
 
 int scanner(list <Token> & tokenlist);
 list<Token>::iterator parser_mnemonic(list <Token> & tokenlist, list<Token>::iterator it);
-list<Token>::iterator parser_label(list <Token> & tokenlist, list<Token>::iterator it);
 list<Token>::iterator parser_directive(list <Token> & tokenlist, list<Token>::iterator it);
 
 #endif /* PARSER_H_ */
