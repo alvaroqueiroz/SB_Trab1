@@ -6,7 +6,8 @@
 #include <fstream>
 #include <string>
 #include <list>
-#include <stdlib.h>
+#include <cctype>
+#include <cstdlib>
 #include "pre_processor.h"
 
 int scanner(char * file_name, std::list<Token> & tokenlist);
@@ -22,6 +23,6 @@ int is_directive(Token & token);
 int is_operand(Token & token);
 int is_decimal(Token & token);
 int is_hexadecimal(Token & token);
-
+void label_spc_fix (std::list<Token> & tokenlist);
 
 #endif /* SCANNER_H_ */

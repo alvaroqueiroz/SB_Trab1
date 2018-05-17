@@ -1,10 +1,25 @@
+/*SCANNER:
+* This program analyses the code searching for lexical errorsand divides the
+*  text into tokens, organizing them in a token list.
+* Tokens have 5 elements: string (str), line number, position in line (pos_il),
+* type and additional information.
+* The additional information field stores different values for different types:
+*   - Mnemonics:  addit_info == OPCODE;
+*   - Labels:     addit_info == '0' for valid labels and '-1' for invalid ones;
+*   - Directives: addit_info == directive identifier from directives table;
+*   - Operand:    addit_info == '0' for valid operands and '-1' for invalid ones;
+*   - Dec Const:  addit_info == int constant value
+*   - Hex Const:  addit_info == int constant value
+*/
+
 #include "scanner.h"
 using namespace std;
 
 int scanner (char * s, list<Token> & tokenlist){
     identify_tokens(s, tokenlist);      //generates token list
-    print_tokenlist (tokenlist);
+//    print_tokenlist (tokenlist);
     rm_spaces(tokenlist);     //removes blank spaces
+    label_spc_fix(tokenlist);       //removes spaces between label and ":"
     print_tokenlist (tokenlist);
     verify_tokens(tokenlist);     //verifies token lexic validity
     return 0;
@@ -51,6 +66,29 @@ void rm_spaces (list<Token> & tokenlist){
             while (newit->line_number == it->line_number){
                 newit->token_pos_il--;
                 newit++;
+            }
+        }
+    }
+}
+
+void label_spc_fix (list<Token> & tokenlist){
+    /*Removes space between label and ":" marker*/
+    list<Token>::iterator it, newit;
+    for (it = tokenlist.begin(); it != tokenlist.end(); it++){
+        if (it->str == ":"){
+            if(it->token_pos_il == 1){
+                it--;
+                it->str = it->str + ":"; //concatenates label and label marker ":"
+                it++;
+                newit = it = tokenlist.erase(it); //erases node and advances iterator
+                it--;   //places iterator back to place (bug fix for Linux)
+                while (newit->line_number == it->line_number){
+                    newit->token_pos_il--;
+                    newit++;
+                }
+            }else {
+                it->type = TT_LABEL;
+                it->addit_info = INVALID_TOKEN;
             }
         }
     }
@@ -122,11 +160,27 @@ int is_mnemonic(Token & token){
 
 
 int is_label(Token & token){
+    if (token.str == ":"){
+        token.type = TT_LABEL;
+        token.addit_info = INVALID_TOKEN;
+        return INVALID_TOKEN;
+    }
     char ch = token.str.back();
     if (ch == ':'){
-        token.type = TT_LABEL;
-        token.addit_info = 0;
-        return TT_LABEL;
+        int i = 0;
+        string delimiter = ":";
+        string nstr = token.str.substr(0, token.str.find(delimiter)); //removes ":" from string
+        char * cstr = new char [nstr.length()+1];
+        strcpy (cstr, nstr.c_str());   //casts string to char* for compatibility with <cctype>
+        for (i=0; i<nstr.length(); i++){
+            if (!isalnum(cstr[i]) && cstr[i] != '_')
+                break;
+        }
+        if (i == nstr.length()){
+            token.type = TT_LABEL;
+            token.addit_info = 0;
+            return TT_LABEL;
+        }
     }
     token.type = 0;
     token.addit_info = 0;
@@ -135,13 +189,35 @@ int is_label(Token & token){
 
 
 int is_directive(Token & token){
-    token.type = 0;
-    token.addit_info = 0;
-    return 0;
-}
-
-
-int is_operand(Token & token){
+    if (token.str.compare("SECTION") == 0 || token.str.compare("section") == 0){
+        token.type = TT_DIRECTIVE;
+        token.addit_info = DIR_SECTION;
+        return DIR_SECTION;
+    }else if (token.str.compare("SPACE") == 0 || token.str.compare("space") == 0){
+        token.type = TT_DIRECTIVE;
+        token.addit_info = DIR_SPACE;
+        return DIR_SPACE;
+    }else if (token.str.compare("CONST") == 0 || token.str.compare("const") == 0){
+        token.type = TT_DIRECTIVE;
+        token.addit_info = DIR_CONST;
+        return DIR_CONST;
+    }else if (token.str.compare("EQU") == 0 || token.str.compare("equ") == 0){
+        token.type = TT_DIRECTIVE;
+        token.addit_info = DIR_EQU;
+        return DIR_EQU;
+    }else if (token.str.compare("IF") == 0 || token.str.compare("if") == 0){
+        token.type = TT_DIRECTIVE;
+        token.addit_info = DIR_IF;
+        return DIR_IF;
+    }else if (token.str.compare("MACRO") == 0 || token.str.compare("macro") == 0){
+        token.type = TT_DIRECTIVE;
+        token.addit_info = DIR_MACRO;
+        return DIR_MACRO;
+    }else if (token.str.compare("ENDMACRO") == 0 || token.str.compare("endmacro") == 0){
+        token.type = TT_DIRECTIVE;
+        token.addit_info = DIR_ENDMACRO;
+        return DIR_ENDMACRO;
+    }
     token.type = 0;
     token.addit_info = 0;
     return 0;
@@ -149,6 +225,26 @@ int is_operand(Token & token){
 
 
 int is_decimal(Token & token){
+    int i = 0;
+    char * cstr = new char [token.str.length()+1];
+    strcpy (cstr, token.str.c_str());   //casts string to char* for compatibility with <cctype>
+    if (cstr[0] == '-' || cstr[0] == '+'){
+        strcpy (cstr, token.str.substr(1, token.str.length()).c_str()); //removes sign
+    }
+    for (i=0; i<strlen(cstr); i++){
+        if (!isdigit(cstr[i])){  //checks if it is a decimal number
+            break;      //exits if it's not
+        }
+    }
+    if (i == strlen(cstr)){
+        token.type = TT_DEC_CONST;      //stores token type
+        token.addit_info = (int)strtol(token.str.c_str(), NULL, 0);  //stores int value
+        return TT_DEC_CONST;
+    }else if (i != 0 && token.str.compare(0, 2, "0x") && token.str.compare(0, 2, "0X")){
+        token.type = TT_OPERAND;            //not constant type!!
+        token.addit_info = INVALID_TOKEN;
+        return INVALID_TOKEN;
+    }
     token.type = 0;
     token.addit_info = 0;
     return 0;
@@ -156,9 +252,51 @@ int is_decimal(Token & token){
 
 
 int is_hexadecimal(Token & token){
+    int i = 0;
+    char * cstr = new char [token.str.length()+1];
+    string s;
+    if (!token.str.compare(0, 2, "0x") || !token.str.compare(0, 2, "0X")){    //IF HAS HEX IDENTIFIER
+        s = token.str.substr(2, token.str.length()); // removes HEX identifier
+        cstr[s.length()] = '\0';
+        strcpy (cstr, s.c_str());   //casts string to char* for compatibility with <cctype>
+        for (i=0; i<=s.length(); i++){
+            if (!isdigit(cstr[i]) && cstr[i] != 'A' && cstr[i] != 'a' && cstr[i] != 'B'
+                            && cstr[i] != 'b' && cstr[i] != 'C' && cstr[i] != 'c'
+                            && cstr[i] != 'D' && cstr[i] != 'd' && cstr[i] != 'E'
+                            && cstr[i] != 'e' && cstr[i] != 'F' && cstr[i] != 'f')  //checks if it is an hexadecimal number
+                break;      //exits if it's not
+        }
+        if (i==s.length()){
+            token.type = TT_HEX_CONST;      //stores token type
+            token.addit_info = (int)strtol(token.str.c_str(), NULL, 16);  //stores int value
+            return TT_HEX_CONST;
+        }else{
+            token.type = TT_OPERAND;            //not constant type!!
+            token.addit_info = INVALID_TOKEN;
+            return INVALID_TOKEN;
+        }
+    }
     token.type = 0;
     token.addit_info = 0;
     return 0;
+}
+
+
+int is_operand(Token & token){
+    int i = 0;
+    token.type = TT_OPERAND;
+    char * cstr = new char [token.str.length()+1];
+    strcpy (cstr, token.str.c_str());   //casts string to char* for compatibility with <cctype>
+    for (i=0; i<token.str.length(); i++){
+        if (!isalpha(cstr[i]) && cstr[i] != '_')
+            break;
+    }
+    if (i == token.str.length()){
+        token.addit_info = 0;
+        return TT_OPERAND;
+    }
+    token.addit_info = INVALID_TOKEN;
+    return TT_OPERAND;
 }
 
 
@@ -184,16 +322,40 @@ int categorize_token(Token & token){
 void lexic_analisys(Token & token){
     switch (token.type){
         case TT_MNEMONIC:
+            if (token.addit_info == INVALID_TOKEN){
+                fprintf(stderr, "Lexical error @ line %d - Invalid mnemonic (%s).\n", token.line_number, token.str.c_str());
+                pre_error = 1;
+            }
             break;
         case TT_LABEL:
+            if (token.addit_info == INVALID_TOKEN){
+                fprintf(stderr, "Lexical error @ line %d - Invalid label (%s).\n", token.line_number, token.str.c_str());
+                pre_error = 1;
+            }
             break;
         case TT_DIRECTIVE:
+            if (token.addit_info == INVALID_TOKEN){
+                fprintf(stderr, "Lexical error @ line %d - Invalid directive (%s).\n", token.line_number, token.str.c_str());
+                pre_error = 1;
+            }
             break;
         case TT_OPERAND:
+            if (token.addit_info == INVALID_TOKEN){
+                fprintf(stderr, "Lexical error @ line %d - Invalid operand (%s).\n", token.line_number, token.str.c_str());
+                pre_error = 1;
+            }
             break;
         case TT_DEC_CONST:
+            if (token.addit_info == INVALID_TOKEN){
+                fprintf(stderr, "Lexical error @ line %d - Invalid decimal constant (%s).\n", token.line_number, token.str.c_str());
+                pre_error = 1;
+            }
             break;
         case TT_HEX_CONST:
+            if (token.addit_info == INVALID_TOKEN){
+                fprintf(stderr, "Lexical error @ line %d - Invalid hexadecimal constant (%s).\n", token.line_number, token.str.c_str());
+                pre_error = 1;
+            }
             break;
         default:
             break;
@@ -208,8 +370,8 @@ void verify_tokens (list<Token> & tokenlist){
     list<Token>::iterator it = tokenlist.begin();
     for (it = tokenlist.begin();it != tokenlist.end(); it++){
         categorize_token(*it);
+        //cout << "Token: " << it->str << "  type: " << it->type << "  info: " << it->addit_info << endl;
         lexic_analisys(*it);
-        cout << it->type << " " << it->addit_info << endl;
     }
 }
 
