@@ -17,6 +17,7 @@ Alunos: Andre Abreu Rodrigues de Almeida    12/0007100
 #include "pre_processor.h"
 using namespace std;
 
+int pre_error = 0; // flag to indicate if pre-processor had any error.
 
 /*
 * MAIN: validates arguments and calls specifc functions, acording to arguments.
