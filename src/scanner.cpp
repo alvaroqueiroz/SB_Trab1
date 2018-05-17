@@ -15,13 +15,20 @@
 #include "scanner.h"
 using namespace std;
 
+//#define __DEBUG__
+
+
 int scanner (char * s, list<Token> & tokenlist){
     identify_tokens(s, tokenlist);      //generates token list
+#ifdef __DEBUG__
     print_tokenlist (tokenlist);
+#endif
     rm_spaces(tokenlist);     //removes blank spaces
     label_spc_fix(tokenlist);       //removes spaces between label and ":"
     comma_operand(tokenlist);
+#ifdef __DEBUG__
     print_tokenlist (tokenlist);
+#endif
     verify_tokens(tokenlist);     //verifies token lexic validity
     return 0;
 }
@@ -398,7 +405,9 @@ void verify_tokens (list<Token> & tokenlist){
     list<Token>::iterator it = tokenlist.begin();
     for (it = tokenlist.begin();it != tokenlist.end(); it++){
         categorize_token(*it);
+#ifdef __DEBUG__
         cout << "Token: " << it->str << "  type: " << it->type << "  info: " << it->addit_info << endl;
+#endif
         lexic_analisys(*it);
     }
 }
