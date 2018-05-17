@@ -165,9 +165,19 @@ int is_label(Token & token){
         token.addit_info = INVALID_TOKEN;
         return INVALID_TOKEN;
     }
-    char ch = token.str.back();
+
+    /*      // Version without the use of c++11.
+    char ch;
+    if (token.str.length() - 1 < 0){
+        ch = token.str.at(token.str.length() - 1);
+    }else {
+        ch = token.str.at(token.str.length() - 1);
+    }
+    */
+    char ch = token.str.back();       // Version with the use of c++11.
+    
     if (ch == ':'){
-        int i = 0;
+        unsigned int i = 0;
         string delimiter = ":";
         string nstr = token.str.substr(0, token.str.find(delimiter)); //removes ":" from string
         char * cstr = new char [nstr.length()+1];
@@ -225,7 +235,7 @@ int is_directive(Token & token){
 
 
 int is_decimal(Token & token){
-    int i = 0;
+    unsigned int i = 0;
     char * cstr = new char [token.str.length()+1];
     strcpy (cstr, token.str.c_str());   //casts string to char* for compatibility with <cctype>
     if (cstr[0] == '-' || cstr[0] == '+'){
@@ -252,7 +262,7 @@ int is_decimal(Token & token){
 
 
 int is_hexadecimal(Token & token){
-    int i = 0;
+    unsigned int i = 0;
     char * cstr = new char [token.str.length()+1];
     string s;
     if (!token.str.compare(0, 2, "0x") || !token.str.compare(0, 2, "0X")){    //IF HAS HEX IDENTIFIER
@@ -283,7 +293,7 @@ int is_hexadecimal(Token & token){
 
 
 int is_operand(Token & token){
-    int i = 0;
+    unsigned int i = 0;
     token.type = TT_OPERAND;
     char * cstr = new char [token.str.length()+1];
     strcpy (cstr, token.str.c_str());   //casts string to char* for compatibility with <cctype>
