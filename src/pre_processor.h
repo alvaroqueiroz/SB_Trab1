@@ -23,11 +23,24 @@
 #define OP_STOP             14
 /*------------------------------------*/
 
-/*----------STRUCTS-------------------*/
+/*----------TOKEN-TYPE-TABLE----------*/
+#define TT_MNEMONIC         1
+#define TT_LABEL            2
+#define TT_DIRECTIVE        3
+#define TT_OPERAND          4
+#define TT_DEC_CONST        5
+#define TT_HEX_CONST        6
+/*------------------------------------*/
+
+#define INVALID_TOKEN      -1
+
+/*--------------STRUCTS---------------*/
 struct Token {
     std::string str;
     int line_number;
     int token_pos_il;
+    int type;
+    int addit_info;
 };
 typedef struct Token Token;
 /*------------------------------------*/
