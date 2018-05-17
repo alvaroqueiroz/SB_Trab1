@@ -40,6 +40,8 @@
 #define DIR_IF              5
 #define DIR_MACRO           6
 #define DIR_ENDMACRO        7
+#define DIR_TEXT            8
+#define DIR_DATA            9
 /*------------------------------------*/
 
 #define INVALID_TOKEN      -1

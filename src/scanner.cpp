@@ -17,9 +17,10 @@ using namespace std;
 
 int scanner (char * s, list<Token> & tokenlist){
     identify_tokens(s, tokenlist);      //generates token list
-//    print_tokenlist (tokenlist);
+    print_tokenlist (tokenlist);
     rm_spaces(tokenlist);     //removes blank spaces
     label_spc_fix(tokenlist);       //removes spaces between label and ":"
+    comma_operand(tokenlist);
     print_tokenlist (tokenlist);
     verify_tokens(tokenlist);     //verifies token lexic validity
     return 0;
@@ -34,8 +35,14 @@ int identify_tokens (char * s, list<Token> & tokenlist){
     int lcount = 0;
     int tcount = 0;
     Token vtoken;
+    char cstr[100];
+    int i = 0;
     if (asmfile){
         while(getline(asmfile, line)){  //scans whole file
+            strcpy (cstr, line.c_str());
+            for (i=0; i<strlen(cstr); i++)
+                toupper (cstr[i]);
+            line = string(cstr);
         line = line.substr(0, line.find(semicolon));    //removes comments
             while (line.length() > 0){  //scans whole line
                 vtoken.str = line.substr(0, line.find(delimiter));   //gets new token
@@ -92,6 +99,17 @@ void label_spc_fix (list<Token> & tokenlist){
             }
         }
     }
+}
+
+
+int comma_operand (list<Token> & tokenlist){
+    list<Token>::iterator it, newit;
+    for (it = tokenlist.begin(); it != tokenlist.end(); it++){
+        if (strstr(it->str.c_str(),",")){
+            cout << "teve vírgula" << endl;
+        }
+    }
+    return 0;
 }
 
 
@@ -217,6 +235,14 @@ int is_directive(Token & token){
         token.type = TT_DIRECTIVE;
         token.addit_info = DIR_ENDMACRO;
         return DIR_ENDMACRO;
+    }else if (token.str.compare("TEXT") == 0 || token.str.compare("text") == 0){
+        token.type = TT_DIRECTIVE;
+        token.addit_info = DIR_TEXT;
+        return DIR_TEXT;
+    }else if (token.str.compare("DATA") == 0 || token.str.compare("data") == 0){
+        token.type = TT_DIRECTIVE;
+        token.addit_info = DIR_DATA;
+        return DIR_DATA;
     }
     token.type = 0;
     token.addit_info = 0;
@@ -288,7 +314,9 @@ int is_operand(Token & token){
     char * cstr = new char [token.str.length()+1];
     strcpy (cstr, token.str.c_str());   //casts string to char* for compatibility with <cctype>
     for (i=0; i<token.str.length(); i++){
-        if (!isalpha(cstr[i]) && cstr[i] != '_')
+        if (!isalpha(cstr[0]))
+            break;
+        if (!isalnum(cstr[i]) && cstr[i] != '_')
             break;
     }
     if (i == token.str.length()){
@@ -370,7 +398,7 @@ void verify_tokens (list<Token> & tokenlist){
     list<Token>::iterator it = tokenlist.begin();
     for (it = tokenlist.begin();it != tokenlist.end(); it++){
         categorize_token(*it);
-        //cout << "Token: " << it->str << "  type: " << it->type << "  info: " << it->addit_info << endl;
+        cout << "Token: " << it->str << "  type: " << it->type << "  info: " << it->addit_info << endl;
         lexic_analisys(*it);
     }
 }

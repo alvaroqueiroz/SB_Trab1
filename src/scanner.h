@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cstring>
 #include <list>
 #include <cctype>
 #include <cstdlib>
@@ -24,5 +25,6 @@ int is_operand(Token & token);
 int is_decimal(Token & token);
 int is_hexadecimal(Token & token);
 void label_spc_fix (std::list<Token> & tokenlist);
+int comma_operand (std::list<Token> & tokenlist);
 
 #endif /* SCANNER_H_ */
