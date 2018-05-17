@@ -13,6 +13,8 @@ Alunos: Andre Abreu Rodrigues de Almeida    12/0007100
 #include <cstdio>
 #include <iostream>
 #include <fstream>
+#include <string>
+#include <cstring>
 #include "argument_checks.h"
 #include "pre_processor.h"
 using namespace std;
@@ -29,15 +31,20 @@ int main (int argc, char** argv){
 
     validateArguments(argc, argv);
     int operation_mode = checkOutputOption(argv[1]);
+    string file_name = string(argv[2]) + ".asm";
+    string output_fn;
     switch (operation_mode){
         case 0:
-            pre_processor(argv[2]);
+            output_fn = string(argv[3]) + ".pre";
+            pre_processor(strdup(file_name.c_str()), strdup(output_fn.c_str()));
             break;
         case 1:
-    //        macro_solver(argv[2]);
+            output_fn = string(argv[3]) + ".mcr";
+    //        macro_solver(strdup(file_name.c_str()), strdup(output_fn.c_str()));
             break;
         case 2:
-    //        assembler(argv[2]);
+            output_fn = string(argv[3]) + ".o";
+    //        assembler(strdup(file_name.c_str()), strdup(output_fn.c_str()));
             break;
         default:
             return 0;

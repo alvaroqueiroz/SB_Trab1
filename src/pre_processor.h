@@ -57,7 +57,7 @@ struct Token {
 typedef struct Token Token;
 /*------------------------------------*/
 
-int pre_processor(char * file_name);
+int pre_processor(char * input_fn, char * output_fn);
 
 
 extern int pre_error;
