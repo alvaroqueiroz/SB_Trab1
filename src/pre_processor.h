@@ -28,6 +28,8 @@ struct Token {
     std::string str;
     int line_number;
     int token_pos_il;
+    int type;
+    int addit_info;
 };
 typedef struct Token Token;
 /*------------------------------------*/
