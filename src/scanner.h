@@ -8,6 +8,7 @@
 #include <list>
 #include <cctype>
 #include <cstdlib>
+#include <cstring>
 #include "pre_processor.h"
 
 int scanner(char * file_name, std::list<Token> & tokenlist);
