@@ -10,8 +10,8 @@ static void showUsage() {
 
 void validateArguments(int argc, char* argv[]) {
     checkArgumentAmount(argc);
-    for (int i = 2; i < argc; ++i)
-        checkFileExtension(argv[i]);
+    //for (int i = 2; i < argc; ++i)
+    //    checkFileExtension(argv[i]);
 }
 
 void checkArgumentAmount(int argc) {
