@@ -22,11 +22,11 @@ int scanner (char * s, list<Token> & tokenlist, list<Token> & labellist){
     identify_tokens(s, tokenlist);      //generates token list
     comma_operand(tokenlist);
 
-#ifdef __DEBUG__
-    print_tokenlist (tokenlist);
-#endif
+    verify_tokens(tokenlist, labellist);       //verifies token lexic validity
 
-    verify_tokens(tokenlist);       //verifies token lexic validity
+#ifdef __DEBUG__
+    print_tokenlist (tokenlist, labellist);
+#endif
     return 0;
 }
 
@@ -35,7 +35,7 @@ int identify_tokens (char * s, list<Token> & tokenlist){
     string line;
     char semicolon = ';';
     
-    int lcount = 0;
+    int lcount = 1;
     int tcount = 0;
     Token vtoken;
     unsigned int i = 0;
@@ -204,8 +204,9 @@ int is_mnemonic(Token & token){
 }
 
 
-int is_label(Token & token){
+int is_label(Token & token, list<Token> & labellist){
     unsigned int i;
+    Token tmp;
 
     if (token.str.at(token.str.length()-1) == ':'){
         token.type = TT_LABEL;
@@ -235,6 +236,9 @@ int is_label(Token & token){
         // Valid label.
         token.type = TT_LABEL;
         token.addit_info = 0;
+        tmp = token;
+        tmp.str = token.str.substr(0, token.str.length()-1);    // take just the name of the label.
+        labellist.insert(labellist.end(), tmp);         // add label to labellist.
         return TT_LABEL;
     }
     return 0;
@@ -242,39 +246,47 @@ int is_label(Token & token){
 
 
 int is_directive(Token & token){
-    if (token.str.compare("SECTION") == 0 || token.str.compare("section") == 0){
+    if (token.str.compare("SECTION") == 0){
         token.type = TT_DIRECTIVE;
         token.addit_info = DIR_SECTION;
         return DIR_SECTION;
-    }else if (token.str.compare("SPACE") == 0 || token.str.compare("space") == 0){
+    }else 
+    if (token.str.compare("SPACE") == 0){
         token.type = TT_DIRECTIVE;
         token.addit_info = DIR_SPACE;
         return DIR_SPACE;
-    }else if (token.str.compare("CONST") == 0 || token.str.compare("const") == 0){
+    }else 
+    if (token.str.compare("CONST") == 0){
         token.type = TT_DIRECTIVE;
         token.addit_info = DIR_CONST;
         return DIR_CONST;
-    }else if (token.str.compare("EQU") == 0 || token.str.compare("equ") == 0){
+    }else 
+    if (token.str.compare("EQU") == 0){
         token.type = TT_DIRECTIVE;
         token.addit_info = DIR_EQU;
         return DIR_EQU;
-    }else if (token.str.compare("IF") == 0 || token.str.compare("if") == 0){
+    }else 
+    if (token.str.compare("IF") == 0){
         token.type = TT_DIRECTIVE;
         token.addit_info = DIR_IF;
         return DIR_IF;
-    }else if (token.str.compare("MACRO") == 0 || token.str.compare("macro") == 0){
+    }else 
+    if (token.str.compare("MACRO") == 0){
         token.type = TT_DIRECTIVE;
         token.addit_info = DIR_MACRO;
         return DIR_MACRO;
-    }else if (token.str.compare("ENDMACRO") == 0 || token.str.compare("endmacro") == 0){
+    }else 
+    if (token.str.compare("ENDMACRO") == 0){
         token.type = TT_DIRECTIVE;
         token.addit_info = DIR_ENDMACRO;
         return DIR_ENDMACRO;
-    }else if (token.str.compare("TEXT") == 0 || token.str.compare("text") == 0){
+    }else 
+    if (token.str.compare("TEXT") == 0){
         token.type = TT_DIRECTIVE;
         token.addit_info = DIR_TEXT;
         return DIR_TEXT;
-    }else if (token.str.compare("DATA") == 0 || token.str.compare("data") == 0){
+    }else 
+    if (token.str.compare("DATA") == 0){
         token.type = TT_DIRECTIVE;
         token.addit_info = DIR_DATA;
         return DIR_DATA;
@@ -363,11 +375,11 @@ int is_operand(Token & token){
 }
 
 
-int categorize_token(Token & token){
+int categorize_token(Token & token, list<Token> & labellist){
     token.type = 0;
     if (is_mnemonic(token))
         return TT_MNEMONIC;
-    if (is_label(token))
+    if (is_label(token, labellist))
         return TT_LABEL;
     if (is_directive(token))
         return TT_DIRECTIVE;
@@ -426,13 +438,13 @@ void lexic_analisys(Token & token){
 }
 
 
-void verify_tokens (list<Token> & tokenlist){
+void verify_tokens (list<Token> & tokenlist, list<Token> & labellist){
 /*categorizes the token into six types: Mnemonic, Label, Decimal Constant, Hexadecimal Constant, Directive and Operand
 **analyses the formation of each token and generates error messages for mistackes
 */
     list<Token>::iterator it = tokenlist.begin();
     for (it = tokenlist.begin();it != tokenlist.end(); it++){
-        categorize_token(*it);
+        categorize_token(*it, labellist);
 
 #ifdef __DEBUG__
         cout << "Token: " << it->str << "  type: " << it->type << "  info: " << it->addit_info << endl;
@@ -443,10 +455,14 @@ void verify_tokens (list<Token> & tokenlist){
 }
 
 
-void print_tokenlist (list<Token> & tokenlist){
+void print_tokenlist (list<Token> & tokenlist, list<Token> & labellist){
     cout << "Tamanho da Lista: " << tokenlist.size() << endl << "-----------------\n"; //print list size
     list<Token>::iterator it;
     for (it = tokenlist.begin();it != tokenlist.end(); it++)
         cout << "Token: " << it->str << "..   Line: " << it->line_number << " Number: " << it->token_pos_il << endl;  //print list element
+    cout << "-----------------\n";
+
+    for (it = labellist.begin();it != labellist.end(); it++)
+        cout << "label: " << it->str << "..   Line: " << it->line_number << " Number: " << it->token_pos_il << endl;  //print list element
     cout << "-----------------\n";
 }
