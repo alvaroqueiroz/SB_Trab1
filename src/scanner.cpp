@@ -18,49 +18,72 @@ using namespace std;
 #define __DEBUG__
 
 
-int scanner (char * s, list<Token> & tokenlist){
+int scanner (char * s, list<Token> & tokenlist, list<Token> & labellist){
     identify_tokens(s, tokenlist);      //generates token list
+
 #ifdef __DEBUG__
     print_tokenlist (tokenlist);
 #endif
-    rm_spaces(tokenlist);     //removes blank spaces
+
     label_spc_fix(tokenlist);       //removes spaces between label and ":"
     comma_operand(tokenlist);
+
 #ifdef __DEBUG__
     print_tokenlist (tokenlist);
 #endif
-    verify_tokens(tokenlist);     //verifies token lexic validity
+
+    verify_tokens(tokenlist);       //verifies token lexic validity
     return 0;
 }
 
 
 int identify_tokens (char * s, list<Token> & tokenlist){
-    ifstream asmfile( s );  //opens ASM file
     string line;
-    string delimiter = " ";
-    string semicolon = ";";
+    char semicolon = ';';
+    
     int lcount = 0;
     int tcount = 0;
     Token vtoken;
-    char cstr[100];
-    int i = 0;
+    unsigned int i = 0;
+
+    ifstream asmfile( s );  //opens ASM file
     if (asmfile){
         while(getline(asmfile, line)){  //scans whole file
-            strcpy (cstr, line.c_str());
-            for (i=0; i<strlen(cstr); i++)
-                toupper (cstr[i]);
-            line = string(cstr);
-        line = line.substr(0, line.find(semicolon));    //removes comments
+            for (i=0; i<line.length(); i++)     // Turn all upper.
+                line.at(i) = toupper(line.at(i));
+
+            line = line.substr(0, line.find(semicolon));    //removes comments
+
             while (line.length() > 0){  //scans whole line
-                vtoken.str = line.substr(0, line.find(delimiter));   //gets new token
-                line.erase(0, vtoken.str.length() + delimiter.length()); //erases token from line
-                vtoken.token_pos_il = tcount;   //stores token order in line
-                vtoken.line_number = lcount;    //stores line number
-                tokenlist.insert(tokenlist.end(), vtoken);   //inserts token to token list
+                
+                // Eliminates desnecessary.
+                i = 0;
+                while (line.at(i) == ' ' || line.at(i) == '\t' || line.at(i) == '\n'){
+                    i++;
+                    if (i == line.length())     // Prevent error.
+                        break;
+                }
+                line.erase(0, i);
+                if (line.length() == 0){        // Check end line.
+                    break;
+                }
+
+                i = 0;
+                while (line.at(i) != ' ' && line.at(i) != '\t' && line.at(i) != '\n'){
+                    i++;
+                    if (i == line.length())     // Prevent error.
+                        break;
+                }
+                
+                vtoken.str = line.substr(0, i);             //gets new token.
+                vtoken.token_pos_il = tcount;               //stores token order in line.
+                vtoken.line_number = lcount;                //stores line number.
+                tokenlist.insert(tokenlist.end(), vtoken);  //inserts token to token list.
+                line.erase(0, vtoken.str.length() + 1);     //erases token and delimiter from line.
                 tcount++;
             }
-        tcount = 0;
-        lcount++;
+            tcount = 0;
+            lcount++;
         }
     }else{
         fprintf(stderr, "[ERRO]: Falha ao abrir o arquivo '%s'.\n", s);
@@ -70,20 +93,6 @@ int identify_tokens (char * s, list<Token> & tokenlist){
     return 0;
 }
 
-
-void rm_spaces (list<Token> & tokenlist){
-    list<Token>::iterator it, newit;
-    for (it = tokenlist.begin(); it != tokenlist.end(); it++){
-        if (it->str == "" || it->str == " " || it->str == "\n"){
-            newit = it = tokenlist.erase(it); //erases node and advances iterator
-            it--;   //places iterator back to place (bug fix for Linux)
-            while (newit->line_number == it->line_number){
-                newit->token_pos_il--;
-                newit++;
-            }
-        }
-    }
-}
 
 void label_spc_fix (list<Token> & tokenlist){
     /*Removes space between label and ":" marker*/
@@ -453,6 +462,6 @@ void print_tokenlist (list<Token> & tokenlist){
     cout << "Tamanho da Lista: " << tokenlist.size() << endl << "-----------------\n"; //print list size
     list<Token>::iterator it;
     for (it = tokenlist.begin();it != tokenlist.end(); it++)
-        cout << "Token: " << it->str << "   Line: " << it->line_number << " Number: " << it->token_pos_il << endl;  //print list element
+        cout << "Token: " << it->str << "..   Line: " << it->line_number << " Number: " << it->token_pos_il << endl;  //print list element
     cout << "-----------------\n";
 }

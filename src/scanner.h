@@ -12,9 +12,8 @@
 #include <cstring>
 #include "pre_processor.h"
 
-int scanner(char * file_name, std::list<Token> & tokenlist/*,std::list<Token> & labellist*/);
+int scanner(char * file_name, std::list<Token> & tokenlist, std::list<Token> & labellist);
 int identify_tokens (char * s, std::list<Token> & tokenlist);
-void rm_spaces (std::list<Token> & tokenlist);
 void verify_tokens (std::list<Token> & tokenlist);
 void print_tokenlist (std::list<Token> & tokenlist);
 int categorize_token(Token & token);
