@@ -13,6 +13,7 @@
 #define TT_OPERAND          4
 #define TT_DEC_CONST        5
 #define TT_HEX_CONST        6
+#define TT_COMMA_OPERATOR      7
 /*------------------------------------*/
 
 /*------------OPCODE-TABLE------------*/
@@ -40,9 +41,12 @@
 #define DIR_IF              5
 #define DIR_MACRO           6
 #define DIR_ENDMACRO        7
+#define DIR_TEXT            8
+#define DIR_DATA            9
 /*------------------------------------*/
 
-#define INVALID_TOKEN      -1
+#define INVALID_TOKEN       -1
+
 
 
 
@@ -57,7 +61,7 @@ struct Token {
 typedef struct Token Token;
 /*------------------------------------*/
 
-int pre_processor(char * file_name);
+int pre_processor(char * input_fn, char * output_fn);
 
 
 extern int pre_error;

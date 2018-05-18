@@ -15,12 +15,20 @@
 #include "scanner.h"
 using namespace std;
 
+#define __DEBUG__
+
+
 int scanner (char * s, list<Token> & tokenlist){
     identify_tokens(s, tokenlist);      //generates token list
-//    print_tokenlist (tokenlist);
+#ifdef __DEBUG__
+    print_tokenlist (tokenlist);
+#endif
     rm_spaces(tokenlist);     //removes blank spaces
     label_spc_fix(tokenlist);       //removes spaces between label and ":"
+    comma_operand(tokenlist);
+#ifdef __DEBUG__
     print_tokenlist (tokenlist);
+#endif
     verify_tokens(tokenlist);     //verifies token lexic validity
     return 0;
 }
@@ -34,8 +42,14 @@ int identify_tokens (char * s, list<Token> & tokenlist){
     int lcount = 0;
     int tcount = 0;
     Token vtoken;
+    char cstr[100];
+    int i = 0;
     if (asmfile){
         while(getline(asmfile, line)){  //scans whole file
+            strcpy (cstr, line.c_str());
+            for (i=0; i<strlen(cstr); i++)
+                toupper (cstr[i]);
+            line = string(cstr);
         line = line.substr(0, line.find(semicolon));    //removes comments
             while (line.length() > 0){  //scans whole line
                 vtoken.str = line.substr(0, line.find(delimiter));   //gets new token
@@ -92,6 +106,43 @@ void label_spc_fix (list<Token> & tokenlist){
             }
         }
     }
+}
+
+
+int comma_operand (list<Token> & tokenlist){
+    list<Token>::iterator it, newit;
+    string delimiter = ",";
+    string substr1, substr2, substr3;
+    Token newtoken;
+    for (it = tokenlist.begin(); it != tokenlist.end(); it++){
+        if (strstr(it->str.c_str(),",")){
+            string substr1 = it->str.substr(0, it->str.find(delimiter));
+            string substr2 = it->str.substr(it->str.find(delimiter),1);
+            string substr3 = it->str.substr(it->str.find(delimiter)+1,it->str.length());
+#ifdef __DEBUG__
+            cout << "RESOLVE VIRGULA" << endl << "substr1 = " << substr1 << endl << "substr2 = " << substr2 << endl << "substr3 = " << substr3 << endl;
+#endif
+            it->str = substr1;
+            newtoken.str = substr2;
+            newtoken.line_number = it->line_number;
+            newtoken.token_pos_il = it->token_pos_il+1;
+            newtoken.type = TT_COMMA_OPERATOR;
+            newtoken.addit_info = 0;
+            it++;
+            tokenlist.insert(it,newtoken);
+            newtoken.str = substr3;
+            newtoken.line_number = it->line_number;
+            newtoken.token_pos_il = it->token_pos_il+1;
+            it++;
+            tokenlist.insert(it,newtoken);
+            newit = it;
+            while (newit->line_number == it->line_number){
+                newit->token_pos_il++;
+                newit++;
+            }
+        }
+    }
+    return 0;
 }
 
 
@@ -217,6 +268,14 @@ int is_directive(Token & token){
         token.type = TT_DIRECTIVE;
         token.addit_info = DIR_ENDMACRO;
         return DIR_ENDMACRO;
+    }else if (token.str.compare("TEXT") == 0 || token.str.compare("text") == 0){
+        token.type = TT_DIRECTIVE;
+        token.addit_info = DIR_TEXT;
+        return DIR_TEXT;
+    }else if (token.str.compare("DATA") == 0 || token.str.compare("data") == 0){
+        token.type = TT_DIRECTIVE;
+        token.addit_info = DIR_DATA;
+        return DIR_DATA;
     }
     token.type = 0;
     token.addit_info = 0;
@@ -288,7 +347,9 @@ int is_operand(Token & token){
     char * cstr = new char [token.str.length()+1];
     strcpy (cstr, token.str.c_str());   //casts string to char* for compatibility with <cctype>
     for (i=0; i<token.str.length(); i++){
-        if (!isalpha(cstr[i]) && cstr[i] != '_')
+        if (!isalpha(cstr[0]))
+            break;
+        if (!isalnum(cstr[i]) && cstr[i] != '_' && cstr[i] != ',')
             break;
     }
     if (i == token.str.length()){
@@ -370,7 +431,9 @@ void verify_tokens (list<Token> & tokenlist){
     list<Token>::iterator it = tokenlist.begin();
     for (it = tokenlist.begin();it != tokenlist.end(); it++){
         categorize_token(*it);
-        //cout << "Token: " << it->str << "  type: " << it->type << "  info: " << it->addit_info << endl;
+#ifdef __DEBUG__
+        cout << "Token: " << it->str << "  type: " << it->type << "  info: " << it->addit_info << endl;
+#endif
         lexic_analisys(*it);
     }
 }
