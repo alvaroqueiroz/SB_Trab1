@@ -15,7 +15,7 @@
 #include "scanner.h"
 using namespace std;
 
-//#define __DEBUG__
+#define __DEBUG__
 
 
 int scanner (char * s, list<Token> & tokenlist){
@@ -111,9 +111,35 @@ void label_spc_fix (list<Token> & tokenlist){
 
 int comma_operand (list<Token> & tokenlist){
     list<Token>::iterator it, newit;
+    string delimiter = ",";
+    string substr1, substr2, substr3;
+    Token newtoken;
     for (it = tokenlist.begin(); it != tokenlist.end(); it++){
         if (strstr(it->str.c_str(),",")){
-            cout << "teve vírgula" << endl;
+            string substr1 = it->str.substr(0, it->str.find(delimiter));
+            string substr2 = it->str.substr(it->str.find(delimiter),1);
+            string substr3 = it->str.substr(it->str.find(delimiter)+1,it->str.length());
+#ifdef __DEBUG__
+            cout << "RESOLVE VIRGULA" << endl << "substr1 = " << substr1 << endl << "substr2 = " << substr2 << endl << "substr3 = " << substr3 << endl;
+#endif
+            it->str = substr1;
+            newtoken.str = substr2;
+            newtoken.line_number = it->line_number;
+            newtoken.token_pos_il = it->token_pos_il+1;
+            newtoken.type = TT_COMMA_OPERATOR;
+            newtoken.addit_info = 0;
+            it++;
+            tokenlist.insert(it,newtoken);
+            newtoken.str = substr3;
+            newtoken.line_number = it->line_number;
+            newtoken.token_pos_il = it->token_pos_il+1;
+            it++;
+            tokenlist.insert(it,newtoken);
+            newit = it;
+            while (newit->line_number == it->line_number){
+                newit->token_pos_il++;
+                newit++;
+            }
         }
     }
     return 0;
@@ -323,7 +349,7 @@ int is_operand(Token & token){
     for (i=0; i<token.str.length(); i++){
         if (!isalpha(cstr[0]))
             break;
-        if (!isalnum(cstr[i]) && cstr[i] != '_')
+        if (!isalnum(cstr[i]) && cstr[i] != '_' && cstr[i] != ',')
             break;
     }
     if (i == token.str.length()){

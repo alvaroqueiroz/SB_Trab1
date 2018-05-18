@@ -9,7 +9,7 @@ using namespace std;
 */
 int pre_processor(char * input_fn, char * output_fn){
     list <Token> tokenlist;
-    scanner(input_fn, tokenlist);
+    scanner(input_fn, tokenlist/*, labellist*/);
     //parser();
     //semantic_analyser();
 
