@@ -82,6 +82,7 @@ int identify_equ(list<Token> & tokenlist, list<Token> & labellist){
                 l_it->line_number = line;
                 l_it->type = type;
                 l_it->addit_info = ad_info;
+                l_it->flag = DIR_EQU;
             }
         }
     }
@@ -90,11 +91,11 @@ int identify_equ(list<Token> & tokenlist, list<Token> & labellist){
 
 int solve_equ (list<Token> & tokenlist, list<Token> & labellist){
     list<Token>::iterator l_it, l_newit, t_it, t_newit;
-    for (l_it = labellist.begin(); l_it != labellist.end(); l_it++){
-        if (!l_it->info_str.empty()){
-            for (t_it = tokenlist.begin(); t_it != tokenlist.end(); t_it++){
-                if (t_it->str == l_it->info_str && t_it->type == l_it->type){
-                    t_it->str = l_it->info_str;
+    for (l_it = labellist.begin(); l_it != labellist.end(); l_it++){    //scans whole list of labels
+        if (l_it->flag == DIR_EQU){       //flag indicates "EQU"
+            for (t_it = tokenlist.begin(); t_it != tokenlist.end(); t_it++){    //scans whole tokenlist
+                if (t_it->str == l_it->str){
+                    t_it->str = l_it->info_str;     //substitutes content
                 }
             }
         }
@@ -104,5 +105,6 @@ int solve_equ (list<Token> & tokenlist, list<Token> & labellist){
 
 
 int conditional_dir(list<Token> & tokenlist){
+    
     return 0;
 }

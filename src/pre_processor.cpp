@@ -29,6 +29,6 @@ void print_list (list<Token> & tokenlist){
     cout << "Tamanho da Lista: " << tokenlist.size() << endl << "-----------------\n"; //print list size
     list<Token>::iterator it;
     for (it = tokenlist.begin();it != tokenlist.end(); it++)
-        cout << "Token: " << it->str << "..   Line: " << it->line_number << "   Position in line: " << it->token_pos_il << "    Type: " << it->type << "        addt_info: " << it->addit_info << "     info str: " << it->info_str << endl;  //print list element
+        cout << "Token: " << it->str << "..   Line: " << it->line_number << "   Position in line: " << it->token_pos_il << "    Type: " << it->type << "        addt_info: " << it->addit_info << "    flag: " << it->flag << "     info str: " << it->info_str << endl;  //print list element
     cout << "-----------------\n";
 }

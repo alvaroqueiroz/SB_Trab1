@@ -54,11 +54,12 @@
 /*--------------STRUCTS---------------*/
 struct Token {
     std::string str;
-    int line_number;
-    int token_pos_il;
-    int type;
-    int addit_info;
+    int line_number = 0;
+    int token_pos_il = 0;
+    int type = 0;
+    int addit_info = 0;
     std::string info_str;
+    int flag = 0;
 };
 typedef struct Token Token;
 /*------------------------------------*/
