@@ -80,7 +80,7 @@ int identify_tokens (char * s, list<Token> & tokenlist){
             lcount++;
         }
     }else{
-        fprintf(stderr, "[ERROR]: Falha ao abrir o arquivo '%s'.\n", s);
+        fprintf(stderr, "[ERROR]: Failed to open file '%s'.\n", s);
         exit(EXIT_FAILURE);
     }
     asmfile.close();    //closes ASM file
