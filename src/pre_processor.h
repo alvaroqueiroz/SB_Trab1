@@ -14,6 +14,7 @@
 #define TT_DEC_CONST        5
 #define TT_HEX_CONST        6
 #define TT_COMMA_OPERATOR   7
+#define TT_CONST        5
 /*------------------------------------*/
 
 /*------------OPCODE-TABLE------------*/
@@ -57,12 +58,13 @@ struct Token {
     int token_pos_il;
     int type;
     int addit_info;
+    std::string info_str;
 };
 typedef struct Token Token;
 /*------------------------------------*/
 
 int pre_processor(char * input_fn, char * output_fn);
-
+void print_list (std::list<Token> & tokenlist);
 
 extern int pre_error;
 
