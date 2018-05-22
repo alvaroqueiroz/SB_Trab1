@@ -246,19 +246,22 @@ int is_label(Token & token, list<Token> & labellist){
                 token.str.compare("IF:") == 0 || \
                 token.str.compare("MACRO:") == 0 || \
                 token.str.compare("ENDMACRO:") == 0 ){     // Check restricted names.
-            cout << "Lexical Error @ Line " << token.line_number << " - invalid label, restricted name." << endl;
+            cerr << "Lexical Error @ Line " << token.line_number << " - invalid label, restricted name." << endl;
+            pre_error = 1;
             token.addit_info = INVALID_TOKEN;
             return INVALID_TOKEN;
         }
 
         if (token.str.length()-1 < 1 || token.str.length()-1 > 20){     // Check length.
-            cout << "Lexical Error @ Line " << token.line_number << " - invalid label length." << endl;
+            cerr << "Lexical Error @ Line " << token.line_number << " - invalid label length." << endl;
+            pre_error = 1;
             token.addit_info = INVALID_TOKEN;
             return INVALID_TOKEN;
         }
 
         if (isdigit(token.str.at(0))){      // Check start with digit.
-            cout << "Lexical Error @ Line " << token.line_number << " - invalid label, label can't start with a number." << endl;
+            cerr << "Lexical Error @ Line " << token.line_number << " - invalid label, label can't start with a number." << endl;
+            pre_error = 1;
             token.addit_info = INVALID_TOKEN;
             return INVALID_TOKEN;
         }
@@ -266,7 +269,8 @@ int is_label(Token & token, list<Token> & labellist){
         for (i = 0; i < token.str.length()-1; i++){       // Check composition.
             if (!isalnum(token.str.at(i))){
                 if (token.str.at(i) != '_'){
-                    cout << "Lexical Error @ Line " << token.line_number << " - invalid label." << endl;
+                    cerr << "Lexical Error @ Line " << token.line_number << " - invalid label." << endl;
+                    pre_error = 1;
                     token.addit_info = INVALID_TOKEN;
                     return INVALID_TOKEN;
                 }
@@ -358,7 +362,8 @@ int is_decimal(Token & token){
     token.type = TT_CONST;
     tmp.addit_info = atoi(token.str.c_str());
     if (tmp.addit_info > 32767 || tmp.addit_info < -32768){     // Check value range.
-        cout << "Lexical Error @ Line " << token.line_number << " - invalid number." << endl;
+        cerr << "Lexical Error @ Line " << token.line_number << " - invalid number." << endl;
+        pre_error = 1;
         token.addit_info = INVALID_TOKEN;
         return INVALID_TOKEN;
     }
@@ -395,7 +400,8 @@ int is_hexadecimal(Token & token){
     token.type = TT_CONST;
     tmp.addit_info = (int)strtol(token.str.c_str(), NULL, 16);
     if (tmp.addit_info > 32767 || tmp.addit_info < -32768){     // Check value range.
-        cout << "Lexical Error @ Line " << token.line_number << " - invalid number." << endl;
+        cerr << "Lexical Error @ Line " << token.line_number << " - invalid number." << endl;
+        pre_error = 1;
         token.addit_info = INVALID_TOKEN;
         return INVALID_TOKEN;
     }
@@ -412,13 +418,15 @@ int is_operand(Token & token, list<Token> & tokenlist){
     
     token.type = TT_OPERAND;
     if (token.str.length() < 1 || token.str.length() > 20){     // Check length.
-        cout << "Lexical Error @ Line " << token.line_number << " - invalid operand length." << endl;
+        cerr << "Lexical Error @ Line " << token.line_number << " - invalid operand length." << endl;
+        pre_error = 1;
         token.addit_info = INVALID_TOKEN;
         return INVALID_TOKEN;
     }
 
     if (isdigit(token.str.at(0))){      // Check start with digit.
-        cout << "Lexical Error @ Line " << token.line_number << " - invalid operand, operand can't start with a number." << endl;
+        cerr << "Lexical Error @ Line " << token.line_number << " - invalid operand, operand can't start with a number." << endl;
+        pre_error = 1;
         token.addit_info = INVALID_TOKEN;
         return INVALID_TOKEN;
     }
@@ -426,7 +434,8 @@ int is_operand(Token & token, list<Token> & tokenlist){
     for (i = 0; i < token.str.length(); i++){       // Check composition.
         if (!isalnum(token.str.at(i))){
             if (token.str.at(i) != '_'){
-                cout << "Lexical Error @ Line " << token.line_number << " - invalid operand." << endl;
+                cerr << "Lexical Error @ Line " << token.line_number << " - invalid operand." << endl;
+                pre_error = 1;
                 token.addit_info = INVALID_TOKEN;
                 return INVALID_TOKEN;
             }
