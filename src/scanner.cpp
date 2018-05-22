@@ -72,6 +72,7 @@ int identify_tokens (char * s, list<Token> & tokenlist){
                 vtoken.str = line.substr(0, i);             //gets new token.
                 vtoken.token_pos_il = tcount;               //stores token order in line.
                 vtoken.line_number = lcount;                //stores line number.
+                vtoken.flag = 0;
                 tokenlist.insert(tokenlist.end(), vtoken);  //inserts token to token list.
                 line.erase(0, vtoken.str.length() + 1);     //erases token and delimiter from line.
                 tcount++;
@@ -88,7 +89,7 @@ int identify_tokens (char * s, list<Token> & tokenlist){
 }
 
 
-int comma_operand (list<Token> & tokenlist){
+int comma_operand (list<Token> & tokenlist){    //separates tokens divided by commas
     list<Token>::iterator it, newit;
     string delimiter = ",";
     string substr1, substr2, substr3;
@@ -103,19 +104,19 @@ int comma_operand (list<Token> & tokenlist){
     cout << "RESOLVE VIRGULA" << endl << "substr1 = " << substr1 << endl << "substr2 = " << substr2 << endl << "substr3 = " << substr3 << endl;
 #endif
 
-            it->str = substr1;
+            it->str = substr1;          //first token
             newtoken.str = substr2;
             newtoken.line_number = it->line_number;
             newtoken.token_pos_il = it->token_pos_il+1;
             newtoken.type = TT_COMMA_OPERATOR;
             newtoken.addit_info = 0;
+            newtoken.flag = 0;
             it++;
-            tokenlist.insert(it,newtoken);
+            tokenlist.insert(it,newtoken);      //comma token
             newtoken.str = substr3;
             newtoken.line_number = it->line_number;
             newtoken.token_pos_il = it->token_pos_il+1;
-            it++;
-            tokenlist.insert(it,newtoken);
+            tokenlist.insert(it,newtoken);      //second token
             newit = it;
             while (newit->line_number == it->line_number){
                 newit->token_pos_il++;
@@ -236,6 +237,7 @@ int is_label(Token & token, list<Token> & labellist){
         // Valid label.
         token.type = TT_LABEL;
         token.addit_info = 0;
+        token.flag = 0;
         tmp = token;
         tmp.str = token.str.substr(0, token.str.length()-1);    // take just the name of the label.
         labellist.insert(labellist.end(), tmp);         // add label to labellist.
