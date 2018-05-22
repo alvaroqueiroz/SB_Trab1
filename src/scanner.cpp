@@ -415,7 +415,7 @@ int is_operand(Token & token, list<Token> & tokenlist){
         return INVALID_TOKEN;
     }
 
-    for (i = 0; i < token.str.length()-1; i++){       // Check composition.
+    for (i = 0; i < token.str.length(); i++){       // Check composition.
         if (!isalnum(token.str.at(i))){
             if (token.str.at(i) != '_'){
                 cout << "Lexical Error @ Line " << token.line_number << " - invalid operand." << endl;
