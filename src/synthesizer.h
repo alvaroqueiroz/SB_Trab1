@@ -8,5 +8,7 @@
 #include <cstring>
 
 int synthesizer ();
+int get_key();
+void remove_file ();
 
 #endif /* SYNTHESIZER_H__ */

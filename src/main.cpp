@@ -37,15 +37,15 @@ int main (int argc, char** argv){
     switch (operation_mode){
         case 0:
             output_fn = string(argv[3]) + ".pre";
-            pre_processor(strdup(file_name.c_str()), strdup(output_fn.c_str()));
+            pre_processor(strdup(file_name.c_str()), strdup(output_fn.c_str()), 1);
             break;
         case 1:
             output_fn = string(argv[3]) + ".mcr";
-    //        macro_solver(strdup(file_name.c_str()), strdup(output_fn.c_str()));
+    //        macro_solver(strdup(file_name.c_str()), strdup(output_fn.c_str()), 1);
             break;
         case 2:
             output_fn = string(argv[3]) + ".o";
-            assembler(strdup(file_name.c_str()), strdup(output_fn.c_str()));
+            assembler(strdup(file_name.c_str()), strdup(output_fn.c_str()), 1);
             break;
         default:
             return 0;

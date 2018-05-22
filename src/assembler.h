@@ -10,6 +10,6 @@
 //#include "macro_solver.h"
 #include "synthesizer.h"
 
-int assembler(char * input_fn, char * output_fn);
+int assembler(char * input_fn, char * output_fn, bool output_enable);
 
 #endif /* ASSEMBLER_H__ */
