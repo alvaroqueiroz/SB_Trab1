@@ -50,7 +50,10 @@ int identify_tokens (char * s, list<Token> & tokenlist){
                 
                 // Eliminates unnecessary.
                 i = 0;
-                while (line.at(i) == ' ' || line.at(i) == '\t' || line.at(i) == '\n'){
+                while ( line.at(i) == ' ' || \
+                        line.at(i) == '\t' || \
+                        line.at(i) == '\n' || \
+                        line.at(i) == '\r'){
                     i++;
                     if (i == line.length())     // Prevent error.
                         break;
@@ -61,7 +64,10 @@ int identify_tokens (char * s, list<Token> & tokenlist){
                 }
 
                 i = 0;      // find token end.
-                while (line.at(i) != ' ' && line.at(i) != '\t' && line.at(i) != '\n'){
+                while ( line.at(i) != ' ' && \
+                        line.at(i) != '\t' && \
+                        line.at(i) != '\n' && \
+                        line.at(i) != '\r'){
                     i++;
                     if (i == line.length())     // Prevent error.
                         break;
