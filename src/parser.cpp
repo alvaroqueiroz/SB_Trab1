@@ -1,6 +1,6 @@
 #include "parser.h"
 
-int parser (list <Token> & tokenlist){
+int parser (list <Token> & tokenlist, list <Token> & labellist){
 	list<Token>::iterator it;
 
 	it = tokenlist.begin();
@@ -29,7 +29,7 @@ int parser (list <Token> & tokenlist){
 			break;
 
 			default:
-				cout << "Parser: unknowm type token." << endl;
+				cout << "Parser: unknowm token type." << endl;
 				it++;
 			break;
 		}
@@ -39,8 +39,9 @@ int parser (list <Token> & tokenlist){
 }
 
 list<Token>::iterator parser_mnemonic(list <Token> & tokenlist, list<Token>::iterator it){
-	static int target_line;
+	int target_line;
 
+	target_line = it->line_number;
 	switch (it->addit_info){
 		case OP_ADD:
 		case OP_SUB:
@@ -54,103 +55,155 @@ list<Token>::iterator parser_mnemonic(list <Token> & tokenlist, list<Token>::ite
 		case OP_STORE:
 		case OP_INPUT:
 		case OP_OUTPUT:
-			target_line = it->line_number;
 			it++;
-			if (it != tokenlist.end()){					// Check end of token list to avoid errors.
-				if (target_line == it->line_number){	// Check the presence of operand.
-					if (it->type == TT_OPERAND){		// Check if the operand is valid.	
-						it++;
-						if (it != tokenlist.end()){		// Check end of token list to avoid errors.
-							if(target_line == it->line_number){		// Check excess of operands.
-								cout << "Sintax Error @ Line " << target_line << " - too much arguments." << endl;
-								do {								// Get out of this line.
-									it++;
-									if (it == tokenlist.end()){		// Check end of token list to avoid errors.
-										break;
-									}
-								} while (target_line == it->line_number);
-							}
-						}
-					} else {
-						cout << "Sintax Error @ Line " << target_line << " - invalid argument, expected one operand." << endl;
-						do {								// Get out of this line.
+			if (it != tokenlist.end() && target_line == it->line_number){			// check if argument exists.
+				if (it->type == TT_OPERAND){										// check if valid argument.
+					it++;
+					if (it != tokenlist.end() && target_line == it->line_number){	// check extra operation.
+						if (it->type == TT_PLUS_OPERATOR){											// check if valid operation +.
 							it++;
-							if (it == tokenlist.end()){		// Check end of token list to avoid errors.
-								break;
+							if (it != tokenlist.end() && target_line == it->line_number){			// check if + argument exist.
+								if (it->type == TT_CONST){											// check if + valid argument.
+									it++;
+									if (it != tokenlist.end() && target_line == it->line_number){	// check if too much arguments.
+										cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+										do {		// get out of line.
+											it++;
+										} while(it != tokenlist.end() && target_line == it->line_number);
+									}
+								} else {
+									cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+									do {		// get out of line.
+										it++;
+									} while(it != tokenlist.end() && target_line == it->line_number);
+								}
+							} else {
+								cout << "Sintax Error @ Line " << target_line << " - missing argument." << endl;
 							}
-						} while (target_line == it->line_number);
+						} else {
+							cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+							do {		// get out of line.
+								it++;
+							} while(it != tokenlist.end() && target_line == it->line_number);
+						}
 					}
 				} else {
-					cout << "Sintax Error @ Line " << target_line << " - expected one argument here." << endl;
+					cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+					do {		// get out of line.
+						it++;
+					} while(it != tokenlist.end() && target_line == it->line_number);
 				}
-			}else {
-				cout << "Sintax Error @ Line " << target_line << " - expected one argument here." << endl;
+			} else {
+				cout << "Sintax Error @ Line " << target_line << " - missing argument." << endl;
 			}
 		break;
 
 		case OP_COPY:
-			target_line = it->line_number;
 			it++;
-			if (it != tokenlist.end()){					// Check end of token list to avoid errors.
-				if (target_line == it->line_number){	// Check the presence of operand.
-					if (it->type == TT_OPERAND){		// Check if the operand is valid.	
-						it++;
-						if (it != tokenlist.end()){		// Check end of token list to avoid errors.
-							if (target_line == it->line_number){
-								if (it->type == TT_OPERAND){
+			if (it != tokenlist.end() && target_line == it->line_number){	// check if arguments exists.
+				
+				// first argument.
+				if (it->type == TT_OPERAND){										// check if valid argument.
+					it++;
+					if (it != tokenlist.end() && target_line == it->line_number){	// check if next argument exist.
+						if (it->type == TT_PLUS_OPERATOR){									// check if it is + operation.
+							it++;
+							if (it != tokenlist.end() && target_line == it->line_number){	// check if + argument exist.
+								if (it->type == TT_CONST){									// check if + valid argument.
 									it++;
-									if(target_line == it->line_number){		// Check excess of operands.
-										cout << "Sintax Error @ Line " << target_line << " - too much arguments." << endl;
-										do {								// Get out of this line.
-											it++;
-											if (it == tokenlist.end()){		// Check end of token list to avoid errors.
-												break;
-											}
-										} while (target_line == it->line_number);
+									if (it == tokenlist.end() || target_line != it->line_number){	// check if next argument exist.
+										cout << "Sintax Error @ Line " << target_line << " - missing argument." << endl;
+										break;		// get out of switch.
 									}
-								} else{
-									cout << "Sintax Error @ Line " << target_line << " - invalid argument, expected two operands." << endl;
-									do {								// Get out of this line.
+								} else {
+									cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+									do {		// get out of line.
 										it++;
-										if (it == tokenlist.end()){		// Check end of token list to avoid errors.
-											break;
-										}
-									} while (target_line == it->line_number);
+									} while(it != tokenlist.end() && target_line == it->line_number);
+									break;		// get out of switch.
 								}
-							} else{
-								cout << "Sintax Error @ Line " << target_line << " - expected two arguments here." << endl;
+							} else {
+								cout << "Sintax Error @ Line " << target_line << " - missing argument." << endl;
+								break;		// get out of switch.
 							}
 						}
 					} else {
-						cout << "Sintax Error @ Line " << target_line << " - invalid argument, expected two operands." << endl;
-						do {								// Get out of this line.
-							it++;
-							if (it == tokenlist.end()){		// Check end of token list to avoid errors.
-								break;
-							}
-						} while (target_line == it->line_number);
+						cout << "Sintax Error @ Line " << target_line << " - missing argument." << endl;
+						break;		// get out of switch.
 					}
 				} else {
-					cout << "Sintax Error @ Line " << target_line << " - expected two arguments here." << endl;
+					cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+					do {		// get out of line.
+						it++;
+					} while(it != tokenlist.end() && target_line == it->line_number);
+					break;		// get out of switch.
 				}
-			}else {
-				cout << "Sintax Error @ Line " << target_line << " - expected two arguments here." << endl;
+
+				// comma argument.
+				if (it->type == TT_COMMA_OPERATOR){									// check if valid argument.
+					it++;
+					if (it == tokenlist.end() || target_line != it->line_number){	// check if next argument exist.
+						cout << "Sintax Error @ Line " << target_line << " - missing argument." << endl;
+						break;		// get out of switch.
+					}
+				} else {
+					cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+					do {		// get out of line.
+						it++;
+					} while(it != tokenlist.end() && target_line == it->line_number);
+					break;
+				}
+
+				// second argument.
+				if (it->type == TT_OPERAND){										// check if valid argument.
+					it++;
+					if (it != tokenlist.end() && target_line == it->line_number){	// check extra operation.
+						if (it->type == TT_PLUS_OPERATOR){											// check if valid operation +.
+							it++;
+							if (it != tokenlist.end() && target_line == it->line_number){			// check if + argument exist.
+								if (it->type == TT_CONST){											// check if + valid argument.
+									it++;
+									if (it != tokenlist.end() && target_line == it->line_number){	// check if too much arguments.
+										cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+										do {		// get out of line.
+											it++;
+										} while(it != tokenlist.end() && target_line == it->line_number);
+									}
+								} else {
+									cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+									do {		// get out of line.
+										it++;
+									} while(it != tokenlist.end() && target_line == it->line_number);
+								}
+							} else {
+								cout << "Sintax Error @ Line " << target_line << " - missing argument." << endl;
+							}
+						} else {
+							cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+							do {		// get out of line.
+								it++;
+							} while(it != tokenlist.end() && target_line == it->line_number);
+						}
+					}
+				} else {
+					cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+					do {		// get out of line.
+						it++;
+					} while(it != tokenlist.end() && target_line == it->line_number);
+				}
+
+			} else {
+				cout << "Sintax Error @ Line " << target_line << " - missing argument." << endl;
 			}
 		break;
 
 		case OP_STOP:
-			target_line = it->line_number;
 			it++;
-			if (it != tokenlist.end()){					// Check end of token list to avoid errors.
-				if (target_line == it->line_number){	// Check excess of arguments.
-					cout << "Sintax Error @ Line " << target_line << " - unexpected arguments." << endl;
-					do {								// Get out of this line.
-						it++;
-						if (it == tokenlist.end()){		// Check end of token list to avoid errors.
-							break;
-						}
-					} while (target_line == it->line_number);
-				}
+			if (it != tokenlist.end() && target_line == it->line_number){		// check if argument exist.
+				cout << "Sintax Error @ Line " << target_line << " - unexpected argument." << endl;
+				do {		// get out of line.
+					it++;
+				} while(it != tokenlist.end() && target_line == it->line_number);
 			}
 		break;
 
@@ -164,185 +217,45 @@ list<Token>::iterator parser_mnemonic(list <Token> & tokenlist, list<Token>::ite
 }
 
 list<Token>::iterator parser_directive(list <Token> & tokenlist, list<Token>::iterator it){
-	static int target_line;
+	int target_line;
 
+	target_line = it->line_number;
 	switch (it->addit_info){
 		case DIR_SECTION:
-			target_line = it->line_number;
-			it++;
-			if (it != tokenlist.end()){					// Check end of token list to avoid errors.
-				if (target_line == it->line_number){	// Check the presence of operand.
-					if (it->str.compare("TEXT") == 0 || it->str.compare("DATA") == 0){		// Check if the operand is valid.	
-						it++;
-						if (it != tokenlist.end()){		// Check end of token list to avoid errors.
-							if(target_line == it->line_number){		// Check excess of operands.
-								cout << "Sintax Error @ Line " << target_line << " - too much arguments." << endl;
-								do {								// Get out of this line.
-									it++;
-									if (it == tokenlist.end()){		// Check end of token list to avoid errors.
-										break;
-									}
-								} while (target_line == it->line_number);
-							}
-						}
-					} else {
-						cout << "Sintax Error @ Line " << target_line << " - invalid argument, expected TEXT or DATA." << endl;
-						do {								// Get out of this line.
-							it++;
-							if (it == tokenlist.end()){		// Check end of token list to avoid errors.
-								break;
-							}
-						} while (target_line == it->line_number);
-					}
-				} else {
-					cout << "Sintax Error @ Line " << target_line << " - expected argument TEXT or DATA here." << endl;
-				}
-			}else {
-				cout << "Sintax Error @ Line " << target_line << " - expected argument TEXT or DATA here." << endl;
-			}
+			do {		// get out of line.
+				it++;
+			} while(it != tokenlist.end() && target_line == it->line_number);
 		break;
 
 		case DIR_SPACE:
-			target_line = it->line_number;
-			it++;
-			if (it != tokenlist.end()){					// Check end of token list to avoid errors.
-				if (target_line == it->line_number){	// Check the presence of operand.
-					if (it->type == TT_CONST){		// Check if the operand is valid.	
-						it++;
-						if (it != tokenlist.end()){		// Check end of token list to avoid errors.
-							if(target_line == it->line_number){		// Check excess of operands.
-								cout << "Sintax Error @ Line " << target_line << " - too much arguments." << endl;
-								do {								// Get out of this line.
-									it++;
-									if (it == tokenlist.end()){		// Check end of token list to avoid errors.
-										break;
-									}
-								} while (target_line == it->line_number);
-							}
-						}
-					} else {
-						cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
-						do {								// Get out of this line.
-							it++;
-							if (it == tokenlist.end()){		// Check end of token list to avoid errors.
-								break;
-							}
-						} while (target_line == it->line_number);
-					}
-				}
-			}
+			do {		// get out of line.
+				it++;
+			} while(it != tokenlist.end() && target_line == it->line_number);
 		break;
 
 		case DIR_CONST:
-			target_line = it->line_number;
-			it++;
-			if (it != tokenlist.end()){					// Check end of token list to avoid errors.
-				if (target_line == it->line_number){	// Check the presence of operand.
-					if (it->type == TT_CONST){		// Check if the operand is valid.	
-						it++;
-						if (it != tokenlist.end()){		// Check end of token list to avoid errors.
-							if(target_line == it->line_number){		// Check excess of operands.
-								cout << "Sintax Error @ Line " << target_line << " - too much arguments." << endl;
-								do {								// Get out of this line.
-									it++;
-									if (it == tokenlist.end()){		// Check end of token list to avoid errors.
-										break;
-									}
-								} while (target_line == it->line_number);
-							}
-						}
-					} else {
-						cout << "Sintax Error @ Line " << target_line << " - invalid argument, expected one constant." << endl;
-						do {								// Get out of this line.
-							it++;
-							if (it == tokenlist.end()){		// Check end of token list to avoid errors.
-								break;
-							}
-						} while (target_line == it->line_number);
-					}
-				} else {
-					cout << "Sintax Error @ Line " << target_line << " - expected one argument here." << endl;
-				}
-			}else {
-				cout << "Sintax Error @ Line " << target_line << " - expected one argument here." << endl;
-			}
-		break;
-
-		case DIR_EQU:
-			target_line = it->line_number;
-			it++;
-			if (it != tokenlist.end()){					// Check end of token list to avoid errors.
-				if (target_line == it->line_number){	// Check the presence of operand.
-					it++;
-					if (it != tokenlist.end()){		// Check end of token list to avoid errors.
-						if(target_line == it->line_number){		// Check excess of operands.
-							cout << "Sintax Error @ Line " << target_line << " - too much arguments." << endl;
-							do {								// Get out of this line.
-								it++;
-								if (it == tokenlist.end()){		// Check end of token list to avoid errors.
-									break;
-								}
-							} while (target_line == it->line_number);
-						}
-					}
-				} else {
-					cout << "Sintax Error @ Line " << target_line << " - expected one argument here." << endl;
-				}
-			}else {
-				cout << "Sintax Error @ Line " << target_line << " - expected one argument here." << endl;
-			}
+			do {		// get out of line.
+				it++;
+			} while(it != tokenlist.end() && target_line == it->line_number);
 		break;
 
 		case DIR_IF:
-			target_line = it->line_number;
-			it++;
-			if (it != tokenlist.end()){					// Check end of token list to avoid errors.
-				if (target_line == it->line_number){	// Check the presence of operand.
-					if (it->type == TT_OPERAND || it->type == TT_CONST){		// Check if the operand is valid.	
-						it++;
-						if (it != tokenlist.end()){		// Check end of token list to avoid errors.
-							if(target_line == it->line_number){		// Check excess of operands.
-								cout << "Sintax Error @ Line " << target_line << " - too much arguments." << endl;
-								do {								// Get out of this line.
-									it++;
-									if (it == tokenlist.end()){		// Check end of token list to avoid errors.
-										break;
-									}
-								} while (target_line == it->line_number);
-							}
-						}
-					} else {
-						cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
-						do {								// Get out of this line.
-							it++;
-							if (it == tokenlist.end()){		// Check end of token list to avoid errors.
-								break;
-							}
-						} while (target_line == it->line_number);
-					}
-				} else {
-					cout << "Sintax Error @ Line " << target_line << " - expected one argument here." << endl;
-				}
-			}else {
-				cout << "Sintax Error @ Line " << target_line << " - expected one argument here." << endl;
-			}
+			do {		// get out of line.
+				it++;
+			} while(it != tokenlist.end() && target_line == it->line_number);
 		break;
 
 		case DIR_MACRO:
 		case DIR_ENDMACRO:
-			target_line = it->line_number;
-			it++;
-			if (it != tokenlist.end()){					// Check end of token list to avoid errors.
-				if (target_line == it->line_number){	// Check excess of arguments.
-					cout << "Sintax Error @ Line " << target_line << " - unexpected arguments." << endl;
-					do {								// Get out of this line.
-						it++;
-						if (it == tokenlist.end()){		// Check end of token list to avoid errors.
-							break;
-						}
-					} while (target_line == it->line_number);
-				}
-			}
+			do {		// get out of line.
+				it++;
+			} while(it != tokenlist.end() && target_line == it->line_number);
+		break;
+
+		case DIR_EQU:	// if found in this stage, it must be an invalid EQU.
+			do {		// get out of line.
+				it++;
+			} while(it != tokenlist.end() && target_line == it->line_number);
 		break;
 
 		default:

@@ -13,7 +13,9 @@ int pre_processor(char * input_fn, char * output_fn){
     list <Token> labellist;
 
     scanner(input_fn, tokenlist, labellist);
-    //parser();
+    //equ;
+    parser(tokenlist, labellist);
+    //if;
     //semantic_analyser();
 
 
