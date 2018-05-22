@@ -10,6 +10,7 @@ using namespace std;
 int pre_processor(char * input_fn, char * output_fn, bool output_enable){
     list <Token> tokenlist;
     list <Token> labellist;
+    list<Token>::iterator it, aux;
 
     scanner(input_fn, tokenlist, labellist);
     //parser();
