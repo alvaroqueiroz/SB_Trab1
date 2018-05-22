@@ -58,12 +58,14 @@ struct Token {
     int token_pos_il;
     int type;
     int addit_info;
+    int flag;
+    std::string info_str;
 };
 typedef struct Token Token;
 /*------------------------------------*/
 
 int pre_processor(char * input_fn, char * output_fn);
-
+void print_list (std::list<Token> & tokenlist);
 
 extern int pre_error;
 
