@@ -1,5 +1,6 @@
 #include "pre_processor.h"
 #include "scanner.h"
+#include "parser.h"
 using namespace std;
 
 /*
@@ -13,7 +14,9 @@ int pre_processor(char * input_fn, char * output_fn){
     list<Token>::iterator it, aux;
 
     scanner(input_fn, tokenlist, labellist);
-    //parser();
+    //equ;
+    parser(tokenlist, labellist);
+    //if;
     //semantic_analyser();
 
 
