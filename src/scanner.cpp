@@ -66,48 +66,49 @@ int identify_tokens (char * s, list<Token> & tokenlist){
                     if (i == line.length())     // Prevent error.
                         break;
                 }
-
                 
                 vtoken.str = line.substr(0, i);             //gets new token.
                 // Check basic operators , and +.
                 while(vtoken.str.find(",") != string::npos || vtoken.str.find("+") != string::npos){
-                    if (vtoken.str.find(",") < vtoken.str.find("+")){
-                        tmp.str = vtoken.str;
-                        
-                        if(vtoken.str.find(",") == 0){      //found in the beginning.
-                            vtoken.str = vtoken.str.substr(0, 1);       //get , token.
-                            vtoken.token_pos_il = tcount;               //stores token order in line.
-                            vtoken.line_number = lcount;                //stores line number.
-
-                            vtoken.type = TT_COMMA_OPERATOR;            //comma type token.
-                            vtoken.addit_info = INVALID_TOKEN;          //invalid.
-                            cout << "Sintax Error @ Line " << vtoken.line_number << " - invalid use of comma." << endl;
-
-                            tokenlist.insert(tokenlist.end(), vtoken);  //inserts token to token list.
-                            line.erase(0, 1);                           //erases token.
-                            vtoken.str = tmp.str;
-                            vtoken.str.erase(0, 1);                     //erases token.
-                            tcount++;                                   //adivance token count.
-                        }else {
-                            vtoken.str = vtoken.str.substr(0, vtoken.str.find(","));       //get token.
-                            vtoken.token_pos_il = tcount;               //stores token order in line.
-                            vtoken.line_number = lcount;                //stores line number.
-                            tokenlist.insert(tokenlist.end(), vtoken);  //inserts token to token list.
-                            tcount++;
-
-                            vtoken.str = ",";
-                            if ()
+                    if (vtoken.str.find(",") < vtoken.str.find("+")){       // case comma.
+                        if (vtoken.str.find(",") != 0){     // not in the beginning.
+                            tmp.str = vtoken.str.substr(0, vtoken.str.find(","));
+                            tmp.token_pos_il = tcount;               //stores token order in line.
+                            tmp.line_number = lcount;                //stores line number.
+                            tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
+                            tcount++;                            
                         }
-                    } else{
-
+                        tmp.str = ",";
+                        tmp.token_pos_il = tcount;               //stores token order in line.
+                        tmp.line_number = lcount;                //stores line number.
+                        tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
+                        tcount++;
+                        vtoken.str.erase(0, vtoken.str.find(",") + 1);
+                    } else{     // case plus.
+                        if (vtoken.str.find("+") != 0){     // not in the beginning.
+                            tmp.str = vtoken.str.substr(0, vtoken.str.find("+"));
+                            tmp.token_pos_il = tcount;               //stores token order in line.
+                            tmp.line_number = lcount;                //stores line number.
+                            tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
+                            tcount++;                            
+                        }
+                        tmp.str = "+";
+                        tmp.token_pos_il = tcount;               //stores token order in line.
+                        tmp.line_number = lcount;                //stores line number.
+                        tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
+                        tcount++;
+                        vtoken.str.erase(0, vtoken.str.find("+") + 1);
                     }
                 }
 
-                vtoken.token_pos_il = tcount;               //stores token order in line.
-                vtoken.line_number = lcount;                //stores line number.
-                tokenlist.insert(tokenlist.end(), vtoken);  //inserts token to token list.
-                line.erase(0, vtoken.str.length() + 1);     //erases token and delimiter from line.
-                tcount++;
+                if (vtoken.str.length() > 0){
+                    vtoken.token_pos_il = tcount;               //stores token order in line.
+                    vtoken.line_number = lcount;                //stores line number.
+                    tokenlist.insert(tokenlist.end(), vtoken);  //inserts token to token list.
+                    tcount++;
+                }
+
+                line.erase(0, i);     //erases token and delimiter from line.
             }
             tcount = 0;
             lcount++;
@@ -362,16 +363,7 @@ int is_hexadecimal(Token & token){
 
 int is_operand(Token & token, list<Token> & tokenlist){
     unsigned int i;
-
-    if (token.str.find(",") != string::npos){     // Check if operand has , mixed.
-        cout << "find-----------------" << endl;
-    }
-
-    if (token.str.find("+") != string::npos){     // Check if operand has + mixed.
-
-    }
-
-    // Is simple operand.
+    
     token.type = TT_OPERAND;
     if (token.str.length() < 1 || token.str.length() > 20){     // Check length.
         cout << "Lexical Error @ Line " << token.line_number << " - invalid operand length." << endl;
