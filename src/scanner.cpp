@@ -15,7 +15,7 @@
 #include "scanner.h"
 using namespace std;
 
-//#define __DEBUG__
+#define __DEBUG__
 
 
 int scanner (char * s, list<Token> & tokenlist, list<Token> & labellist){
@@ -457,22 +457,20 @@ void verify_tokens (list<Token> & tokenlist, list<Token> & labellist){
     list<Token>::iterator it = tokenlist.begin();
     for (it = tokenlist.begin();it != tokenlist.end(); it++){
         categorize_token(*it, labellist, tokenlist);
-
-#ifdef __DEBUG__
-        cout << "Token: " << it->str << "  type: " << it->type << "  info: " << it->addit_info << endl;
-#endif
     }
 }
 
 
 void print_tokenlist (list<Token> & tokenlist, list<Token> & labellist){
-    cout << "Tamanho da Lista: " << tokenlist.size() << endl << "-----------------\n"; //print list size
     list<Token>::iterator it;
-    for (it = tokenlist.begin();it != tokenlist.end(); it++)
-        cout << "Token: " << it->str << "..   Line: " << it->line_number << " Number: " << it->token_pos_il << endl;  //print list element
-    cout << "-----------------\n";
 
+    cout << "Tamanho da Lista: " << tokenlist.size() << endl << "-----------------\n"; //print list size
+    for (it = tokenlist.begin();it != tokenlist.end(); it++)
+        cout << "Token: " << it->str << "..   \t@Line: " << it->line_number << " \tType: " << it->type << endl;  //print list element
+    cout << "-----------------" << endl;
+
+    cout << "Tamanho da Lista: " << labellist.size() << endl << "-----------------\n"; //print list size
     for (it = labellist.begin();it != labellist.end(); it++)
-        cout << "label: " << it->str << "..   Line: " << it->line_number << " Number: " << it->token_pos_il << endl;  //print list element
-    cout << "-----------------\n";
+        cout << "label: " << it->str << "..   \t@Line: " << it->line_number << " \tType: " << it->type << endl;  //print list element
+    cout << "-----------------" << endl;
 }

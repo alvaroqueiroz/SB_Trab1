@@ -23,8 +23,7 @@ int parser (list <Token> & tokenlist){
 				it++;
 			break;
 			
-			case TT_DEC_CONST:
-			case TT_HEX_CONST:
+			case TT_CONST:
 				cout << "Sintax Error @ Line " << it->line_number << " - unexpected value." << endl;
 				it++;
 			break;
@@ -208,7 +207,7 @@ list<Token>::iterator parser_directive(list <Token> & tokenlist, list<Token>::it
 			it++;
 			if (it != tokenlist.end()){					// Check end of token list to avoid errors.
 				if (target_line == it->line_number){	// Check the presence of operand.
-					if (it->type == TT_DEC_CONST){		// Check if the operand is valid.	
+					if (it->type == TT_CONST){		// Check if the operand is valid.	
 						it++;
 						if (it != tokenlist.end()){		// Check end of token list to avoid errors.
 							if(target_line == it->line_number){		// Check excess of operands.
@@ -239,7 +238,7 @@ list<Token>::iterator parser_directive(list <Token> & tokenlist, list<Token>::it
 			it++;
 			if (it != tokenlist.end()){					// Check end of token list to avoid errors.
 				if (target_line == it->line_number){	// Check the presence of operand.
-					if (it->type == TT_HEX_CONST  || it->type == TT_DEC_CONST){		// Check if the operand is valid.	
+					if (it->type == TT_CONST){		// Check if the operand is valid.	
 						it++;
 						if (it != tokenlist.end()){		// Check end of token list to avoid errors.
 							if(target_line == it->line_number){		// Check excess of operands.
@@ -299,7 +298,7 @@ list<Token>::iterator parser_directive(list <Token> & tokenlist, list<Token>::it
 			it++;
 			if (it != tokenlist.end()){					// Check end of token list to avoid errors.
 				if (target_line == it->line_number){	// Check the presence of operand.
-					if (it->type == TT_OPERAND || it->type == TT_DEC_CONST){		// Check if the operand is valid.	
+					if (it->type == TT_OPERAND || it->type == TT_CONST){		// Check if the operand is valid.	
 						it++;
 						if (it != tokenlist.end()){		// Check end of token list to avoid errors.
 							if(target_line == it->line_number){		// Check excess of operands.
