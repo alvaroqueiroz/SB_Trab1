@@ -21,9 +21,10 @@ using namespace std;
 int scanner (char * s, list<Token> & tokenlist, list<Token> & labellist){
     identify_tokens(s, tokenlist);      //generates token list
     verify_tokens(tokenlist, labellist);       //verifies token lexic validity
-
+    ifequ(tokenlist, labellist);
 #ifdef __DEBUG__
-    print_tokenlist (tokenlist, labellist);
+    print_list (tokenlist);
+    print_list (labellist);
 #endif
     return 0;
 }
@@ -32,7 +33,7 @@ int scanner (char * s, list<Token> & tokenlist, list<Token> & labellist){
 int identify_tokens (char * s, list<Token> & tokenlist){
     string line;
     char semicolon = ';';
-    
+
     int lcount = 1;
     int tcount = 0;
     Token vtoken, tmp;
@@ -72,7 +73,7 @@ int identify_tokens (char * s, list<Token> & tokenlist){
                     if (i == line.length())     // Prevent error.
                         break;
                 }
-                
+
                 vtoken.str = line.substr(0, i);             //gets new token.
                 // Check basic operators , and +.
                 while(vtoken.str.find(",") != string::npos || vtoken.str.find("+") != string::npos){
@@ -120,7 +121,7 @@ int identify_tokens (char * s, list<Token> & tokenlist){
             lcount++;
         }
     }else{
-        fprintf(stderr, "[ERRO]: Falha ao abrir o arquivo '%s'.\n", s);
+        fprintf(stderr, "[ERROR]: Failed to open file '%s'.\n", s);
         exit(EXIT_FAILURE);
     }
     asmfile.close();    //closes ASM file
@@ -133,67 +134,67 @@ int is_mnemonic(Token & token){
         token.type = TT_MNEMONIC;
         token.addit_info = OP_ADD;
         return OP_ADD;
-    }else 
+    }else
     if (token.str.compare("SUB") == 0){
         token.type = TT_MNEMONIC;
         token.addit_info = OP_SUB;
         return OP_SUB;
-    }else 
+    }else
     if (token.str.compare("MULT") == 0){
         token.type = TT_MNEMONIC;
         token.addit_info = OP_MULT;
         return OP_MULT;
-    }else 
+    }else
     if (token.str.compare("DIV") == 0){
         token.type = TT_MNEMONIC;
         token.addit_info = OP_DIV;
         return OP_DIV;
-    }else 
+    }else
     if (token.str.compare("JMP") == 0){
         token.type = TT_MNEMONIC;
         token.addit_info = OP_JMP;
         return OP_JMP;
-    }else 
+    }else
     if (token.str.compare("JMPN") == 0){
         token.type = TT_MNEMONIC;
         token.addit_info = OP_JMPN;
         return OP_JMPN;
-    }else 
+    }else
     if (token.str.compare("JMPP") == 0){
         token.type = TT_MNEMONIC;
         token.addit_info = OP_JMPP;
         return OP_JMPP;
-    }else 
+    }else
     if (token.str.compare("JMPZ") == 0){
         token.type = TT_MNEMONIC;
         token.addit_info = OP_JMPZ;
         return OP_JMPZ;
-    }else 
+    }else
     if (token.str.compare("COPY") == 0){
         token.type = TT_MNEMONIC;
         token.addit_info = OP_COPY;
         return OP_COPY;
-    }else 
+    }else
     if (token.str.compare("LOAD") == 0){
         token.type = TT_MNEMONIC;
         token.addit_info = OP_LOAD;
         return OP_LOAD;
-    }else 
+    }else
     if (token.str.compare("STORE") == 0){
         token.type = TT_MNEMONIC;
         token.addit_info = OP_STORE;
         return OP_STORE;
-    }else 
+    }else
     if (token.str.compare("INPUT") == 0){
         token.type = TT_MNEMONIC;
         token.addit_info = OP_INPUT;
         return OP_INPUT;
-    }else 
+    }else
     if (token.str.compare("OUTPUT") == 0){
         token.type = TT_MNEMONIC;
         token.addit_info = OP_OUTPUT;
         return OP_OUTPUT;
-    }else 
+    }else
     if (token.str.compare("STOP") == 0){
         token.type = TT_MNEMONIC;
         token.addit_info = OP_STOP;
@@ -275,6 +276,7 @@ int is_label(Token & token, list<Token> & labellist){
         // Valid label.
         token.type = TT_LABEL;
         token.addit_info = 0;
+        token.flag = 0;
         tmp = token;
         tmp.str = token.str.substr(0, token.str.length()-1);    // take just the name of the label.
         labellist.insert(labellist.end(), tmp);         // add label to labellist.
@@ -289,42 +291,42 @@ int is_directive(Token & token){
         token.type = TT_DIRECTIVE;
         token.addit_info = DIR_SECTION;
         return DIR_SECTION;
-    }else 
+    }else
     if (token.str.compare("SPACE") == 0){
         token.type = TT_DIRECTIVE;
         token.addit_info = DIR_SPACE;
         return DIR_SPACE;
-    }else 
+    }else
     if (token.str.compare("CONST") == 0){
         token.type = TT_DIRECTIVE;
         token.addit_info = DIR_CONST;
         return DIR_CONST;
-    }else 
+    }else
     if (token.str.compare("EQU") == 0){
         token.type = TT_DIRECTIVE;
         token.addit_info = DIR_EQU;
         return DIR_EQU;
-    }else 
+    }else
     if (token.str.compare("IF") == 0){
         token.type = TT_DIRECTIVE;
         token.addit_info = DIR_IF;
         return DIR_IF;
-    }else 
+    }else
     if (token.str.compare("MACRO") == 0){
         token.type = TT_DIRECTIVE;
         token.addit_info = DIR_MACRO;
         return DIR_MACRO;
-    }else 
+    }else
     if (token.str.compare("ENDMACRO") == 0){
         token.type = TT_DIRECTIVE;
         token.addit_info = DIR_ENDMACRO;
         return DIR_ENDMACRO;
-    }else 
+    }else
     if (token.str.compare("TEXT") == 0){
         token.type = TT_DIRECTIVE;
         token.addit_info = DIR_TEXT;
         return DIR_TEXT;
-    }else 
+    }else
     if (token.str.compare("DATA") == 0){
         token.type = TT_DIRECTIVE;
         token.addit_info = DIR_DATA;
@@ -463,22 +465,5 @@ void verify_tokens (list<Token> & tokenlist, list<Token> & labellist){
     list<Token>::iterator it = tokenlist.begin();
     for (it = tokenlist.begin();it != tokenlist.end(); it++){
         categorize_token(*it, labellist, tokenlist);
-
-#ifdef __DEBUG__
-        cout << "Token: " << it->str << "  type: " << it->type << "  info: " << it->addit_info << endl;
-#endif
     }
-}
-
-
-void print_tokenlist (list<Token> & tokenlist, list<Token> & labellist){
-    cout << "Tamanho da Lista: " << tokenlist.size() << endl << "-----------------\n"; //print list size
-    list<Token>::iterator it;
-    for (it = tokenlist.begin();it != tokenlist.end(); it++)
-        cout << "Token: " << it->str << "..   Line: " << it->line_number << " Number: " << it->token_pos_il << endl;  //print list element
-    cout << "-----------------\n";
-
-    for (it = labellist.begin();it != labellist.end(); it++)
-        cout << "label: " << it->str << "..   Line: " << it->line_number << " Number: " << it->token_pos_il << endl;  //print list element
-    cout << "-----------------\n";
 }
