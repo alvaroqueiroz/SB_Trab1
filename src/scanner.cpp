@@ -15,7 +15,7 @@
 #include "scanner.h"
 using namespace std;
 
-#define __DEBUG__
+//#define __DEBUG__
 
 
 int scanner (char * s, list<Token> & tokenlist, list<Token> & labellist){
@@ -192,6 +192,16 @@ int is_mnemonic(Token & token){
         token.type = TT_MNEMONIC;
         token.addit_info = OP_STOP;
         return OP_STOP;
+    }else 
+    if (token.str.compare(",") == 0){
+        token.type = TT_COMMA_OPERATOR;
+        token.addit_info = OP_BASIC_OP;
+        return OP_BASIC_OP;
+    }else 
+    if (token.str.compare("+") == 0){
+        token.type = TT_PLUS_OPERATOR;
+        token.addit_info = OP_BASIC_OP;
+        return OP_BASIC_OP;
     }
     token.type = 0;
     token.addit_info = 0;
@@ -205,6 +215,34 @@ int is_label(Token & token, list<Token> & labellist){
 
     if (token.str.at(token.str.length()-1) == ':'){     // Check if is label.
         token.type = TT_LABEL;
+
+        if (    token.str.compare("ADD:") == 0 || \
+                token.str.compare("SUB:") == 0 || \
+                token.str.compare("MULT:") == 0 || \
+                token.str.compare("DIV:") == 0 || \
+                token.str.compare("JMP:") == 0 || \
+                token.str.compare("JMPN:") == 0 || \
+                token.str.compare("JMPP:") == 0 || \
+                token.str.compare("JMPZ:") == 0 || \
+                token.str.compare("COPY:") == 0 || \
+                token.str.compare("LOAD:") == 0 || \
+                token.str.compare("STORE:") == 0 || \
+                token.str.compare("INPUT:") == 0 || \
+                token.str.compare("OUTPUT:") == 0 || \
+                token.str.compare("STOP:") == 0 || \
+                token.str.compare("SECTION:") == 0 || \
+                token.str.compare("TEXT:") == 0 || \
+                token.str.compare("DATA:") == 0 || \
+                token.str.compare("SPACE:") == 0 || \
+                token.str.compare("CONST:") == 0 || \
+                token.str.compare("EQU:") == 0 || \
+                token.str.compare("IF:") == 0 || \
+                token.str.compare("MACRO:") == 0 || \
+                token.str.compare("ENDMACRO:") == 0 ){     // Check restricted names.
+            cout << "Lexical Error @ Line " << token.line_number << " - invalid label, restricted name." << endl;
+            token.addit_info = INVALID_TOKEN;
+            return INVALID_TOKEN;
+        }
 
         if (token.str.length()-1 < 1 || token.str.length()-1 > 20){     // Check length.
             cout << "Lexical Error @ Line " << token.line_number << " - invalid label length." << endl;

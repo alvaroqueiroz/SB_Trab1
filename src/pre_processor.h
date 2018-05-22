@@ -31,6 +31,7 @@
 #define OP_INPUT            12
 #define OP_OUTPUT           13
 #define OP_STOP             14
+#define OP_BASIC_OP			15
 /*------------------------------------*/
 
 /*----------DIRECTIVE-TABLE-----------*/
