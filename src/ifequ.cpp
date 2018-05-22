@@ -144,7 +144,7 @@ int identify_if (list<Token> & tokenlist, list<Token> & iflist){
             newit = it;     //sintatic/semanitc analisys
             it--;
             if (it->line_number == newit->line_number){     //does "IF" have one argument?
-                if(newit->type == TT_DEC_CONST || newit->type == TT_HEX_CONST){ //Is it a constant?
+                if(newit->type == TT_CONST){ //Is it a constant?
                     newit++;
                     if (it->line_number != newit->line_number){ //does it have ONLY one argument?
                         iflist.push_back(*it);

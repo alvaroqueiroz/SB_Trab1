@@ -1,5 +1,6 @@
 #include "pre_processor.h"
 #include "scanner.h"
+#include "parser.h"
 using namespace std;
 
 /*
@@ -13,7 +14,9 @@ int pre_processor(char * input_fn, char * output_fn, bool output_enable){
     list<Token>::iterator it, aux;
 
     scanner(input_fn, tokenlist, labellist);
-    //parser();
+    //equ;
+    parser(tokenlist, labellist);
+    //if;
     //semantic_analyser();
 
 
@@ -56,6 +59,6 @@ void print_list (list<Token> & tokenlist){
     cout << "Tamanho da Lista: " << tokenlist.size() << endl << "-----------------\n"; //print list size
     list<Token>::iterator it;
     for (it = tokenlist.begin();it != tokenlist.end(); it++)
-        cout << "Token: " << it->str << "..   Line: " << it->line_number << "   Position in line: " << it->token_pos_il << "    Type: " << it->type << "        addt_info: " << it->addit_info << "    flag: " << it->flag << "     info str: " << it->info_str << endl;  //print list element
+        cout << "Token: " << it->str << "..   \tLine: " << it->line_number << "   \tPosition in line: " << it->token_pos_il << "    \tType: " << it->type << "        \taddt_info: " << it->addit_info << "    \tflag: " << it->flag << "     \tinfo str: " << it->info_str << endl;  //print list element
     cout << "-----------------\n";
 }
