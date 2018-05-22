@@ -58,8 +58,7 @@ int identify_equ(list<Token> & tokenlist, list<Token> & labellist){
                             t_it--;
                             i = t_newit->line_number;
                             while (t_it->line_number <= i){  //erases "EQU" line and following line
-                                tokenlist.erase(t_it);
-                                t_it++;
+                                t_it = tokenlist.erase(t_it);
                             }
                             t_newit = aux;
                             t_it = aux;
@@ -76,8 +75,7 @@ int identify_equ(list<Token> & tokenlist, list<Token> & labellist){
                         t_it--;
                         i = t_newit->line_number;
                         while (t_it->line_number <= i){  //erases "EQU" line and following line
-                            tokenlist.erase(t_it);
-                            t_it++;
+                            t_it = tokenlist.erase(t_it);
                         }
                         t_newit = aux;
                         t_it = aux;
@@ -184,8 +182,7 @@ int solve_if (list<Token> & tokenlist, list<Token> & iflist){
                         aux--;                      //returns to beginning of line
                         i = aux->line_number;
                         while (aux->line_number <= i){  //erases "IF" line and following line
-                            tokenlist.erase(aux);
-                            aux++;
+                            aux = tokenlist.erase(aux);
                         }
                         newit = aux;
                     }else{                     //if false
@@ -193,8 +190,7 @@ int solve_if (list<Token> & tokenlist, list<Token> & iflist){
                         i = aux->line_number;
                         i++;                        //until next line
                         while (aux->line_number <= i){  //erases "IF" line and following line
-                            tokenlist.erase(aux);
-                            aux++;
+                            aux = tokenlist.erase(aux);
                         }
                         newit = aux;
                     }
