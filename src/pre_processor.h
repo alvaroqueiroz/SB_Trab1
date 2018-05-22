@@ -11,8 +11,9 @@
 #define TT_LABEL            2
 #define TT_DIRECTIVE        3
 #define TT_OPERAND          4
-#define TT_DEC_CONST        5
-#define TT_HEX_CONST        6
+#define TT_CONST        	5
+#define TT_COMMA_OPERATOR   6
+#define TT_PLUS_OPERATOR	7
 /*------------------------------------*/
 
 /*------------OPCODE-TABLE------------*/
@@ -30,6 +31,7 @@
 #define OP_INPUT            12
 #define OP_OUTPUT           13
 #define OP_STOP             14
+#define OP_BASIC_OP			15
 /*------------------------------------*/
 
 /*----------DIRECTIVE-TABLE-----------*/
@@ -40,9 +42,12 @@
 #define DIR_IF              5
 #define DIR_MACRO           6
 #define DIR_ENDMACRO        7
+#define DIR_TEXT            8
+#define DIR_DATA            9
 /*------------------------------------*/
 
-#define INVALID_TOKEN      -1
+#define INVALID_TOKEN       -1
+
 
 
 

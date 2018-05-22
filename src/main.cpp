@@ -17,6 +17,7 @@ Alunos: Andre Abreu Rodrigues de Almeida    12/0007100
 #include <cstring>
 #include "argument_checks.h"
 #include "pre_processor.h"
+#include "assembler.h"
 using namespace std;
 
 int pre_error = 0; // flag to indicate if pre-processor had any error.
@@ -44,7 +45,7 @@ int main (int argc, char** argv){
             break;
         case 2:
             output_fn = string(argv[3]) + ".o";
-    //        assembler(strdup(file_name.c_str()), strdup(output_fn.c_str()));
+            assembler(strdup(file_name.c_str()), strdup(output_fn.c_str()));
             break;
         default:
             return 0;
