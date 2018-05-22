@@ -19,13 +19,11 @@ int parser (list <Token> & tokenlist, list <Token> & labellist){
 			break;
 			
 			case TT_OPERAND:
-				cout << "Sintax Error @ Line " << it->line_number << " - unexpected operand." << endl;
-				it++;
+				it = parser_operand(tokenlist, it);
 			break;
 			
 			case TT_CONST:
-				cout << "Sintax Error @ Line " << it->line_number << " - unexpected value." << endl;
-				it++;
+				it = parser_const(tokenlist, it);
 			break;
 
 			default:
@@ -333,6 +331,79 @@ list<Token>::iterator parser_directive(list <Token> & tokenlist, list<Token>::it
 			it++;
 		break;		
 	}
+
+	return it;
+}
+
+list<Token>::iterator parser_operand(list <Token> & tokenlist, list<Token>::iterator it){
+	int target_line;
+	target_line = it->line_number;
+
+	// expects to be a macro calling.
+	it++;
+	// first argument.
+	if (it != tokenlist.end() && target_line == it->line_number){
+		if (it->type == TT_OPERAND){
+			it++;
+			// second argument.
+			if (it != tokenlist.end() && target_line == it->line_number){
+				if (it->type == TT_OPERAND){
+					it++;
+					// third argument.
+					if (it != tokenlist.end() && target_line == it->line_number){
+						if (it->type == TT_OPERAND){
+							it++;
+							// fourth argument.
+							if (it != tokenlist.end() && target_line == it->line_number){
+								if (it->type == TT_OPERAND){
+									it++;
+									// too much arguments.
+									if (it != tokenlist.end() && target_line == it->line_number){
+										cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+										do {		// get out of line.
+											it++;
+										} while(it != tokenlist.end() && target_line == it->line_number);
+									}
+								} else {
+									cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+									do {		// get out of line.
+										it++;
+									} while(it != tokenlist.end() && target_line == it->line_number);
+								}
+							}
+						} else {
+							cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+							do {		// get out of line.
+								it++;
+							} while(it != tokenlist.end() && target_line == it->line_number);
+						}
+					}
+				} else {
+					cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+					do {		// get out of line.
+						it++;
+					} while(it != tokenlist.end() && target_line == it->line_number);
+				}
+			}
+		} else {
+			cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+			do {		// get out of line.
+				it++;
+			} while(it != tokenlist.end() && target_line == it->line_number);
+		}
+	}
+
+	return it;
+}
+
+list<Token>::iterator parser_const(list <Token> & tokenlist, list<Token>::iterator it){
+	int target_line;
+	target_line = it->line_number;
+
+	cout << "Sintax Error @ Line " << target_line << " - unexpected value." << endl;
+	do {		// get out of line.
+		it++;
+	} while(it != tokenlist.end() && target_line == it->line_number);
 
 	return it;
 }
