@@ -222,31 +222,101 @@ list<Token>::iterator parser_directive(list <Token> & tokenlist, list<Token>::it
 	target_line = it->line_number;
 	switch (it->addit_info){
 		case DIR_SECTION:
-			do {		// get out of line.
-				it++;
-			} while(it != tokenlist.end() && target_line == it->line_number);
+			it++;
+			if (it != tokenlist.end() && target_line == it->line_number){										// check if arguments exists.
+				if (it->type == TT_DIRECTIVE && (it->addit_info == DIR_TEXT || it->addit_info == DIR_DATA)){	// check if argument is valid.
+					it++;
+					if (it != tokenlist.end() && target_line == it->line_number){								// check if too much arguments.
+						cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+						do {		// get out of line.
+							it++;
+						} while(it != tokenlist.end() && target_line == it->line_number);
+					}
+				} else {
+					cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+					do {		// get out of line.
+						it++;
+					} while(it != tokenlist.end() && target_line == it->line_number);
+				}
+			} else {
+				cout << "Sintax Error @ Line " << target_line << " - missing argument." << endl;
+			}
 		break;
 
 		case DIR_SPACE:
-			do {		// get out of line.
-				it++;
-			} while(it != tokenlist.end() && target_line == it->line_number);
+			it++;
+			if (it != tokenlist.end() && target_line == it->line_number){			// check if argument exist.
+				if (it->type == TT_CONST && it->addit_info > 0){											// check if argument is valid
+					it++;
+					if (it != tokenlist.end() && target_line == it->line_number){	// check if too much arguments.
+						cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+						do {		// get out of line.
+							it++;
+						} while(it != tokenlist.end() && target_line == it->line_number);
+					}
+				} else {
+					cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+					do {		// get out of line.
+						it++;
+					} while(it != tokenlist.end() && target_line == it->line_number);
+				}
+			}
 		break;
 
 		case DIR_CONST:
-			do {		// get out of line.
-				it++;
-			} while(it != tokenlist.end() && target_line == it->line_number);
+			it++;
+			if (it != tokenlist.end() && target_line == it->line_number){			// check if argument exist.
+				if (it->type == TT_CONST){											// check if argument is valid
+					it++;
+					if (it != tokenlist.end() && target_line == it->line_number){	// check if too much arguments.
+						cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+						do {		// get out of line.
+							it++;
+						} while(it != tokenlist.end() && target_line == it->line_number);
+					}
+				} else {
+					cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+					do {		// get out of line.
+						it++;
+					} while(it != tokenlist.end() && target_line == it->line_number);
+				}
+			} else {
+				cout << "Sintax Error @ Line " << target_line << " - missing argument." << endl;
+			}
 		break;
 
 		case DIR_IF:
-			do {		// get out of line.
-				it++;
-			} while(it != tokenlist.end() && target_line == it->line_number);
+			it++;
+			if (it != tokenlist.end() && target_line == it->line_number){			// check if argument exist.
+				if (it->type == TT_CONST || it->type == TT_OPERAND){				// check if argument is valid
+					it++;
+					if (it != tokenlist.end() && target_line == it->line_number){	// check if too much arguments.
+						cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+						do {		// get out of line.
+							it++;
+						} while(it != tokenlist.end() && target_line == it->line_number);
+					}
+				} else {
+					cout << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+					do {		// get out of line.
+						it++;
+					} while(it != tokenlist.end() && target_line == it->line_number);
+				}
+			} else {
+				cout << "Sintax Error @ Line " << target_line << " - missing argument." << endl;
+			}
 		break;
 
 		case DIR_MACRO:
 		case DIR_ENDMACRO:
+			do {		// get out of line.
+				it++;
+			} while(it != tokenlist.end() && target_line == it->line_number);
+		break;
+
+		case DIR_TEXT:
+		case DIR_DATA:
+			cout << "Sintax Error @ Line " << target_line << " - invalid use of directive." << endl;
 			do {		// get out of line.
 				it++;
 			} while(it != tokenlist.end() && target_line == it->line_number);
