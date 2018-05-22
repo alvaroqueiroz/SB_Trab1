@@ -1,0 +1,1 @@
+./simulador teste.o
