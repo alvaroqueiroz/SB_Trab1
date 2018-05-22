@@ -11,14 +11,8 @@ using namespace std;
 
 
 void ifequ(list<Token> & tokenlist, list<Token> & labellist){
-    print_list(tokenlist);
-    print_list(labellist);
     equilizer(tokenlist, labellist);
-    print_list(tokenlist);
-    print_list(labellist);
     conditional_dir(tokenlist);
-    print_list(tokenlist);
-    print_list(labellist);
 }
 
 
