@@ -31,7 +31,7 @@ int parser (list <Token> & tokenlist, list <Token> & labellist){
 			case TT_AMPERSAND_OPERATOR:
 				it = parser_ampersand(tokenlist, it);
 			break;
-			
+
 			default:
 				cout << "Parser: unknowm token type." << endl;
 				it++;
@@ -706,6 +706,13 @@ list<Token>::iterator parser_label(list <Token> & tokenlist, list<Token>::iterat
 	it++;
 	if (it == tokenlist.end() || target_line != it->line_number){
 		cout << "Sintax Error @ Line " << target_line << " - empty label." << endl;
+	} else {
+		if (it->type == TT_LABEL){
+			cout << "Sintax Error @ Line " << target_line << " - multiple labels in line." << endl;
+			do {		// get out of line.
+				it++;
+			} while(it != tokenlist.end() && target_line == it->line_number);
+		}
 	}
 
 	return it;
