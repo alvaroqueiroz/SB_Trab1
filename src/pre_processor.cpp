@@ -18,6 +18,7 @@ int pre_processor(char * input_fn, char * output_fn){
     parser(tokenlist, labellist);
     //if;
     //semantic_analyser();
+    //macro;
 
 
     /*create output file*/
