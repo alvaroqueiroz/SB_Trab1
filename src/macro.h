@@ -20,7 +20,7 @@ struct Macro {
     
     // MDT.
     int body_length;
-    list<Token>::iterator start;
+    list<Token>::iterator it_start;
 
     // argx <- paramx.
     string param[4];

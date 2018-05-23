@@ -1,6 +1,7 @@
 #include "pre_processor.h"
 #include "scanner.h"
 #include "parser.h"
+#include "macro.h"
 using namespace std;
 
 /*
@@ -19,6 +20,8 @@ int pre_processor(char * input_fn, char * output_fn){
     //if;
     //semantic_analyser();
     //macro;
+    solve_macro(tokenlist);
+    print_list(tokenlist);
 
 
     /*create output file*/

@@ -1,22 +1,24 @@
-L1:  EQU 0
-L2:  EQU 1
+l2: macro arg1
+add arg1
+endmacro
+
+cray:  macro	arg1 arg2
+l2 arg1
+l3 arg2
+l4 arg1 arg2
+endmacro
+
+
+l3: macro arg1
+l2 arg1
+load arg1
+endmacro
+
+l4: macro arg1 arg2
+copy arg1, arg2
+l3 arg1
+endmacro
+
+
 SECTION TEXT
-INPUT OLD_DaTa
-LOAD OLD_DATA
-L1: DIV DOIS
-STORE  NEW_DATA    
-MULT DOIS		
-STORE TMP_DATA     
-LOAD OLD_DATA
-SUB TMP_DATA
-STORE TMP_DATA
-OUTPUT TMP_DATA
-COPY NEW_DATA,OLD_DATA
-LOAD OLD_DATA
-JMPP L1
-STOP
-SECTION DATA
-DOIS: CONST 2
-OLD_DATA: SPACE
-NEW_DATA: SPACE
-TMP_DATA: SPACE
+cray AA BB
