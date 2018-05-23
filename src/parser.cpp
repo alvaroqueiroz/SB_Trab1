@@ -11,7 +11,7 @@ int parser (list <Token> & tokenlist, list <Token> & labellist){
 			break;
 
 			case TT_LABEL:
-				it++;
+				it = parser_label(tokenlist, it);
 			break;
 
 			case TT_DIRECTIVE:
@@ -24,11 +24,14 @@ int parser (list <Token> & tokenlist, list <Token> & labellist){
 			
 			case TT_COMMA_OPERATOR:
 			case TT_PLUS_OPERATOR:
-			case TT_AMPERSAND_OPERATOR:
 			case TT_CONST:
 				it = parser_const(tokenlist, it);
 			break;
 
+			case TT_AMPERSAND_OPERATOR:
+				it = parser_ampersand(tokenlist, it);
+			break;
+			
 			default:
 				cout << "Parser: unknowm token type." << endl;
 				it++;
@@ -680,6 +683,30 @@ list<Token>::iterator parser_const(list <Token> & tokenlist, list<Token>::iterat
 	do {		// get out of line.
 		it++;
 	} while(it != tokenlist.end() && target_line == it->line_number);
+
+	return it;
+}
+
+list<Token>::iterator parser_ampersand(list <Token> & tokenlist, list<Token>::iterator it){
+	int target_line;
+	target_line = it->line_number;
+
+	it++;
+	if (it == tokenlist.end() || target_line != it->line_number){
+		cout << "Sintax Error @ Line " << target_line << " - ." << endl;
+	}
+
+	return it;
+}
+
+list<Token>::iterator parser_label(list <Token> & tokenlist, list<Token>::iterator it){
+	int target_line;
+	target_line = it->line_number;
+
+	it++;
+	if (it == tokenlist.end() || target_line != it->line_number){
+		cout << "Sintax Error @ Line " << target_line << " - empty label." << endl;
+	}
 
 	return it;
 }

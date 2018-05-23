@@ -26,4 +26,4 @@ endmacro
 
 SECTION TEXT
 cray AA, BB
-sub &op
+sub op
