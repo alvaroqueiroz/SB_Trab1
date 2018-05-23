@@ -38,6 +38,7 @@ int identify_tokens (char * s, list<Token> & tokenlist){
     int tcount = 0;
     Token vtoken, tmp;
     unsigned int i = 0;
+    vtoken.flag = 0;
 
     ifstream asmfile( s );  //opens ASM file
     if (asmfile){
@@ -48,7 +49,7 @@ int identify_tokens (char * s, list<Token> & tokenlist){
             line = line.substr(0, line.find(semicolon));    //removes comments
 
             while (line.length() > 0){  //scans whole line
-                
+
                 // Eliminates unnecessary.
                 i = 0;
                 while ( line.at(i) == ' ' || \
@@ -83,7 +84,7 @@ int identify_tokens (char * s, list<Token> & tokenlist){
                             tmp.token_pos_il = tcount;               //stores token order in line.
                             tmp.line_number = lcount;                //stores line number.
                             tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
-                            tcount++;                            
+                            tcount++;
                         }
                         tmp.str = ",";
                         tmp.token_pos_il = tcount;               //stores token order in line.
@@ -97,7 +98,7 @@ int identify_tokens (char * s, list<Token> & tokenlist){
                             tmp.token_pos_il = tcount;               //stores token order in line.
                             tmp.line_number = lcount;                //stores line number.
                             tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
-                            tcount++;                            
+                            tcount++;
                         }
                         tmp.str = "+";
                         tmp.token_pos_il = tcount;               //stores token order in line.
@@ -199,12 +200,12 @@ int is_mnemonic(Token & token){
         token.type = TT_MNEMONIC;
         token.addit_info = OP_STOP;
         return OP_STOP;
-    }else 
+    }else
     if (token.str.compare(",") == 0){
         token.type = TT_COMMA_OPERATOR;
         token.addit_info = OP_BASIC_OP;
         return OP_BASIC_OP;
-    }else 
+    }else
     if (token.str.compare("+") == 0){
         token.type = TT_PLUS_OPERATOR;
         token.addit_info = OP_BASIC_OP;
@@ -351,7 +352,7 @@ int is_decimal(Token & token){
     } else {
         tmp.str = token.str;
     }
-    
+
     for(i = 0; i < tmp.str.length(); i++){      // Check if is number.
         if(!isdigit(tmp.str.at(i))){
             return 0;
@@ -415,7 +416,7 @@ int is_hexadecimal(Token & token){
 
 int is_operand(Token & token, list<Token> & tokenlist){
     unsigned int i;
-    
+
     token.type = TT_OPERAND;
     if (token.str.length() < 1 || token.str.length() > 20){     // Check length.
         cerr << "Lexical Error @ Line " << token.line_number << " - invalid operand length." << endl;

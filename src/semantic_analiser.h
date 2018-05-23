@@ -7,8 +7,6 @@
 #include <string>
 
 int semantic_analiser();
-int program_flow_control ();
-int single_declaration ();
 
 
 #endif /* SEMANTIC_H_ */

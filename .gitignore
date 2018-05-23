@@ -2,3 +2,13 @@
 src/assembler
 
 *.pre
+
+src/TestesSB/comentarios/
+
+src/TestesSB/Detecção de erros/
+
+src/TestesSB/EQU/
+
+src/TestesSB/files/
+
+src/TestesSB/Deteccao_de_erros/

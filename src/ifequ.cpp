@@ -35,12 +35,14 @@ int identify_equ(list<Token> & tokenlist, list<Token> & labellist){
                         label = t_newit->str.substr(0, t_newit->str.find(delimiter));
                     }else{                              //if it's not a label marks as sintax error
                         fprintf(stderr, "Sintax error @ line %d - Missing label for 'EQU' directive.\n", t_it->line_number);
+                        mark_sintax_error(tokenlist,t_it);
                         pre_error = 1;
                         equ_error = 1;
                         break;
                 }
             }else{      //if it's the first token of the tokenlist
                 fprintf(stderr, "Sintax error @ line %d - Missing label for 'EQU' directive.\n", t_it->line_number);
+                mark_sintax_error(tokenlist,t_it);
                 pre_error = 1;
                 equ_error = 1;
                 break;
@@ -64,6 +66,7 @@ int identify_equ(list<Token> & tokenlist, list<Token> & labellist){
                             t_it = aux;
                         }else{
                             fprintf(stderr, "Sintax error @ line %d - Too many arguments for 'EQU' directive.\n", t_it->line_number);
+                            mark_sintax_error(tokenlist,t_it);
                             pre_error = 1;
                             equ_error = 1;
                             break;
@@ -82,12 +85,14 @@ int identify_equ(list<Token> & tokenlist, list<Token> & labellist){
                     }
                 }else{                      ////if there's no argument marks as sintax error
                     fprintf(stderr, "Sintax error @ line %d - Missing argument for 'EQU' directive.\n", t_it->line_number);
+                    mark_sintax_error(tokenlist,t_it);
                     pre_error = 1;
                     equ_error = 1;
                     break;
                 }
             }else{                      ////if there's no argument marks as sintax error
                 fprintf(stderr, "Sintax error @ line %d - Missing argument for 'EQU' directive.\n", t_it->line_number);
+                mark_sintax_error(tokenlist,t_it);
                 pre_error = 1;
                 equ_error = 1;
                 break;
@@ -150,6 +155,7 @@ int identify_if (list<Token> & tokenlist, list<Token> & iflist){
                         iflist.push_back(*it);
                     }else{
                         fprintf(stderr, "Sintax error @ line %d - Too many arguments for 'IF' directive.\n", newit->line_number);
+                        mark_sintax_error(tokenlist,newit);
                         if_err = 1;
                         pre_error = 1;
                     }
@@ -160,6 +166,7 @@ int identify_if (list<Token> & tokenlist, list<Token> & iflist){
                 }
             }else{
                 fprintf(stderr, "Sintax error @ line %d - Malformed 'IF' statement - Expected CONST type.\n", it->line_number);
+                mark_sintax_error(tokenlist, it);
                 if_err = 1;
                 pre_error = 1;
             }
