@@ -7,13 +7,14 @@
 #include <list>
 
 /*----------TOKEN-TYPE-TABLE----------*/
-#define TT_MNEMONIC         1
-#define TT_LABEL            2
-#define TT_DIRECTIVE        3
-#define TT_OPERAND          4
-#define TT_CONST        	5
-#define TT_COMMA_OPERATOR   6
-#define TT_PLUS_OPERATOR	7
+#define TT_MNEMONIC         	1
+#define TT_LABEL            	2
+#define TT_DIRECTIVE        	3
+#define TT_OPERAND          	4
+#define TT_CONST        		5
+#define TT_COMMA_OPERATOR   	6
+#define TT_PLUS_OPERATOR		7
+#define TT_AMPERSAND_OPERATOR 	8
 /*------------------------------------*/
 
 /*------------OPCODE-TABLE------------*/

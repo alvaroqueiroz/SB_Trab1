@@ -58,12 +58,13 @@ void expand_macro(list<Token> & tokenlist, list<Macro> & macrolist){
 	list<Macro>::iterator it_mc, tmp_mc;
 	Token token, aux;
 	Macro macro;
-	int i, j, first;
+	int i, j, first, macro_space;
 
 	it_tk = tokenlist.begin();
 	it_mc = macrolist.begin();
+	macro_space = 0;
 	while (it_tk != tokenlist.end()){		// go through entire token list.
-		if(it_tk->type == TT_OPERAND){		// check if macro operand.
+		if(it_tk->type == TT_OPERAND  && !macro_space){		// check if macro operand.
 			for(it_mc = macrolist.begin(); it_mc != macrolist.end(); it_mc++){
 				if (it_tk->str == it_mc->str){		// is macro.
 					tmp_tk = it_tk;
@@ -93,7 +94,13 @@ void expand_macro(list<Token> & tokenlist, list<Macro> & macrolist){
 						if (tmp_tk->type == TT_OPERAND){				// if operand check if is arg.
 							for(j = 0; j < it_mc->argn; j++){			// check if all args.
 								if (tmp_tk->str == it_mc->arg[j]){		// is arg.
-									aux.str = it_mc->param[j];			// put param in place of arg.
+									tmp_tk--;
+									if (tmp_tk->type == TT_AMPERSAND_OPERATOR){		// check the argument indicator
+										it_tk--;
+										it_tk = tokenlist.erase(it_tk);
+										aux.str = it_mc->param[j];			// put param in place of arg.
+									}
+									tmp_tk++;
 								}
 							}
 						}
@@ -112,6 +119,12 @@ void expand_macro(list<Token> & tokenlist, list<Macro> & macrolist){
 					break; 		// get out of for.
 				}
 			}
+		} else
+		if (it_tk->type == TT_DIRECTIVE && it_tk->addit_info == DIR_MACRO){		// entering macro definition space.
+			macro_space = 1;
+		} else
+		if (it_tk->type == TT_DIRECTIVE && it_tk->addit_info == DIR_ENDMACRO){		// exiting macro definition space.
+			macro_space = 0;
 		}
 
 		it_tk++;
