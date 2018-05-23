@@ -15,7 +15,7 @@
 #include "scanner.h"
 using namespace std;
 
-//#define __DEBUG__
+#define __DEBUG__
 
 
 int scanner (char * s, list<Token> & tokenlist, list<Token> & labellist){
