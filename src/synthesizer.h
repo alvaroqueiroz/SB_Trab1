@@ -6,7 +6,11 @@
 #include <fstream>
 #include <string>
 #include <cstring>
+#include "first_pass.h"
+#include "pre_processor.h"
 
-int synthesizer ();
+using namespace std;
+
+int synthesizer (list<Token> & tokenlist);
 
 #endif /* SYNTHESIZER_H__ */
