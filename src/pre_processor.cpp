@@ -1,6 +1,7 @@
 #include "pre_processor.h"
 #include "scanner.h"
 #include "parser.h"
+#include "semantic_analyser.h"
 using namespace std;
 
 /*
@@ -17,7 +18,7 @@ int pre_processor(char * input_fn, char * output_fn){
     //equ;
     parser(tokenlist, labellist);
     //if;
-    //semantic_analyser();
+    semantic_analyser(tokenlist, labellist);
 
 
     /*create output file*/
