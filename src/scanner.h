@@ -26,6 +26,6 @@ int is_operand(Token & token, std::list<Token> & tokenlist);
 int is_decimal(Token & token);
 int is_hexadecimal(Token & token);
 
-
+extern int pre_error;
 
 #endif /* SCANNER_H_ */

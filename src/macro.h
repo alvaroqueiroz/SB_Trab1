@@ -33,4 +33,6 @@ void create_macrolist(list<Token> & tokenlist, list<Macro> & macrolist);
 void expand_macro(list<Token> & tokenlist, list<Macro> & macrolist);
 void erase_macro(list<Token> & tokenlist);
 
+extern int pre_error;
+
 #endif /* MACRO_H_ */

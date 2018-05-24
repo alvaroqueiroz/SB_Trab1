@@ -12,6 +12,8 @@
 
 using namespace std;
 
-int synthesizer (list<Token> & tokenlist);
+int synthesizer (list<Token> & tokenlist, list<int> & object);
+
+extern int pre_error;
 
 #endif /* SYNTHESIZER_H__ */

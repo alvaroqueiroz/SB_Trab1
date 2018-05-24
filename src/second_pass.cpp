@@ -2,10 +2,9 @@
 
 //#define __DEBUG__
 
-void second_pass(list<Token> & tokenlist, list<Symbol> & symboltable){
+void second_pass(list<Token> & tokenlist, list<Symbol> & symboltable, list<int> & object){
 	list<Token>::iterator it_tk;
 	list<Symbol>::iterator it_sb;
-	list<int> object;
 	list<int>::iterator it_ob;
 	int i;
 

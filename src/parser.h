@@ -19,4 +19,6 @@ list<Token>::iterator parser_const(list <Token> & tokenlist, list<Token>::iterat
 list<Token>::iterator parser_ampersand(list <Token> & tokenlist, list<Token>::iterator it);
 list<Token>::iterator parser_label(list <Token> & tokenlist, list<Token>::iterator it);
 
+extern int pre_error;
+
 #endif /* PARSER_H_ */

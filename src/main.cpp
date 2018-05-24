@@ -48,13 +48,18 @@ int main (int argc, char** argv){
         return 0;
     } else {
         pre_processor(strdup(file_name.c_str()), tokenlist);
+        
+        if (pre_error){
+            cout << endl << "Error = true. The process will terminate before creating output files." << endl << endl;
+            return 0;
+        }
         /*create output file*/
         output_fn = string(argv[3]) + ".pre";
         ofstream fpp (output_fn);  //opens output file
         for (it = tokenlist.begin(); it != tokenlist.end(); it++){
             aux = it;
             aux++;
-            while (aux->line_number == it->line_number){
+            while (aux->line_number == it->line_number && it->token_pos_il < aux->token_pos_il){
                 fpp << it->str << " ";
                 it++;
                 aux++;
@@ -73,7 +78,7 @@ int main (int argc, char** argv){
         for (it = tokenlist.begin(); it != tokenlist.end(); it++){
             aux = it;
             aux++;
-            while (aux->line_number == it->line_number){
+            while (aux->line_number == it->line_number && it->token_pos_il < aux->token_pos_il){
                 fpm << it->str << " ";
                 it++;
                 aux++;
@@ -85,19 +90,12 @@ int main (int argc, char** argv){
             return 0;
         }
 
-        synthesizer(tokenlist);
+        synthesizer(tokenlist, object);
         /*create output file*/
         output_fn = string(argv[3]) + ".o";
         ofstream fpo (output_fn);  //opens output file
-        for (it = tokenlist.begin(); it != tokenlist.end(); it++){
-            aux = it;
-            aux++;
-            while (aux->line_number == it->line_number){
-                fpo << it->str << " ";
-                it++;
-                aux++;
-            }
-            fpo << it->str << endl;
+        for (it_ob = object.begin(); it_ob != object.end(); it_ob++){
+            fpo << *it_ob << " ";
         }
         fpo.close();   //closes output file
         
