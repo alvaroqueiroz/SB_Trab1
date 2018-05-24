@@ -27,8 +27,8 @@ endmacro
 SECTION TEXT
 cray AA, BB
 sub op
-num: const 5
-void: space
-gvoid: space 3
+AA: const 5
+XX: space
+BB: space 3
 add op
 op: space

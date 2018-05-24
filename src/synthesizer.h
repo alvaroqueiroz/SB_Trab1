@@ -7,6 +7,7 @@
 #include <string>
 #include <cstring>
 #include "first_pass.h"
+#include "second_pass.h"
 #include "pre_processor.h"
 
 using namespace std;

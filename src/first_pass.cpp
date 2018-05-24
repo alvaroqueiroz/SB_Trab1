@@ -45,7 +45,9 @@ void first_pass(list<Token> & tokenlist, list<Symbol> & symboltable){
 		}
 	}
 
+	cout << "Tamanho da Lista: " << symboltable.size() << endl << "-----------------\n";
 	for (it_sb = symboltable.begin(); it_sb != symboltable.end(); it_sb++){
 		cout << "symbol: " << it_sb->str << ".. \tatrb: " << it_sb->atrb << endl;
 	}
+	cout << "-----------------\n";
 }
