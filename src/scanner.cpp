@@ -77,35 +77,82 @@ int identify_tokens (char * s, list<Token> & tokenlist){
 
                 vtoken.str = line.substr(0, i);             //gets new token.
                 // Check basic operators , and +.
-                while(vtoken.str.find(",") != string::npos || vtoken.str.find("+") != string::npos){
-                    if (vtoken.str.find(",") < vtoken.str.find("+")){       // case comma.
-                        if (vtoken.str.find(",") != 0){     // not in the beginning.
-                            tmp.str = vtoken.str.substr(0, vtoken.str.find(","));
+                while(vtoken.str.find(",") != string::npos || vtoken.str.find("+") != string::npos || vtoken.str.find("&") != string::npos){
+                    if ((vtoken.str.find(",") <= vtoken.str.find("&")) && (vtoken.str.find("+") <= vtoken.str.find("&"))){
+                        if (vtoken.str.find(",") < vtoken.str.find("+")){       // case comma.
+                            if (vtoken.str.find(",") != 0){     // not in the beginning.
+                                tmp.str = vtoken.str.substr(0, vtoken.str.find(","));
+                                tmp.token_pos_il = tcount;               //stores token order in line.
+                                tmp.line_number = lcount;                //stores line number.
+                                tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
+                                tcount++;                            
+                            }
+                            tmp.str = ",";
                             tmp.token_pos_il = tcount;               //stores token order in line.
                             tmp.line_number = lcount;                //stores line number.
                             tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
                             tcount++;
-                        }
-                        tmp.str = ",";
-                        tmp.token_pos_il = tcount;               //stores token order in line.
-                        tmp.line_number = lcount;                //stores line number.
-                        tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
-                        tcount++;
-                        vtoken.str.erase(0, vtoken.str.find(",") + 1);
-                    } else{     // case plus.
-                        if (vtoken.str.find("+") != 0){     // not in the beginning.
-                            tmp.str = vtoken.str.substr(0, vtoken.str.find("+"));
+                            vtoken.str.erase(0, vtoken.str.find(",") + 1);
+                        } else{     // case plus.
+                            if (vtoken.str.find("+") != 0){     // not in the beginning.
+                                tmp.str = vtoken.str.substr(0, vtoken.str.find("+"));
+                                tmp.token_pos_il = tcount;               //stores token order in line.
+                                tmp.line_number = lcount;                //stores line number.
+                                tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
+                                tcount++;                            
+                            }
+                            tmp.str = "+";
                             tmp.token_pos_il = tcount;               //stores token order in line.
                             tmp.line_number = lcount;                //stores line number.
                             tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
                             tcount++;
+                            vtoken.str.erase(0, vtoken.str.find("+") + 1);
                         }
-                        tmp.str = "+";
-                        tmp.token_pos_il = tcount;               //stores token order in line.
-                        tmp.line_number = lcount;                //stores line number.
-                        tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
-                        tcount++;
-                        vtoken.str.erase(0, vtoken.str.find("+") + 1);
+                    } else {
+                        if (vtoken.str.find(",") < vtoken.str.find("&")){       // case comma.
+                            if (vtoken.str.find(",") != 0){     // not in the beginning.
+                                tmp.str = vtoken.str.substr(0, vtoken.str.find(","));
+                                tmp.token_pos_il = tcount;               //stores token order in line.
+                                tmp.line_number = lcount;                //stores line number.
+                                tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
+                                tcount++;                            
+                            }
+                            tmp.str = ",";
+                            tmp.token_pos_il = tcount;               //stores token order in line.
+                            tmp.line_number = lcount;                //stores line number.
+                            tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
+                            tcount++;
+                            vtoken.str.erase(0, vtoken.str.find(",") + 1);
+                        } else 
+                        if (vtoken.str.find("+") < vtoken.str.find("&")){       // case plus.
+                            if (vtoken.str.find("+") != 0){     // not in the beginning.
+                                tmp.str = vtoken.str.substr(0, vtoken.str.find("+"));
+                                tmp.token_pos_il = tcount;               //stores token order in line.
+                                tmp.line_number = lcount;                //stores line number.
+                                tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
+                                tcount++;                            
+                            }
+                            tmp.str = "+";
+                            tmp.token_pos_il = tcount;               //stores token order in line.
+                            tmp.line_number = lcount;                //stores line number.
+                            tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
+                            tcount++;
+                            vtoken.str.erase(0, vtoken.str.find("+") + 1);
+                        } else {        // case ampersand.
+                            if (vtoken.str.find("&") != 0){     // not in the beginning.
+                                tmp.str = vtoken.str.substr(0, vtoken.str.find("&"));
+                                tmp.token_pos_il = tcount;               //stores token order in line.
+                                tmp.line_number = lcount;                //stores line number.
+                                tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
+                                tcount++;                            
+                            }
+                            tmp.str = "&";
+                            tmp.token_pos_il = tcount;               //stores token order in line.
+                            tmp.line_number = lcount;                //stores line number.
+                            tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
+                            tcount++;
+                            vtoken.str.erase(0, vtoken.str.find("&") + 1);
+                        }
                     }
                 }
 
@@ -208,6 +255,12 @@ int is_mnemonic(Token & token){
     }else
     if (token.str.compare("+") == 0){
         token.type = TT_PLUS_OPERATOR;
+        token.addit_info = OP_BASIC_OP;
+        return OP_BASIC_OP;
+    }
+    else 
+    if (token.str.compare("&") == 0){
+        token.type = TT_AMPERSAND_OPERATOR;
         token.addit_info = OP_BASIC_OP;
         return OP_BASIC_OP;
     }

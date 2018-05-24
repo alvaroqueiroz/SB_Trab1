@@ -9,13 +9,14 @@
 
 
 /*----------TOKEN-TYPE-TABLE----------*/
-#define TT_MNEMONIC         1
-#define TT_LABEL            2
-#define TT_DIRECTIVE        3
-#define TT_OPERAND          4
-#define TT_CONST        	5
-#define TT_COMMA_OPERATOR   6
-#define TT_PLUS_OPERATOR	7
+#define TT_MNEMONIC         	1
+#define TT_LABEL            	2
+#define TT_DIRECTIVE        	3
+#define TT_OPERAND          	4
+#define TT_CONST        		5
+#define TT_COMMA_OPERATOR   	6
+#define TT_PLUS_OPERATOR		7
+#define TT_AMPERSAND_OPERATOR 	8
 /*------------------------------------*/
 
 /*------------OPCODE-TABLE------------*/
@@ -66,7 +67,7 @@ struct Token {
 typedef struct Token Token;
 /*------------------------------------*/
 
-int pre_processor(char * input_fn, char * output_fn);
+int pre_processor(char * input_fn, std::list<Token> & tokenlist);
 void print_list (std::list<Token> & tokenlist);
 void mark_sintax_error (std::list<Token> & tokenlist, std::list<Token>::iterator it);
 
