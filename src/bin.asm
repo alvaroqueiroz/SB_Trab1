@@ -2,7 +2,7 @@ l2: macro &arg1
 add &arg1
 endmacro
 
-cray:  macro	&arg1, & arg2
+cray:  macro    &arg1, & arg2
 l2 &arg1
 l3 &arg2
 l4 &arg1, &arg2
