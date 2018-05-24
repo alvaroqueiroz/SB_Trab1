@@ -2,6 +2,7 @@
 #include "scanner.h"
 #include "parser.h"
 #include "macro.h"
+#include "synthesizer.h"
 using namespace std;
 
 /*
@@ -22,6 +23,7 @@ int pre_processor(char * input_fn, char * output_fn){
     //macro;
     solve_macro(tokenlist);
     print_list(tokenlist);
+    synthesizer(tokenlist);
 
 
     /*create output file*/
