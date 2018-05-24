@@ -13,6 +13,8 @@ using namespace std;
 * - unused label from data section (warning)
 * - Data definition declared as Text label
 * - Absent & wrong section TEXT labels
+* - constant redefinitions
+* - division by zero
 */
 
 /*
@@ -124,6 +126,7 @@ int section_placement (list <Token> & tokenlist, list<Token>::iterator & text, l
 
 int check_symbols_from_data(list <Token> & tokenlist, list<Token>::iterator data_begin){
     int err = 0;
+    int i =0;
     list<Token>::iterator it, data_it, aux;
     for (it = tokenlist.begin(); it != tokenlist.end(); it++){
         if (it->type == TT_OPERAND && it->addit_info != -1 && it->flag != -1){
@@ -142,10 +145,26 @@ int check_symbols_from_data(list <Token> & tokenlist, list<Token>::iterator data
                                                 aux->addit_info == OP_JMPN ||\
                                                 aux->addit_info == OP_JMPP ||\
                                                 aux->addit_info == OP_JMPZ))){
-                    aux++;
-                    fprintf(stderr, "Semantic error @ line %d - Argument '%s' not declared in DATA section.\n", it->line_number, it->str.c_str());
-                    pre_error = 1;
-                    err++;
+                    if (aux->line_number == it->line_number){
+                        for (aux = it; aux != tokenlist.begin(); aux--){
+                            if (aux->type == TT_DIRECTIVE && aux->addit_info == DIR_MACRO){
+                                i=1;
+                                break;
+                            }
+                        }
+                        for (aux = it; aux != tokenlist.begin(); aux++){
+                            if (aux->type == TT_DIRECTIVE && aux->addit_info == DIR_ENDMACRO){
+                                i++;
+                                break;
+                            }
+                        }
+                        if(i!=2){
+                            cout << "Token: " << it->str << "..   \tLine: " << it->line_number << "   \tPosition in line: " << it->token_pos_il << "    \tType: " << it->type << "        \taddt_info: " << it->addit_info << "    \tflag: " << it->flag << "     \tinfo str: " << it->info_str << endl;  //print list element
+                            fprintf(stderr, "Semantic error @ line %d - Argument '%s' not declared in DATA section.\n", it->line_number, it->str.c_str());
+                            pre_error = 1;
+                            err++;
+                        }
+                    }
                 }
             }
         }
@@ -189,23 +208,40 @@ int check_for_data_need(list <Token> & tokenlist){
 
 int defaslabel(list<Token> & tokenlist, list<Token>::iterator data_it){
     int err = 0;
-    list<Token>::iterator it, newit, aux;
+    list<Token>::iterator it, newit, aux, auxx;
+    int i = 0;
     for (it = tokenlist.begin(); it != tokenlist.end(); it++){
         if (it->type == TT_OPERAND && it->addit_info != -1 && it->flag != -1){
             aux = it;
             aux--;
-            if (!(aux->type == TT_MNEMONIC && (aux->addit_info == OP_JMP ||\
-                                            aux->addit_info == OP_JMPN ||\
-                                            aux->addit_info == OP_JMPP ||\
-                                            aux->addit_info == OP_JMPZ))){
-                for (newit=tokenlist.begin();newit != data_it && newit != tokenlist.end(); newit++){
-                    if ( (newit->str.substr(0, newit->str.find(":")) == it->str) && \
-                                        (newit->type == TT_LABEL) && \
-                                        (newit->line_number != it->line_number) && \
-                                        (newit->token_pos_il != it->token_pos_il) ){
-                        fprintf(stderr, "Semantic error @ line %d - Definition from line %d (%s) declared as TEXT label in line %d.\n", it->line_number, it->line_number, it->str.c_str(), newit->line_number);
-                        pre_error = 1;
-                        err++;
+            if (aux->line_number == it->line_number){
+                if (!(aux->type == TT_MNEMONIC && (aux->addit_info == OP_JMP ||\
+                                                aux->addit_info == OP_JMPN ||\
+                                                aux->addit_info == OP_JMPP ||\
+                                                aux->addit_info == OP_JMPZ))){
+                    for (newit=tokenlist.begin();newit != data_it; newit++){
+                        if ( (newit->str.substr(0, newit->str.find(":")) == it->str) && \
+                                            (newit->type == TT_LABEL) && \
+                                            (newit->line_number != it->line_number) && \
+                                            (newit->token_pos_il != it->token_pos_il) ){
+                            for (auxx = it; auxx != tokenlist.begin(); auxx--){
+                                if (auxx->type == TT_DIRECTIVE && auxx->addit_info == DIR_MACRO){
+                                    i=1;
+                                    break;
+                                }
+                            }
+                            for (auxx = it; auxx != tokenlist.begin(); auxx++){
+                                if (auxx->type == TT_DIRECTIVE && auxx->addit_info == DIR_ENDMACRO){
+                                    i++;
+                                    break;
+                                }
+                            }
+                            if (i!=2){
+                                fprintf(stderr, "Semantic error @ line %d - Definition from line %d (%s) declared as TEXT label in line %d.\n", it->line_number, it->line_number, it->str.c_str(), newit->line_number);
+                                pre_error = 1;
+                                err++;
+                            }
+                        }
                     }
                 }
             }
