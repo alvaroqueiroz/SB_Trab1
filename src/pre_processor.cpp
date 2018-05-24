@@ -3,6 +3,7 @@
 #include "parser.h"
 #include "macro.h"
 #include "synthesizer.h"
+#include "semantic_analyser.h"
 using namespace std;
 
 /*
@@ -24,6 +25,7 @@ int pre_processor(char * input_fn, char * output_fn){
     solve_macro(tokenlist);
     print_list(tokenlist);
     synthesizer(tokenlist);
+    semantic_analyser(tokenlist, labellist);
 
 
     /*create output file*/
@@ -45,10 +47,25 @@ int pre_processor(char * input_fn, char * output_fn){
     return 0;
 }
 
+
 void print_list (list<Token> & tokenlist){
     cout << "Tamanho da Lista: " << tokenlist.size() << endl << "-----------------\n"; //print list size
     list<Token>::iterator it;
     for (it = tokenlist.begin();it != tokenlist.end(); it++)
         cout << "Token: " << it->str << "..   \tLine: " << it->line_number << "   \tPosition in line: " << it->token_pos_il << "    \tType: " << it->type << "        \taddt_info: " << it->addit_info << "    \tflag: " << it->flag << "     \tinfo str: " << it->info_str << endl;  //print list element
     cout << "-----------------\n";
+}
+
+void mark_sintax_error (list<Token> & tokenlist, list<Token>::iterator it){
+    int i = it->line_number;
+    list<Token>::iterator newit;
+    newit = it;
+    while (newit->line_number == i){
+        newit--;
+    }
+    newit++;
+    while (newit->line_number == i){
+        newit->flag = -1;
+        newit++;
+    }
 }

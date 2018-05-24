@@ -6,6 +6,8 @@
 #include <fstream>
 #include <list>
 
+
+
 /*----------TOKEN-TYPE-TABLE----------*/
 #define TT_MNEMONIC         	1
 #define TT_LABEL            	2
@@ -67,6 +69,7 @@ typedef struct Token Token;
 
 int pre_processor(char * input_fn, char * output_fn);
 void print_list (std::list<Token> & tokenlist);
+void mark_sintax_error (std::list<Token> & tokenlist, std::list<Token>::iterator it);
 
 extern int pre_error;
 

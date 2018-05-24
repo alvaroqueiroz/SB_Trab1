@@ -15,7 +15,7 @@
 #include "scanner.h"
 using namespace std;
 
-//#define __DEBUG__
+#define __DEBUG__
 
 
 int scanner (char * s, list<Token> & tokenlist, list<Token> & labellist){
@@ -38,6 +38,7 @@ int identify_tokens (char * s, list<Token> & tokenlist){
     int tcount = 0;
     Token vtoken, tmp;
     unsigned int i = 0;
+    vtoken.flag = 0;
 
     ifstream asmfile( s );  //opens ASM file
     if (asmfile){
@@ -48,7 +49,7 @@ int identify_tokens (char * s, list<Token> & tokenlist){
             line = line.substr(0, line.find(semicolon));    //removes comments
 
             while (line.length() > 0){  //scans whole line
-                
+
                 // Eliminates unnecessary.
                 i = 0;
                 while ( line.at(i) == ' ' || \
@@ -246,12 +247,12 @@ int is_mnemonic(Token & token){
         token.type = TT_MNEMONIC;
         token.addit_info = OP_STOP;
         return OP_STOP;
-    }else 
+    }else
     if (token.str.compare(",") == 0){
         token.type = TT_COMMA_OPERATOR;
         token.addit_info = OP_BASIC_OP;
         return OP_BASIC_OP;
-    }else 
+    }else
     if (token.str.compare("+") == 0){
         token.type = TT_PLUS_OPERATOR;
         token.addit_info = OP_BASIC_OP;
@@ -299,19 +300,22 @@ int is_label(Token & token, list<Token> & labellist){
                 token.str.compare("IF:") == 0 || \
                 token.str.compare("MACRO:") == 0 || \
                 token.str.compare("ENDMACRO:") == 0 ){     // Check restricted names.
-            cout << "Lexical Error @ Line " << token.line_number << " - invalid label, restricted name." << endl;
+            cerr << "Lexical Error @ Line " << token.line_number << " - invalid label, restricted name." << endl;
+            pre_error = 1;
             token.addit_info = INVALID_TOKEN;
             return INVALID_TOKEN;
         }
 
         if (token.str.length()-1 < 1 || token.str.length()-1 > 20){     // Check length.
-            cout << "Lexical Error @ Line " << token.line_number << " - invalid label length." << endl;
+            cerr << "Lexical Error @ Line " << token.line_number << " - invalid label length." << endl;
+            pre_error = 1;
             token.addit_info = INVALID_TOKEN;
             return INVALID_TOKEN;
         }
 
         if (isdigit(token.str.at(0))){      // Check start with digit.
-            cout << "Lexical Error @ Line " << token.line_number << " - invalid label, label can't start with a number." << endl;
+            cerr << "Lexical Error @ Line " << token.line_number << " - invalid label, label can't start with a number." << endl;
+            pre_error = 1;
             token.addit_info = INVALID_TOKEN;
             return INVALID_TOKEN;
         }
@@ -319,7 +323,8 @@ int is_label(Token & token, list<Token> & labellist){
         for (i = 0; i < token.str.length()-1; i++){       // Check composition.
             if (!isalnum(token.str.at(i))){
                 if (token.str.at(i) != '_'){
-                    cout << "Lexical Error @ Line " << token.line_number << " - invalid label." << endl;
+                    cerr << "Lexical Error @ Line " << token.line_number << " - invalid label." << endl;
+                    pre_error = 1;
                     token.addit_info = INVALID_TOKEN;
                     return INVALID_TOKEN;
                 }
@@ -400,7 +405,7 @@ int is_decimal(Token & token){
     } else {
         tmp.str = token.str;
     }
-    
+
     for(i = 0; i < tmp.str.length(); i++){      // Check if is number.
         if(!isdigit(tmp.str.at(i))){
             return 0;
@@ -411,7 +416,8 @@ int is_decimal(Token & token){
     token.type = TT_CONST;
     tmp.addit_info = atoi(token.str.c_str());
     if (tmp.addit_info > 32767 || tmp.addit_info < -32768){     // Check value range.
-        cout << "Lexical Error @ Line " << token.line_number << " - invalid number." << endl;
+        cerr << "Lexical Error @ Line " << token.line_number << " - invalid number." << endl;
+        pre_error = 1;
         token.addit_info = INVALID_TOKEN;
         return INVALID_TOKEN;
     }
@@ -448,7 +454,8 @@ int is_hexadecimal(Token & token){
     token.type = TT_CONST;
     tmp.addit_info = (int)strtol(token.str.c_str(), NULL, 16);
     if (tmp.addit_info > 32767 || tmp.addit_info < -32768){     // Check value range.
-        cout << "Lexical Error @ Line " << token.line_number << " - invalid number." << endl;
+        cerr << "Lexical Error @ Line " << token.line_number << " - invalid number." << endl;
+        pre_error = 1;
         token.addit_info = INVALID_TOKEN;
         return INVALID_TOKEN;
     }
@@ -462,16 +469,18 @@ int is_hexadecimal(Token & token){
 
 int is_operand(Token & token, list<Token> & tokenlist){
     unsigned int i;
-    
+
     token.type = TT_OPERAND;
     if (token.str.length() < 1 || token.str.length() > 20){     // Check length.
-        cout << "Lexical Error @ Line " << token.line_number << " - invalid operand length." << endl;
+        cerr << "Lexical Error @ Line " << token.line_number << " - invalid operand length." << endl;
+        pre_error = 1;
         token.addit_info = INVALID_TOKEN;
         return INVALID_TOKEN;
     }
 
     if (isdigit(token.str.at(0))){      // Check start with digit.
-        cout << "Lexical Error @ Line " << token.line_number << " - invalid operand, operand can't start with a number." << endl;
+        cerr << "Lexical Error @ Line " << token.line_number << " - invalid operand, operand can't start with a number." << endl;
+        pre_error = 1;
         token.addit_info = INVALID_TOKEN;
         return INVALID_TOKEN;
     }
@@ -479,7 +488,8 @@ int is_operand(Token & token, list<Token> & tokenlist){
     for (i = 0; i < token.str.length(); i++){       // Check composition.
         if (!isalnum(token.str.at(i))){
             if (token.str.at(i) != '_'){
-                cout << "Lexical Error @ Line " << token.line_number << " - invalid operand." << endl;
+                cerr << "Lexical Error @ Line " << token.line_number << " - invalid operand." << endl;
+                pre_error = 1;
                 token.addit_info = INVALID_TOKEN;
                 return INVALID_TOKEN;
             }
