@@ -27,6 +27,9 @@ endmacro
 
 cray AA, BB
 sub op
+ajncoan: space
+
+ADOJFNAOJNC: CONST 2
 
 section data
 AA: const 5

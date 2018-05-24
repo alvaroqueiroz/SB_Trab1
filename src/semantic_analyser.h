@@ -17,6 +17,7 @@ int defaslabel(std::list<Token> & tokenlist, std::list<Token>::iterator data_it)
 int nolabel(std::list<Token> & tokenlist, std::list<Token>::iterator data_it);
 int invalid_label(std::list<Token> & tokenlist, std::list<Token>::iterator data_it);
 int const_cases(std::list<Token> & tokenlist, std::list<Token>::iterator data_it);
+int wrong_section(std::list<Token> & tokenlist, std::list<Token>::iterator data_it);
 
 extern int pre_error;
 
