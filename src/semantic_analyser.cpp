@@ -12,24 +12,25 @@ using namespace std;
 * - missing labels from data section
 * - unused label from data section (warning)
 * - Data definition declared as Text label
+* - Absent & wrong section TEXT labels
 */
 
 /*
 especificações de roteiro
 
-(/)    – declarações e rótulos ausentes;
+(X)    – declarações e rótulos ausentes;
 (X)    – declarações e rótulos repetidos;
-( )    – pulo para rótulos inválidos; – pulo para seção errada;
+(/)    – pulo para rótulos inválidos; – pulo para seção errada;
 (X)    – diretivas inválidas;
 (X)    – instruções inválidas;
 ( )    – diretivas ou instruções na seção errada;
-( )    – divisão por zero (para constante);
+(X)    – divisão por zero (para constante);
 (X)    – instruções com a quantidade de operando inválida; – tokens inválidos;
 (X)    – dois rótulos na mesma linha;
 (X)    – seção TEXT faltante;
-( )    – seção inválida;
-( )    – tipo de argumento inválido;
-( )    – modificação de um valor constante;
+(X)    – seção inválida;
+(X)    – tipo de argumento inválido;
+(X)    – modificação de um valor constante;
 
 */
 
@@ -47,6 +48,9 @@ int semantic_analyser(list <Token> & tokenlist, list <Token> & labellist){
         err+=check_for_data_need(tokenlist);
     }
     err+=defaslabel(tokenlist, data_it);
+    err+=nolabel(tokenlist, data_it);
+    err+=invalid_label(tokenlist, data_it);
+    err+=const_cases(tokenlist, data_it);
 
     return err;
 }
@@ -200,6 +204,124 @@ int defaslabel(list<Token> & tokenlist, list<Token>::iterator data_it){
                                         (newit->line_number != it->line_number) && \
                                         (newit->token_pos_il != it->token_pos_il) ){
                         fprintf(stderr, "Semantic error @ line %d - Definition from line %d (%s) declared as TEXT label in line %d.\n", it->line_number, it->line_number, it->str.c_str(), newit->line_number);
+                        pre_error = 1;
+                        err++;
+                    }
+                }
+            }
+        }
+    }
+    return err;
+}
+
+int nolabel(list<Token> & tokenlist, list<Token>::iterator data_it){
+    int err = 0;
+    list<Token>::iterator it, newit, aux;
+    for (it = tokenlist.begin(); it != tokenlist.end(); it++){
+        if (it->type == TT_OPERAND && it->addit_info != -1 && it->flag != -1){
+            aux = it;
+            aux--;
+            if (aux->type == TT_MNEMONIC && (aux->addit_info == OP_JMP ||\
+                                            aux->addit_info == OP_JMPN ||\
+                                            aux->addit_info == OP_JMPP ||\
+                                            aux->addit_info == OP_JMPZ)){
+                for (newit=tokenlist.begin();newit != data_it; newit++){
+                    if ( (newit->str.substr(0, newit->str.find(":")) == it->str) && \
+                                        (newit->type == TT_LABEL) && \
+                                        (newit->line_number != it->line_number) && \
+                                        (newit->token_pos_il != it->token_pos_il) ){
+                        break;
+                    }
+                }
+                if (newit == data_it){
+                    fprintf(stderr, "Semantic error @ line %d - Label '%s' not declared in TEXT section.\n", it->line_number, it->str.c_str());
+                    pre_error = 1;
+                    err++;
+                    while (newit != tokenlist.end()){
+                        newit++;
+                        if ( (newit->str.substr(0, newit->str.find(":")) == it->str) && \
+                                            (newit->type == TT_LABEL) && \
+                                            (newit->line_number != it->line_number) && \
+                                            (newit->token_pos_il != it->token_pos_il) ){
+                            fprintf(stderr, "Semantic error @ line %d - Label '%s' defined in DATA section, but a TEXT section label was expected (previous declaration @ line %d).\n", newit->line_number, it->str.c_str(), it->line_number);
+                            pre_error = 1;
+                            err++;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return err;
+}
+
+int invalid_label(list<Token> & tokenlist, list<Token>::iterator data_it){
+    int err = 0;
+    list<Token>::iterator it, newit, aux;
+    for (it = tokenlist.begin(); it != tokenlist.end(); it++){
+        if (it->type == TT_OPERAND && it->addit_info != -1 && it->flag != -1){
+            aux = it;
+            aux--;
+            if (aux->type == TT_MNEMONIC && (aux->addit_info == OP_JMP ||\
+                                            aux->addit_info == OP_JMPN ||\
+                                            aux->addit_info == OP_JMPP ||\
+                                            aux->addit_info == OP_JMPZ)){
+                for (newit=tokenlist.begin();newit != data_it; newit++){
+                    if ( (newit->str.substr(0, newit->str.find(":")) == it->str) && \
+                                        (newit->type == TT_LABEL) && \
+                                        (newit->line_number != it->line_number) && \
+                                        (newit->token_pos_il != it->token_pos_il) ){
+                        break;
+                    }
+                }
+                if (newit != data_it){
+                    aux = newit;
+                    aux++;
+                    if (aux->type == TT_DIRECTIVE){
+                        fprintf(stderr, "Semantic error @ line %d - Jump to invalid Label ('%s' - previous declaration @ line %d).\n", newit->line_number, it->str.c_str(), it->line_number);
+                        pre_error = 1;
+                        err++;
+                    }
+                }
+            }
+        }
+    }
+    return err;
+}
+
+
+int const_cases(list<Token> & tokenlist, list<Token>::iterator data_it){
+    int err = 0;
+    list<Token>::iterator it, otherit, aux;
+    for (it = tokenlist.begin(); it != tokenlist.end(); it++){
+        if ( it->type == TT_MNEMONIC ){
+            if (it->addit_info == OP_STORE || it->addit_info == OP_COPY){
+                it++;
+                for (otherit = data_it; otherit != tokenlist.end(); otherit++){
+                    if (otherit->str.substr(0, otherit->str.find(":")) == it->str){
+                        aux = otherit;
+                        advance (aux, 2);
+                        if (aux->line_number == otherit->line_number && aux->type == TT_CONST){
+                            fprintf(stderr, "Semantic error @ line %d - Atempt to change constant value ('%s').\n", it->line_number, it->str.c_str());
+                            pre_error = 1;
+                            err++;
+                        }
+                    }
+                }
+            }
+            if (it->addit_info == OP_DIV){
+                it++;
+                for (otherit = data_it; otherit != tokenlist.end(); otherit++){
+                    if (otherit->str.substr(0, otherit->str.find(":")) == it->str){
+                        aux = otherit;
+                        advance (aux, 2);
+                        if (aux->line_number == otherit->line_number && aux->type == TT_CONST){
+                            if (aux->addit_info == 0){
+                                fprintf(stderr, "Semantic error @ line %d - Atempt to divide by zero.\n", it->line_number);
+                                pre_error = 1;
+                                err++;
+                            }
+                        }
                     }
                 }
             }

@@ -14,5 +14,7 @@ int get_sublists (std::list <Token> & tokenlist, std::list <Token> & textlist, s
 int check_symbols_from_data(std::list <Token> & tokenlist, std::list<Token>::iterator data_it);
 int check_for_data_need(std::list <Token> & tokenlist);
 int defaslabel(std::list<Token> & tokenlist, std::list<Token>::iterator data_it);
-
+int nolabel(std::list<Token> & tokenlist, std::list<Token>::iterator data_it);
+int invalid_label(std::list<Token> & tokenlist, std::list<Token>::iterator data_it);
+int const_cases(std::list<Token> & tokenlist, std::list<Token>::iterator data_it);
 #endif /* SEMANTIC_H_ */
