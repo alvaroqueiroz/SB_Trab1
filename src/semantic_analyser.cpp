@@ -15,6 +15,7 @@ using namespace std;
 * - Absent & wrong section TEXT labels
 * - constant redefinitions
 * - division by zero
+* - directive or mnemonic in the wrong section
 */
 
 /*
@@ -25,7 +26,7 @@ especificações de roteiro
 (/)    – pulo para rótulos inválidos; – pulo para seção errada;
 (X)    – diretivas inválidas;
 (X)    – instruções inválidas;
-( )    – diretivas ou instruções na seção errada;
+(X)    – diretivas ou instruções na seção errada;
 (X)    – divisão por zero (para constante);
 (X)    – instruções com a quantidade de operando inválida; – tokens inválidos;
 (X)    – dois rótulos na mesma linha;
@@ -53,6 +54,7 @@ int semantic_analyser(list <Token> & tokenlist, list <Token> & labellist){
     err+=nolabel(tokenlist, data_it);
     err+=invalid_label(tokenlist, data_it);
     err+=const_cases(tokenlist, data_it);
+    err+=wrong_section(tokenlist, data_it);
 
     return err;
 }
@@ -362,6 +364,28 @@ int const_cases(list<Token> & tokenlist, list<Token>::iterator data_it){
                 }
             }
         }
+    }
+    return err;
+}
+
+
+int wrong_section(list<Token> & tokenlist, list<Token>::iterator data_it){
+    int err = 0;
+    list<Token>::iterator it;
+    for (it = tokenlist.begin(); it != data_it; it++){
+        if (it->type == TT_DIRECTIVE && (it->addit_info == DIR_CONST || it->addit_info == DIR_SPACE)){
+            fprintf(stderr, "Semantic error @ line %d - Atempt to use the directive '%s' in the wrong section.\n", it->line_number, it->str.c_str());
+            pre_error = 1;
+            err++;
+        }
+    }
+    while (it != tokenlist.end()){
+        if (it->type == TT_MNEMONIC){
+            fprintf(stderr, "Semantic error @ line %d - Atempt to use the mnemonic '%s' in the wrong section.\n", it->line_number, it->str.c_str());
+            pre_error = 1;
+            err++;
+        }
+        it++;
     }
     return err;
 }
