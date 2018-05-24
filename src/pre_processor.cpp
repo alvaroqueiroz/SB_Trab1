@@ -11,38 +11,20 @@ using namespace std;
 * INPUT: - char * input_fn -> ASM file name from terminal
 * OUTPUT: - FILE *output_fn -> File containing analysed code
 */
-int pre_processor(char * input_fn, char * output_fn){
-    list <Token> tokenlist;
+
+//#define __DEBUG__
+
+int pre_processor(char * input_fn, list<Token> & tokenlist){
     list <Token> labellist;
     list<Token>::iterator it, aux;
 
     scanner(input_fn, tokenlist, labellist);
-    //equ;
     parser(tokenlist, labellist);
-    //if;
-    //semantic_analyser();
-    //macro;
-    solve_macro(tokenlist);
-    print_list(tokenlist);
-    synthesizer(tokenlist);
     semantic_analyser(tokenlist, labellist);
 
-
-    /*create output file*/
-    ofstream fp (output_fn);  //opens output file
-    for (it = tokenlist.begin(); it != tokenlist.end(); it++){
-        aux = it;
-        aux++;
-        while (aux->line_number == it->line_number){
-            fp << it->str << " ";
-            it++;
-            aux++;
-        }
-        fp << it->str << endl;
-    }
-
-
-    fp.close();   //closes output file
+#ifdef __DEBUG__
+    print_list(tokenlist);
+#endif
 
     return 0;
 }

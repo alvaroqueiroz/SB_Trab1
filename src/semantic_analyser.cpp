@@ -194,7 +194,7 @@ int defaslabel(list<Token> & tokenlist, list<Token>::iterator data_it){
                                             aux->addit_info == OP_JMPN ||\
                                             aux->addit_info == OP_JMPP ||\
                                             aux->addit_info == OP_JMPZ))){
-                for (newit=tokenlist.begin();newit != data_it; newit++){
+                for (newit=tokenlist.begin();newit != data_it && newit != tokenlist.end(); newit++){
                     if ( (newit->str.substr(0, newit->str.find(":")) == it->str) && \
                                         (newit->type == TT_LABEL) && \
                                         (newit->line_number != it->line_number) && \

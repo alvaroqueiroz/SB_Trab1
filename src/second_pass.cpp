@@ -1,5 +1,7 @@
 #include "second_pass.h"
 
+//#define __DEBUG__
+
 void second_pass(list<Token> & tokenlist, list<Symbol> & symboltable){
 	list<Token>::iterator it_tk;
 	list<Symbol>::iterator it_sb;
@@ -48,7 +50,7 @@ void second_pass(list<Token> & tokenlist, list<Symbol> & symboltable){
 						if (it_tk->type == TT_PLUS_OPERATOR){
 							it_tk++;
 							if(it_tk->type == TT_CONST){
-								object.insert(object.end(), it_sb->atrb + it_tk->addit_info - 1);
+								object.insert(object.end(), it_sb->atrb + it_tk->addit_info);
 								break;
 							} else {
 								it_tk--;
@@ -74,10 +76,13 @@ void second_pass(list<Token> & tokenlist, list<Symbol> & symboltable){
 		}
 	}
 
+
+#ifdef __DEBUG__
 	cout << "Tamanho da Lista: " << object.size() << endl << "-----------------\n";
 	cout << "code:";
 	for (it_ob = object.begin(); it_ob != object.end(); it_ob++){
 		cout << " " << *it_ob;
 	}
 	cout << "\n-----------------\n";
+#endif
 }

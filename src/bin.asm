@@ -16,7 +16,7 @@ load &arg1
 endmacro
 
 l4: macro &arg1, &arg2
-copy &arg1, &arg2
+copy &arg1, &arg2 + 2
 l3 &arg1
 endmacro
 
@@ -27,6 +27,8 @@ endmacro
 SECTION TEXT
 cray AA, BB
 sub op
+
+section data
 AA: const 5
 XX: space
 BB: space 3
