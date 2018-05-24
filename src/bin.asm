@@ -1,3 +1,4 @@
+SECTION TEXT
 l2: macro &arg1
 add &arg1
 endmacro
@@ -24,7 +25,6 @@ l5: macro &arg1, &arg2
 &arg1 &arg2
 endmacro
 
-SECTION TEXT
 cray AA, BB
 sub op
 
