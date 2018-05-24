@@ -12,6 +12,6 @@
 
 using namespace std;
 
-void second_pass(list<Token> & tokenlist, list<Symbol> & symboltable);
+void second_pass(list<Token> & tokenlist, list<Symbol> & symboltable,list<int> & object);
 
 #endif /* SECOND_PASS_H_ */

@@ -14,5 +14,6 @@ int solve_equ(std::list<Token> & tokenlist, std::list<Token> & labellist);
 int identify_if (std::list<Token> & tokenlist, std::list<Token> & iflist);
 int solve_if (std::list<Token> & tokenlist, std::list<Token> & iflist);
 
+extern int pre_error;
 
 #endif

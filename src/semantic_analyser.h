@@ -15,4 +15,6 @@ int check_symbols_from_data(std::list <Token> & tokenlist, std::list<Token>::ite
 int check_for_data_need(std::list <Token> & tokenlist);
 int defaslabel(std::list<Token> & tokenlist, std::list<Token>::iterator data_it);
 
+extern int pre_error;
+
 #endif /* SEMANTIC_H_ */
