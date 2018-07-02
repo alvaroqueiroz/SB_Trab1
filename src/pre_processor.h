@@ -47,6 +47,10 @@
 #define DIR_ENDMACRO        7
 #define DIR_TEXT            8
 #define DIR_DATA            9
+#define DIR_BEGIN			10
+#define DIR_END 			11
+#define DIR_EXTERN			12
+#define DIR_PUBLIC 			13
 /*------------------------------------*/
 
 #define INVALID_TOKEN       -1

@@ -2,7 +2,7 @@
 
 //#define __DEBUG__
 
-void second_pass(list<Token> & tokenlist, list<Symbol> & symboltable, list<int> & object){
+void second_pass(list<Token> & tokenlist, list<Symbol> & symboltable, list<int> & object, list<int> & realoc){
 	list<Token>::iterator it_tk;
 	list<Symbol>::iterator it_sb;
 	list<int>::iterator it_ob;
@@ -11,6 +11,7 @@ void second_pass(list<Token> & tokenlist, list<Symbol> & symboltable, list<int> 
 	for(it_tk = tokenlist.begin(); it_tk != tokenlist.end(); it_tk++){
 		switch(it_tk->type){
 			case TT_MNEMONIC:
+				realoc.insert(realoc.end(), 0);
 				object.insert(object.end(), it_tk->addit_info);
 			break;
 
@@ -20,9 +21,11 @@ void second_pass(list<Token> & tokenlist, list<Symbol> & symboltable, list<int> 
 						it_tk++;
 						if(it_tk->type == TT_CONST && it_tk != tokenlist.end()){
 							for(i=0; i < it_tk->addit_info; i++){
+								realoc.insert(realoc.end(), 0);
 								object.insert(object.end(), 0);
 							}
 						} else {
+							realoc.insert(realoc.end(), 0);
 							object.insert(object.end(), 0);
 						}
 					break;
@@ -30,11 +33,16 @@ void second_pass(list<Token> & tokenlist, list<Symbol> & symboltable, list<int> 
 					case DIR_CONST:
 						it_tk++;
 						if(it_tk->type == TT_CONST){
+							realoc.insert(realoc.end(), 0);
 							object.insert(object.end(), it_tk->addit_info);
 						} else {
 							it_tk--;
 							cout << "second pass: error!" << endl;
 						}
+					break;
+
+					case DIR_PUBLIC:
+						it_tk++;
 					break;
 
 					default:
@@ -49,6 +57,7 @@ void second_pass(list<Token> & tokenlist, list<Symbol> & symboltable, list<int> 
 						if (it_tk->type == TT_PLUS_OPERATOR){
 							it_tk++;
 							if(it_tk->type == TT_CONST){
+								realoc.insert(realoc.end(), 1);
 								object.insert(object.end(), it_sb->atrb + it_tk->addit_info);
 								break;
 							} else {
@@ -57,6 +66,7 @@ void second_pass(list<Token> & tokenlist, list<Symbol> & symboltable, list<int> 
 								break;
 							}
 						} else {
+							realoc.insert(realoc.end(), 1);
 							object.insert(object.end(), it_sb->atrb);
 							it_tk--;
 							break;

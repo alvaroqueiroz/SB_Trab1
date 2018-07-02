@@ -683,7 +683,7 @@ list<Token>::iterator parser_directive(list <Token> & tokenlist, list<Token>::it
 
 		case DIR_TEXT:
 		case DIR_DATA:
-			cerr << "S intax Error @ Line " << target_line << " - invalid use of directive." << endl;
+			cerr << "Sintax Error @ Line " << target_line << " - invalid use of directive." << endl;
 			mark_sintax_error(tokenlist,it);
 			pre_error = 1;
 			it->flag = -1;
@@ -696,6 +696,84 @@ list<Token>::iterator parser_directive(list <Token> & tokenlist, list<Token>::it
 			do {		// get out of line.
 				it++;
 			} while(it != tokenlist.end() && target_line == it->line_number);
+		break;
+
+		case DIR_BEGIN:	
+		case DIR_EXTERN:
+			it--;
+			if (it->type == TT_LABEL) {		// check if have label.
+				it++;
+				it++;
+
+				if (it != tokenlist.end() && target_line == it->line_number){		// check if argument exist.
+					cerr << "Sintax Error @ Line " << target_line << " - unexpected argument." << endl;
+					mark_sintax_error(tokenlist,it);
+					pre_error = 1;
+					it->flag = -1;
+					do {		// get out of line.
+						it++;
+					} while(it != tokenlist.end() && target_line == it->line_number);
+				}
+			} else {
+				it++;
+
+				cerr << "Sintax Error @ Line " << target_line << " - invalid use of directive." << endl;
+				mark_sintax_error(tokenlist,it);
+				pre_error = 1;
+				it->flag = -1;
+				do {		// get out of line.
+					it++;
+				} while(it != tokenlist.end() && target_line == it->line_number);
+			}
+		break;
+
+		case DIR_END:	
+			it++;
+
+			if (it != tokenlist.end() && target_line == it->line_number){		// check if argument exist.
+				cerr << "Sintax Error @ Line " << target_line << " - unexpected argument." << endl;
+				mark_sintax_error(tokenlist,it);
+				pre_error = 1;
+				it->flag = -1;
+				do {		// get out of line.
+					it++;
+				} while(it != tokenlist.end() && target_line == it->line_number);
+			}
+		break;
+
+		case DIR_PUBLIC:
+			it++;
+
+			if (it != tokenlist.end() && target_line == it->line_number){	// check if argument is present.
+				if (it->type == TT_OPERAND){								// check if argument is valid.
+					it++;
+
+					if (it != tokenlist.end() && target_line == it->line_number){		// check if argument exist.
+						cerr << "Sintax Error @ Line " << target_line << " - unexpected argument." << endl;
+						mark_sintax_error(tokenlist,it);
+						pre_error = 1;
+						it->flag = -1;
+						do {		// get out of line.
+							it++;
+						} while(it != tokenlist.end() && target_line == it->line_number);
+					}
+				} else {
+					mark_sintax_error(tokenlist,it);
+								pre_error = 1;
+								it->flag = -1;
+					cerr << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
+					do {		// get out of line.
+						it++;
+					} while(it != tokenlist.end() && target_line == it->line_number);
+					break;
+				}
+			} else {
+				mark_sintax_error(tokenlist,it);
+								pre_error = 1;
+								it->flag = -1;
+				cerr << "Sintax Error @ Line " << target_line << " - missing argument." << endl;
+				break;
+			}
 		break;
 
 		default:

@@ -45,20 +45,50 @@ int semantic_analyser(list <Token> & tokenlist, list <Token> & labellist){
     int hasdatasec = 0;
     err+=duplicate_label(labellist);
     err+=section_placement(tokenlist, text_it, data_it, hasdatasec);
+    /*
     if (err == 0 && hasdatasec){
         err+=check_symbols_from_data(tokenlist, data_it);
     } else if (err == 0){
         err+=check_for_data_need(tokenlist);
     }
     err+=defaslabel(tokenlist, data_it);
-    err+=nolabel(tokenlist, data_it);
     err+=invalid_label(tokenlist, data_it);
+    */
+    err+=nolabel(tokenlist, data_it);
+
+    err+=labelexist(tokenlist, labellist);
+
     err+=const_cases(tokenlist, data_it);
     err+=wrong_section(tokenlist, data_it);
 
     return err;
 }
 
+
+int labelexist (list <Token> & tokenlist, list <Token> & labellist){
+    list<Token>::iterator itt, itl;
+    int err = 0;
+    int flag = 0;
+
+    for (itt = tokenlist.begin(); itt != tokenlist.end(); itt++){
+        if (itt->type == TT_OPERAND){
+            for (itl = labellist.begin(); itl != labellist.end(); itl++){
+                if (itt->str == itl->str){
+                    flag = 1;
+                    break;
+                }
+            }
+            if (!flag) {
+                cerr << "Semantic Error @ Line " << itt->line_number << " - no definition of label (" << itt->str << ") found." << endl;
+                pre_error = 1;
+                err++;
+            }
+            flag = 0;
+        }
+    }
+
+    return err;
+}
 
 int duplicate_label (list <Token> & labellist){
     list<Token>::iterator it, aux, end;
@@ -161,7 +191,7 @@ int check_symbols_from_data(list <Token> & tokenlist, list<Token>::iterator data
                             }
                         }
                         if(i!=2){
-                            cout << "Token: " << it->str << "..   \tLine: " << it->line_number << "   \tPosition in line: " << it->token_pos_il << "    \tType: " << it->type << "        \taddt_info: " << it->addit_info << "    \tflag: " << it->flag << "     \tinfo str: " << it->info_str << endl;  //print list element
+                            //cout << "Token: " << it->str << "..   \tLine: " << it->line_number << "   \tPosition in line: " << it->token_pos_il << "    \tType: " << it->type << "        \taddt_info: " << it->addit_info << "    \tflag: " << it->flag << "     \tinfo str: " << it->info_str << endl;  //print list element
                             fprintf(stderr, "Semantic error @ line %d - Argument '%s' not declared in DATA section.\n", it->line_number, it->str.c_str());
                             pre_error = 1;
                             err++;

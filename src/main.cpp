@@ -2,7 +2,7 @@
 Universidade de Brasilia - 01/2018
 CIC 116432 - Software Basico - Turma B
 Professor Bruno Macchiavello
-Trabalho Pratico 1 - Montador
+Trabalho Pratico 2 - Montador + Ligador
 
 Alunos: Andre Abreu Rodrigues de Almeida    12/0007100
         Bruno Takashi Tengan                12/0167263
@@ -36,7 +36,9 @@ int main (int argc, char** argv){
 
     list<Token> tokenlist;
     list<Token>::iterator it, aux;
-    list<int> object;
+    list<Symbol> dt, ut;
+    list<Symbol>::iterator its;
+    list<int> object, realoc;
     list<int>::iterator it_ob;
 
     validateArguments(argc, argv);
@@ -54,6 +56,7 @@ int main (int argc, char** argv){
             return 0;
         }
         /*create output file*/
+        /*
         output_fn = string(argv[3]) + ".pre";
         ofstream fpp (output_fn);  //opens output file
         for (it = tokenlist.begin(); it != tokenlist.end(); it++){
@@ -67,12 +70,14 @@ int main (int argc, char** argv){
             fpp << it->str << endl;
         }
         fpp.close();   //closes output file
+        */
         if (operation_mode == 0){
             return 0;
         }
 
         solve_macro(tokenlist);
         /*create output file*/
+        /*
         output_fn = string(argv[3]) + ".mcr";
         ofstream fpm (output_fn);  //opens output file
         for (it = tokenlist.begin(); it != tokenlist.end(); it++){
@@ -86,14 +91,33 @@ int main (int argc, char** argv){
             fpm << it->str << endl;
         }
         fpm.close();   //closes output file
+        */
         if (operation_mode == 1){
             return 0;
         }
 
-        synthesizer(tokenlist, object);
+        synthesizer(tokenlist, object, realoc, dt, ut);
         /*create output file*/
         output_fn = string(argv[3]) + ".o";
         ofstream fpo (output_fn);  //opens output file
+        fpo << "HEAD:" << endl;
+        fpo << "S. " << realoc.size() << endl;
+        fpo << "R. ";
+        for (it_ob = realoc.begin(); it_ob != realoc.end(); it_ob++){
+            fpo << *it_ob << " ";
+        }
+        fpo << endl;
+        fpo << "D. ";
+        for (its = dt.begin(); its != dt.end(); its++){
+            fpo << its->str << " " << its->atrb << " ";
+        }
+        fpo << endl;
+        fpo << "U. ";
+        for (its = ut.begin(); its != ut.end(); its++){
+            fpo << its->str << " " << its->atrb << " ";
+        }
+
+        fpo << endl << "TEXT: ";
         for (it_ob = object.begin(); it_ob != object.end(); it_ob++){
             fpo << *it_ob << " ";
         }

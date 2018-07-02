@@ -19,6 +19,8 @@ int invalid_label(std::list<Token> & tokenlist, std::list<Token>::iterator data_
 int const_cases(std::list<Token> & tokenlist, std::list<Token>::iterator data_it);
 int wrong_section(std::list<Token> & tokenlist, std::list<Token>::iterator data_it);
 
+int labelexist(std::list <Token> & tokenlist, std::list <Token> & labellist);
+
 extern int pre_error;
 
 #endif /* SEMANTIC_H_ */

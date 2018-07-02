@@ -299,6 +299,10 @@ int is_label(Token & token, list<Token> & labellist){
                 token.str.compare("EQU:") == 0 || \
                 token.str.compare("IF:") == 0 || \
                 token.str.compare("MACRO:") == 0 || \
+                token.str.compare("BEGIN:") == 0 || \
+                token.str.compare("END:") == 0 || \
+                token.str.compare("EXTERN:") == 0 || \
+                token.str.compare("PUBLIC:") == 0 || \
                 token.str.compare("ENDMACRO:") == 0 ){     // Check restricted names.
             cerr << "Lexical Error @ Line " << token.line_number << " - invalid label, restricted name." << endl;
             pre_error = 1;
@@ -389,7 +393,28 @@ int is_directive(Token & token){
         token.type = TT_DIRECTIVE;
         token.addit_info = DIR_DATA;
         return DIR_DATA;
+    }else
+    if (token.str.compare("BEGIN") == 0){
+        token.type = TT_DIRECTIVE;
+        token.addit_info = DIR_BEGIN;
+        return DIR_BEGIN;
+    }else
+    if (token.str.compare("END") == 0){
+        token.type = TT_DIRECTIVE;
+        token.addit_info = DIR_END;
+        return DIR_END;
+    }else
+    if (token.str.compare("EXTERN") == 0){
+        token.type = TT_DIRECTIVE;
+        token.addit_info = DIR_EXTERN;
+        return DIR_EXTERN;
+    }else
+    if (token.str.compare("PUBLIC") == 0){
+        token.type = TT_DIRECTIVE;
+        token.addit_info = DIR_PUBLIC;
+        return DIR_PUBLIC;
     }
+
     token.type = 0;
     token.addit_info = 0;
     return 0;
