@@ -4,8 +4,8 @@
 
 /**  Instrução de uso correto do programa e escolha do tipo de output */
 static void showUsage() {
-    printf("Usage:    .\\assembler <argument> assembly_file.asm\n");
-    printf("<argument> = '-p' or '-m' or '-o' or '-P' or '-M' or '-O'\n");
+    printf("Usage1:    .\\assembler assembly_file\n");
+    printf("Usage2:    .\\assembler assembly_file1 assembly_file2\n");
 }
 
 void validateArguments(int argc, char* argv[]) {
@@ -15,7 +15,7 @@ void validateArguments(int argc, char* argv[]) {
 }
 
 void checkArgumentAmount(int argc) {
-    if (argc != 4) {
+    if (argc != 2 && argc != 3) {
         fprintf(stderr, "[ERROR]: Invalid amount of arguments.\n");
         showUsage();
         exit(EXIT_FAILURE);

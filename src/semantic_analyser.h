@@ -20,7 +20,9 @@ int const_cases(std::list<Token> & tokenlist, std::list<Token>::iterator data_it
 int wrong_section(std::list<Token> & tokenlist, std::list<Token>::iterator data_it);
 
 int labelexist(std::list <Token> & tokenlist, std::list <Token> & labellist);
+int begendexist(std::list <Token> & tokenlist);
 
 extern int pre_error;
+extern int solo;
 
 #endif /* SEMANTIC_H_ */

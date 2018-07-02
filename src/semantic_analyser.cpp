@@ -56,6 +56,7 @@ int semantic_analyser(list <Token> & tokenlist, list <Token> & labellist){
     */
     err+=nolabel(tokenlist, data_it);
 
+    err+=begendexist(tokenlist);
     err+=labelexist(tokenlist, labellist);
 
     err+=const_cases(tokenlist, data_it);
@@ -64,6 +65,50 @@ int semantic_analyser(list <Token> & tokenlist, list <Token> & labellist){
     return err;
 }
 
+int begendexist(list <Token> & tokenlist){
+    list<Token>::iterator it;
+    int err = 0;
+    int fbegin = 0;
+    int fend = 0;
+
+    for (it = tokenlist.begin(); it != tokenlist.end(); it++){
+        if (it->type == TT_DIRECTIVE && it->addit_info == DIR_BEGIN){
+            fbegin = 1;
+            if (solo){
+                cerr << "Semantic Error @ Line " << it->line_number << " - the archive can't have BEGIN directive." << endl;
+                pre_error = 1;
+                err++;
+            }
+        }
+        if (it->type == TT_DIRECTIVE && it->addit_info == DIR_END){
+            fend = 1;
+            if (solo){
+                cerr << "Semantic Error @ Line " << it->line_number << " - the archive can't have END directive." << endl;
+                pre_error = 1;
+                err++;
+            }
+            if (!fbegin){
+                cerr << "Semantic Error @ Line " << it->line_number << " - END directive before BEGIN." << endl;
+                pre_error = 1;
+                err++;
+            }
+        }
+    }
+    if (!solo){
+        if (!fbegin){
+            cerr << "Semantic Error - missing BEGIN directive." << endl;
+            pre_error = 1;
+            err++;
+        }
+        if (!fend){
+            cerr << "Semantic Error - missing END directive." << endl;
+            pre_error = 1;
+            err++;
+        }
+    }
+
+    return err;
+}
 
 int labelexist (list <Token> & tokenlist, list <Token> & labellist){
     list<Token>::iterator itt, itl;
