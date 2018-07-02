@@ -1,7 +1,0 @@
-HEAD:
-N. fat_mod_B
-S. 11
-R. 0 1 0 1 0 1 0 1 0 1 0 
-D. MOD_B 0 
-U. N 3 N 5 FAT 9 
-TEXT: 11 10 3 0 11 0 10 10 5 0 0 
