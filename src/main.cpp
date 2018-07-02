@@ -70,15 +70,19 @@ int main (int argc, char** argv){
         for (it_ob = realoc.begin(); it_ob != realoc.end(); it_ob++){
             fpo << *it_ob << " ";
         }
-        fpo << endl;
-        fpo << "D. ";
-        for (its = dt.begin(); its != dt.end(); its++){
-            fpo << its->str << " " << its->atrb << " ";
+        if(dt.size() != 0){
+            fpo << endl;
+            fpo << "D. ";
+            for (its = dt.begin(); its != dt.end(); its++){
+                fpo << its->str << " " << its->atrb << " ";
+            }
         }
-        fpo << endl;
-        fpo << "U. ";
-        for (its = ut.begin(); its != ut.end(); its++){
-            fpo << its->str << " " << its->atrb << " ";
+        if (ut.size() != 0){
+            fpo << endl;
+            fpo << "U. ";
+            for (its = ut.begin(); its != ut.end(); its++){
+                fpo << its->str << " " << its->atrb << " ";
+            }
         }
 
         fpo << endl << "TEXT: ";
@@ -116,15 +120,19 @@ int main (int argc, char** argv){
         for (it_ob = realoc.begin(); it_ob != realoc.end(); it_ob++){
             fpo << *it_ob << " ";
         }
-        fpo << endl;
-        fpo << "D. ";
-        for (its = dt.begin(); its != dt.end(); its++){
-            fpo << its->str << " " << its->atrb << " ";
+        if (dt.size() != 0){
+            fpo << endl;
+            fpo << "D. ";
+            for (its = dt.begin(); its != dt.end(); its++){
+                fpo << its->str << " " << its->atrb << " ";
+            }
         }
-        fpo << endl;
-        fpo << "U. ";
-        for (its = ut.begin(); its != ut.end(); its++){
-            fpo << its->str << " " << its->atrb << " ";
+        if (ut.size() != 0) {
+            fpo << endl;
+            fpo << "U. ";
+            for (its = ut.begin(); its != ut.end(); its++){
+                fpo << its->str << " " << its->atrb << " ";
+            }
         }
 
         fpo << endl << "TEXT: ";
@@ -143,15 +151,19 @@ int main (int argc, char** argv){
         for (it_ob = realoc2.begin(); it_ob != realoc2.end(); it_ob++){
             fpo2 << *it_ob << " ";
         }
-        fpo2 << endl;
-        fpo2 << "D. ";
-        for (its = dt2.begin(); its != dt2.end(); its++){
-            fpo2 << its->str << " " << its->atrb << " ";
+        if (dt2.size() != 0) {
+            fpo2 << endl;
+            fpo2 << "D. ";
+            for (its = dt2.begin(); its != dt2.end(); its++){
+                fpo2 << its->str << " " << its->atrb << " ";
+            }
         }
-        fpo2 << endl;
-        fpo2 << "U. ";
-        for (its = ut2.begin(); its != ut2.end(); its++){
-            fpo2 << its->str << " " << its->atrb << " ";
+        if (ut2.size() != 0) {
+            fpo2 << endl;
+            fpo2 << "U. ";
+            for (its = ut2.begin(); its != ut2.end(); its++){
+                fpo2 << its->str << " " << its->atrb << " ";
+            }
         }
 
         fpo2 << endl << "TEXT: ";
