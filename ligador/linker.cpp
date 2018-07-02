@@ -1,6 +1,6 @@
 #include "linker.h"
 
-#define DEBUG_
+//#define DEBUG_
 
 void linker(ifstream& ofile1, ifstream& ofile2, list<int>& object){
 	int ofile1_size = 0;
