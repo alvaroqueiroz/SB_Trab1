@@ -129,17 +129,34 @@ arg_input:
             mov edx, mess4_len
             call puts
 			
-			
-			%define argumento arg1
-			%define inteiro int1
+			mov ecx, 10
+			copy1:
+				mov ebx, arg1
+				add ebx, ecx
+				mov al, [ebx]
+				mov ebx, argumento
+				add ebx, ecx
+				mov [ebx], al
+			loop copy1
+			mov ebx, [int1]
+			mov [inteiro], ebx
             call get_args
 			
 			mov ecx, message5				; "Insira o segundo argumento:", 13, 10
             mov edx, mess5_len
             call puts
 			
-			%define argumento arg2
-			%define inteiro int2
+			mov ecx, 10
+			copy2:
+				mov ebx, arg2
+				add ebx, ecx
+				mov al, [ebx]
+				mov ebx, argumento
+				add ebx, ecx
+				mov [ebx], al
+			loop copy2
+			mov ebx, [int2]
+			mov [inteiro], ebx
             call get_args
             ret
 
@@ -400,3 +417,5 @@ int2:		resd	1
 resstring:	resb	13
 resint:		resd	1
 temp:		resd	1
+argumento:  resb	11
+inteiro:	resd	1
