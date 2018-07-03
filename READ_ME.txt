@@ -21,3 +21,20 @@ Comandos de compilação usados:
 *Compilador: CLANG -> Apple LLVM version 9.1.0 (clang-902.0.39.1)
 *comando: clang++ -std=c++11 -Wall *.cpp
 *obs: compilado na pasta /src.
+
+
+*************************************************************************
+
+***  PROGRAMA NASMCALC  ***
+
+Instruções de montagem e uso:
+
+O código da calculadora em NASM presente em /Calculadora/nasmcalc.asm DEVE ser montado em Nasm, atendendo as seguintes configurações:
+
+*SO:  Lubuntu - Ubuntu 10.04 LTS i386 - 32 bits
+*CPU: Intel(R) Atom(TM) CPU Z520 @ 1.33 GHz
+*Montador: NASM versão 2.13.02
+*Ligador:  GNU ld (GNU binutils for Ubuntu) 2.30
+
+*comando de terminal: nasm -felf nasmcalc.asm && ld nasmcalc.o && ./a.out
+**obs: executado na pasta /calculadora.
