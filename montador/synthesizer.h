@@ -12,7 +12,7 @@
 
 using namespace std;
 
-int synthesizer (list<Token> & tokenlist, list<int> & object);
+int synthesizer (list<Token> & tokenlist, list<int> & object, list<int> & realoc, list<Symbol> & dt, list<Symbol> & ut);
 
 extern int pre_error;
 
