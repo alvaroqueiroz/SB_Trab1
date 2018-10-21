@@ -173,14 +173,22 @@ int section_placement (list <Token> & tokenlist, list<Token>::iterator & text, l
                     text = it;
                 }
             }else if (count == 1 && err == 0){      //second section
-                if (!(it->type == TT_DIRECTIVE && it->addit_info == DIR_DATA)){     //not data section
-                    fprintf(stderr, "Semantic error @ line %d - Expected 'DATA' section!\n", it->line_number);
+                if (!(it->type == TT_DIRECTIVE && (it->addit_info == DIR_DATA || it->addit_info == DIR_BSS))){     //not data section
+                    fprintf(stderr, "Semantic error @ line %d - Expected 'DATA' or 'BSS' section!\n", it->line_number);
                     pre_error = 1;
                     err++;
                 }else{
                     data = it;
                 }
-            }else if (err == 0){    //third+ section
+            }else if (count == 2 && err == 0){      //third section
+                if (!(it->type == TT_DIRECTIVE && (it->addit_info == DIR_DATA || it->addit_info == DIR_BSS))){     //not data section
+                    fprintf(stderr, "Semantic error @ line %d - Expected 'DATA' or 'BSS' section!\n", it->line_number);
+                    pre_error = 1;
+                    err++;
+                }else{
+                    data = it;
+                }
+            }else if (err == 0){    //fourth section
                 fprintf(stderr, "Semantic error @ line %d - Too many sections!\n", it->line_number);
                 pre_error = 1;
                 err++;
