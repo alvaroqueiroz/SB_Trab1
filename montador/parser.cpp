@@ -321,7 +321,7 @@ list<Token>::iterator parser_directive(list <Token> & tokenlist, list<Token>::it
 		case DIR_SECTION:
 			it++;
 			if (it != tokenlist.end() && target_line == it->line_number){										// check if arguments exists.
-				if (it->type == TT_DIRECTIVE && (it->addit_info == DIR_TEXT || it->addit_info == DIR_DATA)){	// check if argument is valid.
+				if (it->type == TT_DIRECTIVE && (it->addit_info == DIR_TEXT || it->addit_info == DIR_DATA || it->addit_info == DIR_BSS)){	// check if argument is valid.
 					it++;
 					if (it != tokenlist.end() && target_line == it->line_number){								// check if too much arguments.
 						cerr << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;
@@ -691,6 +691,15 @@ list<Token>::iterator parser_directive(list <Token> & tokenlist, list<Token>::it
 				it++;
 			} while(it != tokenlist.end() && target_line == it->line_number);
 		break;
+		case DIR_BSS:
+			cerr << "Sintax Error @ Line " << target_line << " - invalid use of directive." << endl;
+			mark_sintax_error(tokenlist, it);
+			pre_error = 1;
+			it->flag = -1;
+			do {		// get out of line.
+				it++;
+			} while (it != tokenlist.end() && target_line == it->line_number);
+			break;
 
 		case DIR_EQU:	// if found in this stage, it must be an invalid EQU.
 			do {		// get out of line.

@@ -51,6 +51,7 @@
 #define DIR_END 			11
 #define DIR_EXTERN			12
 #define DIR_PUBLIC 			13
+#define DIR_BSS             14
 /*------------------------------------*/
 
 #define INVALID_TOKEN       -1

@@ -448,7 +448,7 @@ int wrong_section(list<Token> & tokenlist, list<Token>::iterator data_it){
     int err = 0;
     list<Token>::iterator it;
     for (it = tokenlist.begin(); it != data_it; it++){
-        if (it->type == TT_DIRECTIVE && (it->addit_info == DIR_CONST || it->addit_info == DIR_SPACE)){
+        if ((it->type == TT_DIRECTIVE) && (it->addit_info == DIR_CONST)){
             fprintf(stderr, "Semantic error @ line %d - Atempt to use the directive '%s' in the wrong section.\n", it->line_number, it->str.c_str());
             pre_error = 1;
             err++;

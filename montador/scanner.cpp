@@ -294,6 +294,7 @@ int is_label(Token & token, list<Token> & labellist){
                 token.str.compare("SECTION:") == 0 || \
                 token.str.compare("TEXT:") == 0 || \
                 token.str.compare("DATA:") == 0 || \
+				token.str.compare("BSS:") == 0 || \
                 token.str.compare("SPACE:") == 0 || \
                 token.str.compare("CONST:") == 0 || \
                 token.str.compare("EQU:") == 0 || \
@@ -394,6 +395,12 @@ int is_directive(Token & token){
         token.addit_info = DIR_DATA;
         return DIR_DATA;
     }else
+	if (token.str.compare("BSS") == 0) {
+		token.type = TT_DIRECTIVE;
+		token.addit_info = DIR_BSS;
+		return DIR_BSS;
+	}
+	else
     if (token.str.compare("BEGIN") == 0){
         token.type = TT_DIRECTIVE;
         token.addit_info = DIR_BEGIN;
