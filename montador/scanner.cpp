@@ -85,7 +85,7 @@ int identify_tokens (char * s, list<Token> & tokenlist){
                                 tmp.token_pos_il = tcount;               //stores token order in line.
                                 tmp.line_number = lcount;                //stores line number.
                                 tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
-                                tcount++;                            
+                                tcount++;
                             }
                             tmp.str = ",";
                             tmp.token_pos_il = tcount;               //stores token order in line.
@@ -99,7 +99,7 @@ int identify_tokens (char * s, list<Token> & tokenlist){
                                 tmp.token_pos_il = tcount;               //stores token order in line.
                                 tmp.line_number = lcount;                //stores line number.
                                 tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
-                                tcount++;                            
+                                tcount++;
                             }
                             tmp.str = "+";
                             tmp.token_pos_il = tcount;               //stores token order in line.
@@ -115,7 +115,7 @@ int identify_tokens (char * s, list<Token> & tokenlist){
                                 tmp.token_pos_il = tcount;               //stores token order in line.
                                 tmp.line_number = lcount;                //stores line number.
                                 tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
-                                tcount++;                            
+                                tcount++;
                             }
                             tmp.str = ",";
                             tmp.token_pos_il = tcount;               //stores token order in line.
@@ -123,14 +123,14 @@ int identify_tokens (char * s, list<Token> & tokenlist){
                             tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
                             tcount++;
                             vtoken.str.erase(0, vtoken.str.find(",") + 1);
-                        } else 
+                        } else
                         if (vtoken.str.find("+") < vtoken.str.find("&")){       // case plus.
                             if (vtoken.str.find("+") != 0){     // not in the beginning.
                                 tmp.str = vtoken.str.substr(0, vtoken.str.find("+"));
                                 tmp.token_pos_il = tcount;               //stores token order in line.
                                 tmp.line_number = lcount;                //stores line number.
                                 tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
-                                tcount++;                            
+                                tcount++;
                             }
                             tmp.str = "+";
                             tmp.token_pos_il = tcount;               //stores token order in line.
@@ -144,7 +144,7 @@ int identify_tokens (char * s, list<Token> & tokenlist){
                                 tmp.token_pos_il = tcount;               //stores token order in line.
                                 tmp.line_number = lcount;                //stores line number.
                                 tokenlist.insert(tokenlist.end(), tmp);  //inserts token to token list.
-                                tcount++;                            
+                                tcount++;
                             }
                             tmp.str = "&";
                             tmp.token_pos_il = tcount;               //stores token order in line.
@@ -258,7 +258,7 @@ int is_mnemonic(Token & token){
         token.addit_info = OP_BASIC_OP;
         return OP_BASIC_OP;
     }
-    else 
+    else
     if (token.str.compare("&") == 0){
         token.type = TT_AMPERSAND_OPERATOR;
         token.addit_info = OP_BASIC_OP;
@@ -294,7 +294,7 @@ int is_label(Token & token, list<Token> & labellist){
                 token.str.compare("SECTION:") == 0 || \
                 token.str.compare("TEXT:") == 0 || \
                 token.str.compare("DATA:") == 0 || \
-				token.str.compare("BSS:") == 0 || \
+                token.str.compare("BSS:") == 0 || \
                 token.str.compare("SPACE:") == 0 || \
                 token.str.compare("CONST:") == 0 || \
                 token.str.compare("EQU:") == 0 || \

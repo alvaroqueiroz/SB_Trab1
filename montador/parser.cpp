@@ -21,7 +21,7 @@ int parser (list <Token> & tokenlist, list <Token> & labellist){
 			case TT_OPERAND:
 				it = parser_operand(tokenlist, it);
 			break;
-			
+
 			case TT_COMMA_OPERATOR:
 			case TT_PLUS_OPERATOR:
 			case TT_CONST:
@@ -683,6 +683,7 @@ list<Token>::iterator parser_directive(list <Token> & tokenlist, list<Token>::it
 
 		case DIR_TEXT:
 		case DIR_DATA:
+		case DIR_BSS:
 			cerr << "Sintax Error @ Line " << target_line << " - invalid use of directive." << endl;
 			mark_sintax_error(tokenlist,it);
 			pre_error = 1;
@@ -691,15 +692,6 @@ list<Token>::iterator parser_directive(list <Token> & tokenlist, list<Token>::it
 				it++;
 			} while(it != tokenlist.end() && target_line == it->line_number);
 		break;
-		case DIR_BSS:
-			cerr << "Sintax Error @ Line " << target_line << " - invalid use of directive." << endl;
-			mark_sintax_error(tokenlist, it);
-			pre_error = 1;
-			it->flag = -1;
-			do {		// get out of line.
-				it++;
-			} while (it != tokenlist.end() && target_line == it->line_number);
-			break;
 
 		case DIR_EQU:	// if found in this stage, it must be an invalid EQU.
 			do {		// get out of line.
@@ -707,7 +699,7 @@ list<Token>::iterator parser_directive(list <Token> & tokenlist, list<Token>::it
 			} while(it != tokenlist.end() && target_line == it->line_number);
 		break;
 
-		case DIR_BEGIN:	
+		case DIR_BEGIN:
 		case DIR_EXTERN:
 			it--;
 			if (it->type == TT_LABEL) {		// check if have label.
@@ -736,7 +728,7 @@ list<Token>::iterator parser_directive(list <Token> & tokenlist, list<Token>::it
 			}
 		break;
 
-		case DIR_END:	
+		case DIR_END:
 			it++;
 
 			if (it != tokenlist.end() && target_line == it->line_number){		// check if argument exist.
