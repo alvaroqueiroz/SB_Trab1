@@ -60,40 +60,10 @@ int main (int argc, char** argv){
         solve_macro(tokenlist);
         synthesizer(tokenlist, object, realoc, dt, ut);
         
-        /*create output file*/
-        output_fn = string(argv[1]) + ".o";
-        ofstream fpo (output_fn);  //opens output file
-        fpo << "HEAD:" << endl;
-        fpo << "N. " << string(argv[1]) << endl;
-        fpo << "S. " << realoc.size() << endl;
-        fpo << "R. ";
-        for (it_ob = realoc.begin(); it_ob != realoc.end(); it_ob++){
-            fpo << *it_ob << " ";
-        }
-        if(dt.size() != 0){
-            fpo << endl;
-            fpo << "D. ";
-            for (its = dt.begin(); its != dt.end(); its++){
-                fpo << its->str << " " << its->atrb << " ";
-            }
-        }
-        if (ut.size() != 0){
-            fpo << endl;
-            fpo << "U. ";
-            for (its = ut.begin(); its != ut.end(); its++){
-                fpo << its->str << " " << its->atrb << " ";
-            }
-        }
-
-        fpo << endl << "TEXT: ";
-        for (it_ob = object.begin(); it_ob != object.end(); it_ob++){
-            fpo << *it_ob << " ";
-        }
-        fpo.close();   //closes output file
-
+ 
 		ofstream xpre;  //opens output file for pre 
 
-		xpre.open(string(argv[1]) + ".pre");
+		xpre.open(string(argv[1]) + ".o");
 
 		xpre << "TABLE USE "<< endl;
 		    for (its = ut.begin(); its != ut.end(); its++){
@@ -106,7 +76,13 @@ int main (int argc, char** argv){
 		    }
 		xpre << endl;
 		xpre << "RELATIVE "<< endl;
-		xpre << "1 2 3 etc "<< endl;
+		int num = 0;
+		for (it_ob = realoc.begin(); it_ob != realoc.end(); it_ob++){
+
+			if(*it_ob == 1) {
+				xpre << to_string(num) << " ";}
+			num ++;
+		}
 		xpre << endl;
 		xpre << "CODE "<< endl;
 		for (it_ob = object.begin(); it_ob != object.end(); it_ob++){
