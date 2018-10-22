@@ -90,6 +90,24 @@ int main (int argc, char** argv){
             fpo << *it_ob << " ";
         }
         fpo.close();   //closes output file
+
+		ofstream xpre;  //opens output file
+
+		xpre.open(string(argv[1]) + ".pre");
+
+		xpre << "TABLE USE "<< endl;
+		xpre << "use1 use2 use3 etc "<< endl;
+		xpre << endl;
+		xpre << "TABLE DEFINITION "<< endl;
+		xpre << "def1 def2 def3 etc "<< endl;
+		xpre << endl;
+		xpre << "RELATIVE "<< endl;
+		xpre << "1 2 3 etc "<< endl;
+		xpre << endl;
+		xpre << "CODE "<< endl;
+		xpre << "codecodecode "<< endl;
+
+		xpre.close();   //closes output file
         
         return 0;
     } else {
@@ -171,6 +189,9 @@ int main (int argc, char** argv){
             fpo2 << *it_ob << " ";
         }
         fpo2.close();   //closes output file
+
+				/*create output file*/
+
         
         return 0;
     }
