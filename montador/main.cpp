@@ -91,21 +91,27 @@ int main (int argc, char** argv){
         }
         fpo.close();   //closes output file
 
-		ofstream xpre;  //opens output file
+		ofstream xpre;  //opens output file for pre 
 
 		xpre.open(string(argv[1]) + ".pre");
 
 		xpre << "TABLE USE "<< endl;
-		xpre << "use1 use2 use3 etc "<< endl;
+		    for (its = ut.begin(); its != ut.end(); its++){
+		        xpre << its->str << " " << its->atrb << " ";
+		    }
 		xpre << endl;
 		xpre << "TABLE DEFINITION "<< endl;
-		xpre << "def1 def2 def3 etc "<< endl;
+		    for (its = dt.begin(); its != dt.end(); its++){
+			xpre << its->str << " " << its->atrb << " ";
+		    }
 		xpre << endl;
 		xpre << "RELATIVE "<< endl;
 		xpre << "1 2 3 etc "<< endl;
 		xpre << endl;
 		xpre << "CODE "<< endl;
-		xpre << "codecodecode "<< endl;
+		for (it_ob = object.begin(); it_ob != object.end(); it_ob++){
+		    xpre << *it_ob << " ";
+		}
 
 		xpre.close();   //closes output file
         
