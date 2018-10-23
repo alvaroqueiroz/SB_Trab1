@@ -59,8 +59,13 @@ int main (int argc, char** argv){
 
         solve_macro(tokenlist);
         synthesizer(tokenlist, object, realoc, dt, ut);
-        
- 
+
+		ofstream pre; 
+		pre.open(string(argv[1]) + ".pre");
+		    for (it = tokenlist.begin(); it != tokenlist.end(); it++){
+		        pre << it->str << " ";
+		    }
+ 		pre.close();
 		ofstream xpre;  //opens output file for pre 
 
 		xpre.open(string(argv[1]) + ".o");
@@ -80,8 +85,9 @@ int main (int argc, char** argv){
 		for (it_ob = realoc.begin(); it_ob != realoc.end(); it_ob++){
 
 			if(*it_ob == 1) {
-				xpre << to_string(num) << " ";}
-			num ++;
+				xpre << to_string(num) << " ";
+			}
+		num ++;
 		}
 		xpre << endl;
 		xpre << "CODE "<< endl;
