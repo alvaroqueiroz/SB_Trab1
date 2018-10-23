@@ -5,7 +5,7 @@ Professor Bruno Macchiavello
 Trabalho Pratico 1 - Montador + Ligador
 
 Alunos: Andre Abreu Rodrigues de Almeida    12/0007100
-        Álvaro Queiroz						15/0155280
+        Alvaro Queiroz dos Reis Silva       15/0155280
 */
 
 
@@ -51,7 +51,7 @@ int main (int argc, char** argv){
         solo = 1;
         file_name = file_name = string(argv[1]) + ".asm";
         pre_processor(strdup(file_name.c_str()), tokenlist);
-        
+
         if (pre_error){
             cout << endl << "Error = true. The process will terminate before creating output files." << endl << endl;
             return 0;
@@ -60,13 +60,13 @@ int main (int argc, char** argv){
         solve_macro(tokenlist);
         synthesizer(tokenlist, object, realoc, dt, ut);
 
-		ofstream pre; 
+		ofstream pre;
 		pre.open(string(argv[1]) + ".pre");
 		    for (it = tokenlist.begin(); it != tokenlist.end(); it++){
 		        pre << it->str << " ";
 		    }
  		pre.close();
-		ofstream xpre;  //opens output file for pre 
+		ofstream xpre;  //opens output file for pre
 
 		xpre.open(string(argv[1]) + ".o");
 
@@ -96,7 +96,7 @@ int main (int argc, char** argv){
 		}
 
 		xpre.close();   //closes output file
-        
+
         return 0;
     } else {
         solo = 0;
@@ -104,7 +104,7 @@ int main (int argc, char** argv){
         pre_processor(strdup(file_name.c_str()), tokenlist);
         file_name = file_name = string(argv[2]) + ".asm";
         pre_processor(strdup(file_name.c_str()), tokenlist2);
-        
+
         if (pre_error){
             cout << endl << "Error = true. The process will terminate before creating output files." << endl << endl;
             return 0;
@@ -114,7 +114,7 @@ int main (int argc, char** argv){
         synthesizer(tokenlist, object, realoc, dt, ut);
         solve_macro(tokenlist2);
         synthesizer(tokenlist2, object2, realoc2, dt2, ut2);
-        
+
 
         /*create output file*/
         output_fn = string(argv[1]) + ".o";
@@ -146,7 +146,7 @@ int main (int argc, char** argv){
             fpo << *it_ob << " ";
         }
         fpo.close();   //closes output file
-        
+
         /*create output file*/
         output_fn = string(argv[2]) + ".o";
         ofstream fpo2 (output_fn);  //opens output file
@@ -180,7 +180,7 @@ int main (int argc, char** argv){
 
 				/*create output file*/
 
-        
+
         return 0;
     }
 }

@@ -1,11 +1,11 @@
 /*
-Universidade de Brasilia - 01/2018
+Universidade de Brasilia - 02/2018
 CIC 116432 - Software Basico - Turma B
 Professor Bruno Macchiavello
-Trabalho Pratico 2 - Montador + ligador
+Trabalho Pratico 1 - Montador + ligador
 
 Alunos: Andre Abreu Rodrigues de Almeida    12/0007100
-        Bruno Takashi Tengan                12/0167263
+        Alvaro Queiroz dos Reis Silva       15/0155280
 */
 
 *** INSTRUÇÕES DE COMPILAÇÃO MONTADOR***
@@ -31,20 +31,3 @@ Comandos de compilação usados:
 *Compilador: gcc 5.4.0 20160609
 *comando: g++ -Wall *.cpp
 *obs: compilado na pasta /ligador.
-
-
-*************************************************************************
-
-***  PROGRAMA NASMCALC  ***
-
-Instruções de montagem e uso:
-
-O código da calculadora em NASM presente em /Calculadora/nasmcalc.asm DEVE ser montado em Nasm, atendendo as seguintes configurações:
-
-*SO:  Lubuntu - Ubuntu 10.04 LTS i386 - 32 bits
-*CPU: Intel(R) Atom(TM) CPU Z520 @ 1.33 GHz
-*Montador: NASM versão 2.13.02
-*Ligador:  GNU ld (GNU binutils for Ubuntu) 2.30
-
-*comando de terminal: nasm -felf nasmcalc.asm && ld nasmcalc.o && ./a.out
-**obs: executado na pasta /calculadora.
