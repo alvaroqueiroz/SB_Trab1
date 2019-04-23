@@ -1,10 +1,10 @@
 /*
-Universidade de Brasilia - 02/2018
+Universidade de Brasilia - 01/2019
 CIC 116432 - Software Basico - Turma B
 Professor Bruno Macchiavello
-Trabalho Pratico 1 - Montador + Ligador
+Trabalho Pratico 1 - Montador
 
-Alunos: Andre Abreu Rodrigues de Almeida    12/0007100
+Alunos: Ian
         Alvaro Queiroz dos Reis Silva       15/0155280
 */
 
