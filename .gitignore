@@ -12,3 +12,7 @@ src/TestesSB/EQU/
 src/TestesSB/files/
 
 src/TestesSB/Deteccao_de_erros/
+
+.vscode/
+
+src/.vscode/
