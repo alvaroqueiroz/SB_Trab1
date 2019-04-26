@@ -60,7 +60,7 @@ To compile this program, please use the following terminal command:
 
 And to use it, please use:
 
-	./assembler -d filename.asm
+	./assembler filename
 
 Where "-d" is one of the directives "-p", "-m" or "-o" (not case sensitive).
 
