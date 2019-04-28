@@ -69,28 +69,6 @@ int main (int argc, char** argv){
 		ofstream xpre;  //opens output file for pre
 
 		xpre.open(string(argv[1]) + ".o");
-
-		xpre << "TABLE USE "<< endl;
-		    for (its = ut.begin(); its != ut.end(); its++){
-		        xpre << its->str << " " << its->atrb << " ";
-		    }
-		xpre << endl;
-		xpre << "TABLE DEFINITION "<< endl;
-		    for (its = dt.begin(); its != dt.end(); its++){
-			xpre << its->str << " " << its->atrb << " ";
-		    }
-		xpre << endl;
-		xpre << "RELATIVE "<< endl;
-		int num = 0;
-		for (it_ob = realoc.begin(); it_ob != realoc.end(); it_ob++){
-
-			if(*it_ob == 1) {
-				xpre << to_string(num) << " ";
-			}
-		num ++;
-		}
-		xpre << endl;
-		xpre << "CODE "<< endl;
 		for (it_ob = object.begin(); it_ob != object.end(); it_ob++){
 		    xpre << *it_ob << " ";
 		}
