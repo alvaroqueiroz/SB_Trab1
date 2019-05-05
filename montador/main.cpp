@@ -46,10 +46,11 @@ int main (int argc, char** argv){
     //int operation_mode = checkOutputOption(argv[1]);
     string file_name;
     string output_fn;
-
+    string pathPRE;
+    string pathO;
     if (argc == 2) {
         solo = 1;
-        file_name = file_name = string(argv[1]) + ".asm";
+        file_name = "../arquivosASM/" + string(argv[1]) + ".asm";
         pre_processor(strdup(file_name.c_str()), tokenlist);
 
         if (pre_error){
@@ -61,14 +62,16 @@ int main (int argc, char** argv){
         synthesizer(tokenlist, object, realoc, dt, ut);
 
 		ofstream pre;
-		pre.open(string(argv[1]) + ".pre");
+        pathPRE = "../arquivosPRE/" + string(argv[1]) + ".pre";
+		pre.open(pathPRE);
 		    for (it = tokenlist.begin(); it != tokenlist.end(); it++){
 		        pre << it->str << " ";
 		    }
  		pre.close();
 		ofstream xpre;  //opens output file for pre
 
-		xpre.open(string(argv[1]) + ".o");
+        pathO = "../arquivosO/" + string(argv[1]) + ".o";
+		xpre.open(pathO);
 		for (it_ob = object.begin(); it_ob != object.end(); it_ob++){
 		    xpre << *it_ob << " ";
 		}
