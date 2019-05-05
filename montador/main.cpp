@@ -42,7 +42,7 @@ int main (int argc, char** argv){
     list<int> object, realoc, object2, realoc2;
     list<int>::iterator it_ob;
 
-    validateArguments(argc, argv);
+    checkArgumentAmount(argc, argv);
     //int operation_mode = checkOutputOption(argv[1]);
     string file_name;
     string output_fn;
