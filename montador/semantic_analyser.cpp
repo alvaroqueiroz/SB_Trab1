@@ -34,6 +34,7 @@ especificações de roteiro
 (X)    – seção inválida;
 (X)    – tipo de argumento inválido;
 (X)    – modificação de um valor constante;
+( )    - divisao pela constante zero
 
 */
 
@@ -59,7 +60,7 @@ int semantic_analyser(list <Token> & tokenlist, list <Token> & labellist){
     err+=begendexist(tokenlist);
     err+=labelexist(tokenlist, labellist);
 
-    //err+=const_cases(tokenlist, data_it);
+    err+=const_cases(tokenlist, data_it);
     err+=wrong_section(tokenlist, data_it);
 
     return err;
