@@ -34,7 +34,7 @@ especificações de roteiro
 (X)    – seção inválida;
 (X)    – tipo de argumento inválido;
 (X)    – modificação de um valor constante;
-( )    - divisao pela constante zero
+
 
 */
 
@@ -417,8 +417,12 @@ int const_cases(list<Token> & tokenlist, list<Token>::iterator data_it){
     list<Token>::iterator it, otherit, aux;
     for (it = tokenlist.begin(); it != tokenlist.end(); it++){
         if ( it->type == TT_MNEMONIC ){
-            if (it->addit_info == OP_STORE || it->addit_info == OP_COPY){
-                it++;
+            if (it->addit_info == OP_COPY || it->addit_info == OP_STORE){
+                if (it->addit_info == OP_COPY){
+                    advance (it, 3);
+                }else{
+                    it++;
+                }
                 for (otherit = data_it; otherit != tokenlist.end(); otherit++){
                     if (otherit->str.substr(0, otherit->str.find(":")) == it->str){
                         aux = otherit;
