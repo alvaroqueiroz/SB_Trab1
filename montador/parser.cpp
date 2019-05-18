@@ -39,7 +39,8 @@ int parser (list <Token> & tokenlist, list <Token> & labellist){
 				it->flag = -1;
 				it++;
 			break;
-		}
+		}		    
+            
 	}
 
 	return 0;
@@ -352,7 +353,7 @@ list<Token>::iterator parser_directive(list <Token> & tokenlist, list<Token>::it
 		case DIR_SPACE:
 			it++;
 			if (it != tokenlist.end() && target_line == it->line_number){			// check if argument exist.
-				if (it->type == TT_CONST && it->addit_info > 0){											// check if argument is valid
+				if (it->type == TT_CONST && it->addit_info > 0){					// check if argument is valid
 					it++;
 					if (it != tokenlist.end() && target_line == it->line_number){	// check if too much arguments.
 						cerr << "Sintax Error @ Line " << target_line << " - invalid argument." << endl;

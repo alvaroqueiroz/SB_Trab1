@@ -416,6 +416,7 @@ int const_cases(list<Token> & tokenlist, list<Token>::iterator data_it){
     int err = 0;
     list<Token>::iterator it, otherit, aux;
     for (it = tokenlist.begin(); it != tokenlist.end(); it++){
+	    //cout << "aditional info" << it->addit_info << "\n";
         if ( it->type == TT_MNEMONIC ){
             if (it->addit_info == OP_COPY || it->addit_info == OP_STORE){
                 if (it->addit_info == OP_COPY){
@@ -426,8 +427,8 @@ int const_cases(list<Token> & tokenlist, list<Token>::iterator data_it){
                 for (otherit = data_it; otherit != tokenlist.end(); otherit++){
                     if (otherit->str.substr(0, otherit->str.find(":")) == it->str){
                         aux = otherit;
-                        advance (aux, 2);
-                        if (aux->line_number == otherit->line_number && aux->type == TT_CONST){
+                        advance (aux, 1);
+                        if (aux->line_number == otherit->line_number && aux->str == "CONST"){
                             fprintf(stderr, "Semantic error @ line %d - Atempt to change constant value ('%s').\n", it->line_number, it->str.c_str());
                             pre_error = 1;
                             err++;
