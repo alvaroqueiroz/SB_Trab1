@@ -36,7 +36,7 @@ int solo = 0;
 */
 int main (int argc, char** argv){
 
-    list<Token> tokenlist, tokenlist2;
+    list<Token> tokenlist, tokenlist2, labellist, labellist2;
     list<Token>::iterator it, aux;
     list<Symbol> dt, ut, dt2, ut2;
     list<Symbol>::iterator its;
@@ -52,14 +52,15 @@ int main (int argc, char** argv){
     if (argc == 2) {
         solo = 1;
         file_name = "../arquivosASM/" + string(argv[1]) + ".asm";
-        pre_processor(strdup(file_name.c_str()), tokenlist);
+        solve_macro(strdup(file_name.c_str()), tokenlist, labellist);
+        pre_processor(tokenlist, labellist);
 
         if (pre_error){
             cout << endl << "Error = true. The process will terminate before creating output files." << endl << endl;
             return 0;
         }
 
-        solve_macro(tokenlist);
+        
         synthesizer(tokenlist, object, realoc, dt, ut);
 
             // Creating a directory 
@@ -97,18 +98,20 @@ int main (int argc, char** argv){
     } else {
         solo = 0;
         file_name = file_name = string(argv[1]) + ".asm";
-        pre_processor(strdup(file_name.c_str()), tokenlist);
+        solve_macro(strdup(file_name.c_str()), tokenlist, labellist);
+        pre_processor(tokenlist, labellist);
         file_name = file_name = string(argv[2]) + ".asm";
-        pre_processor(strdup(file_name.c_str()), tokenlist2);
+        solve_macro(strdup(file_name.c_str()), tokenlist, labellist2);
+        pre_processor(tokenlist2, labellist2);
 
         if (pre_error){
             cout << endl << "Error = true. The process will terminate before creating output files." << endl << endl;
             return 0;
         }
 
-        solve_macro(tokenlist);
+        //solve_macro(strdup(file_name.c_str()), tokenlist, labellist);
         synthesizer(tokenlist, object, realoc, dt, ut);
-        solve_macro(tokenlist2);
+        //solve_macro(strdup(file_name.c_str()), tokenlist2, labellist);
         synthesizer(tokenlist2, object2, realoc2, dt2, ut2);
 
 

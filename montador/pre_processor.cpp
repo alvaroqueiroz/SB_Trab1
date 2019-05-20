@@ -14,11 +14,11 @@ using namespace std;
 
 //#define __DEBUG__
 
-int pre_processor(char * input_fn, list<Token> & tokenlist){
-    list <Token> labellist;
+int pre_processor(list<Token> & tokenlist, list<Token> & labellist){
+    //list <Token> labellist;
     list<Token>::iterator it, aux;
 
-    scanner(input_fn, tokenlist, labellist);
+    //scanner(input_fn, tokenlist, labellist);
     parser(tokenlist, labellist);
     semantic_analyser(tokenlist, labellist);
 

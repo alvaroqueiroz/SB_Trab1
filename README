@@ -9,6 +9,10 @@ Para compilar o montador, abra a pasta com o respectivo nome no terminal e digit
 
 	clang++ -Wall *.cpp -o assembler
 
+Caso não possua o compilador em sua máquina, basta utilizar o comando:
+
+	sudo apt install clang
+
 Para usar o programa:
 
 	./assembler filename

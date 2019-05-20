@@ -1,13 +1,17 @@
 #include "macro.h"
-
+#include "scanner.h"
 // at this stage the code is considered correct.
 
-void solve_macro(list<Token> & tokenlist){
-	list<Macro> macrolist; 
+void solve_macro(char * input_fn, list<Token> & tokenlist, list<Token> & labellist){
+	list<Macro> macrolist;
+	//list <Token> labellist;
+    list<Token>::iterator it, aux; 
 
+	scanner(input_fn, tokenlist, labellist);
 	create_macrolist(tokenlist, macrolist);
 	expand_macro(tokenlist, macrolist);
 	erase_macro(tokenlist);
+	std::cout << "expanded feito\n";
 
 }
 

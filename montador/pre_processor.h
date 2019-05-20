@@ -72,7 +72,7 @@ struct Token {
 typedef struct Token Token;
 /*------------------------------------*/
 
-int pre_processor(char * input_fn, std::list<Token> & tokenlist);
+int pre_processor(std::list<Token> & tokenlist, std::list<Token> & labellist);
 void print_list (std::list<Token> & tokenlist);
 void mark_sintax_error (std::list<Token> & tokenlist, std::list<Token>::iterator it);
 

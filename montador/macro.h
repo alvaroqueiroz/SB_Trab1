@@ -28,7 +28,7 @@ struct Macro {
 typedef struct Macro Macro;
 /*------------------------------------*/
 
-void solve_macro(list<Token> & tokenlist);
+void solve_macro(char * input_fn, list<Token> & tokenlist, list<Token> & labellist);
 void create_macrolist(list<Token> & tokenlist, list<Macro> & macrolist);
 void expand_macro(list<Token> & tokenlist, list<Macro> & macrolist);
 void erase_macro(list<Token> & tokenlist);

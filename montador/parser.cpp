@@ -11,12 +11,6 @@ int parser (list <Token> & tokenlist, list <Token> & labellist){
 			break;
 
 			case TT_LABEL:
-//				if(it->str == "DATA"){
-//					data = it
-//				}else
-//				if(it->str == "TEXT"){
-//					text = it				
-//				}
 				it = parser_label(tokenlist, it);
 			break;
 
