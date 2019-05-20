@@ -15,6 +15,7 @@ Alunos: Ian Moura Alexandre                 15/0129661
 #include <fstream>
 #include <string>
 #include <cstring>
+#include <sys/stat.h>
 #include "argument_checks.h"
 #include "pre_processor.h"
 #include "scanner.h"
@@ -61,7 +62,14 @@ int main (int argc, char** argv){
         solve_macro(tokenlist);
         synthesizer(tokenlist, object, realoc, dt, ut);
 
-		ofstream pre;
+            // Creating a directory 
+        if (mkdir("../arquivosPRE", 0777) == -1){
+            if(errno != 17){ 
+                cerr << "Error :  " << strerror(errno) << endl;
+            }
+        }
+
+        ofstream pre;
         pathPRE = "../arquivosPRE/" + string(argv[1]) + ".pre";
 		pre.open(pathPRE);
 		    for (it = tokenlist.begin(); it != tokenlist.end(); it++){
@@ -71,7 +79,12 @@ int main (int argc, char** argv){
         cout << "Created the " << string(argv[1]) << ".pre\n";
 		ofstream xpre;  //opens output file for pre
 
-        pathO = "../arquivosO/" + string(argv[1]) + ".obj";
+        pathO = "../arquivosOBJ/" + string(argv[1]) + ".obj";
+        if (mkdir("../arquivosOBJ", 0777) == -1){
+            if(errno != 17){ 
+                cerr << "Error :  " << strerror(errno) << endl;
+            }
+        }
 		xpre.open(pathO);
 		for (it_ob = object.begin(); it_ob != object.end(); it_ob++){
 		    xpre << *it_ob << " ";
