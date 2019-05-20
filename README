@@ -1,0 +1,20 @@
+# Software Básico - Trabalho 1
+# Alunos: Alvaro Queiroz dos Reis Silva       Matrícula: 15/0155280
+#Ian Moura Alexandre    		      Matrícula: 15/0129661
+#
+
+## Instruções de uso
+
+Para compilar o montador, abra a pasta com o respectivo nome no terminal e digite o comando:
+
+	clang++ -Wall *.cpp -o assembler
+
+Para usar o programa:
+
+	./assembler filename
+ 
+Os códigos de entrada deverão estar na pasta /arquivosASM, contido na raiz. Os arquivos de saída estarão nas pastas /arquivosPRE e /arquivosO.
+
+
+
+

@@ -1,7 +1,11 @@
 UM: EQU 1
+batata: EQU 3
 SECTION TEXT
+
+if batata
 ROT: INPUT N1
-COPY N1, N4 + UM
+
+COPY N1 ,N4 + UM
 COPY N2, N3
 COPY N3, N4
 LOAD N4

@@ -181,11 +181,11 @@ int solve_if (list<Token> & tokenlist, list<Token> & iflist){
         int i;
         Token token;
         for (it = iflist.begin(); it != iflist.end(); it++){    //for whole tokenlist
-            for (newit = tokenlist.begin(); newit != tokenlist.end(); newit++){     //fot all the "IF" statements
+            for (newit = tokenlist.begin(); newit != tokenlist.end(); newit++){     //for all the "IF" statements
                 if (newit->line_number == it->line_number && newit->addit_info == DIR_IF){
                     aux = newit;
                     aux++;
-                    if (aux->addit_info){                     //if false
+                    if (aux->addit_info == 1){                     //if false
                         aux--;                      //returns to beginning of line
                         i = aux->line_number;
                         while (aux->line_number <= i){  //erases "IF" line and following line

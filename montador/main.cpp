@@ -4,7 +4,7 @@ CIC 116432 - Software Basico - Turma B
 Professor Bruno Macchiavello
 Trabalho Pratico 1 - Montador
 
-Alunos: Ian
+Alunos: Ian Moura Alexandre                 15/0129661
         Alvaro Queiroz dos Reis Silva       15/0155280
 */
 
@@ -68,15 +68,17 @@ int main (int argc, char** argv){
 		        pre << it->str << " ";
 		    }
  		pre.close();
+        cout << "Created the " << string(argv[1]) << ".pre\n";
 		ofstream xpre;  //opens output file for pre
 
-        pathO = "../arquivosO/" + string(argv[1]) + ".o";
+        pathO = "../arquivosO/" + string(argv[1]) + ".obj";
 		xpre.open(pathO);
 		for (it_ob = object.begin(); it_ob != object.end(); it_ob++){
 		    xpre << *it_ob << " ";
 		}
 
 		xpre.close();   //closes output file
+        cout << "Created the " << string(argv[1]) << ".obj\n";
 
         return 0;
     } else {
