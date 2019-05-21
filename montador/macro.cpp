@@ -11,7 +11,7 @@ void solve_macro(char * input_fn, list<Token> & tokenlist, list<Token> & labelli
 	create_macrolist(tokenlist, macrolist);
 	expand_macro(tokenlist, macrolist);
 	erase_macro(tokenlist);
-	std::cout << "expanded feito\n";
+	
 
 }
 
@@ -43,7 +43,7 @@ void create_macrolist(list<Token> & tokenlist, list<Macro> & macrolist){
 			tmp_tk--;
 			macro.it_start = tmp_tk;		// store body beginning point;
 			i = 0;						// store body length
-			while (it_tk->type != TT_DIRECTIVE && it_tk->addit_info != DIR_ENDMACRO){
+			while (it_tk->type != TT_DIRECTIVE && it_tk->addit_info != DIR_END){
 				i++;
 				it_tk++;
 			}
@@ -91,7 +91,7 @@ void expand_macro(list<Token> & tokenlist, list<Macro> & macrolist){
 
 					tmp_tk = it_mc->it_start;
 					first = 1;
-					for (tmp_tk++; (tmp_tk->type != TT_DIRECTIVE) || (tmp_tk->addit_info != DIR_ENDMACRO); tmp_tk++){		// expand macro.
+					for (tmp_tk++; (tmp_tk->type != TT_DIRECTIVE) || (tmp_tk->addit_info != DIR_END); tmp_tk++){		// expand macro.
 						token = *tmp_tk;
 						aux = token;		// safety to not change the original code.
 
@@ -127,7 +127,7 @@ void expand_macro(list<Token> & tokenlist, list<Macro> & macrolist){
 		if (it_tk->type == TT_DIRECTIVE && it_tk->addit_info == DIR_MACRO){		// entering macro definition space.
 			macro_space = 1;
 		} else
-		if (it_tk->type == TT_DIRECTIVE && it_tk->addit_info == DIR_ENDMACRO){		// exiting macro definition space.
+		if (it_tk->type == TT_DIRECTIVE && it_tk->addit_info == DIR_END){		// exiting macro definition space.
 			macro_space = 0;
 		}
 
@@ -143,7 +143,7 @@ void erase_macro(list<Token> & tokenlist){
 	while (it_tk != tokenlist.end()){		// go through entire token list.
 		if (it_tk->type == TT_DIRECTIVE && it_tk->addit_info == DIR_MACRO){
 			it_tk--;		// get the label.
-			while((it_tk->type != TT_DIRECTIVE) || (it_tk->addit_info != DIR_ENDMACRO)){
+			while((it_tk->type != TT_DIRECTIVE) || (it_tk->addit_info != DIR_END)){
 				it_tk = tokenlist.erase(it_tk);
 			}
 			it_tk = tokenlist.erase(it_tk);
